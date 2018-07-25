@@ -72,7 +72,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
       .attr("text-anchor", "end")
       .text("Funding");
 
-  g.append("path")
+g.append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
@@ -80,5 +80,24 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
       .attr("stroke-linecap", "round")
       .attr("stroke-width", 1.5)
       .attr("d", line);
+	  
+	var options = dropDown.selectAll("option")
+						.data(data)
+						.enter()
+						.append("option");
+	options.text(function(d) {return d.Fund_Name; });
+	
+	dropDown.on("change", function() {
+		var selected = this.value;
+		displayOthers = this.checked > "inline" : "none";
+		display = this.checked ? "none" : "inline";
+		
+		svg.selectAll("svg")
+			.filter(function(d) {return selected != d.Fund_Name;})
+			.attr("display",displayOthers);
+		svg.selectAll("svg")
+			.filter(function(d) {return selected == d.Fund_Name;})
+			.attr("display",display);
+	});
 });
 </script>
