@@ -100,14 +100,18 @@ var initialGraph = function(fund) {
 	var selectFund = nest.filter(function(d) { return d.key == fund;})
 	
 	var selectedFunds = svg.SelectAll(".funds")
-		.data(selectFund)
+		.data(selectFun, function(d) { return d ? d.key: this.key;})
+		.enter()
+		.append("g")
+		.attr("class", "funds")
 	
-	selectedFunds.selectAll("path.line")
+	var initialPath = selectedFunds.selectAll(".line")
 		.data(function(d) { return (d.values);})
-		.transition()
-		 .duration(1000)
-		 .attr("d", function(d) { return valueLine(d.values)
-		 })
+		.enter()
+		 .append("path")
+	initialPath
+		 .attr("d", function(d) { return valueLine(d.values)})
+		 .attr("class","line")
 }
 
 initialGraph("ALGONQUIN POLICE PENSION FUND")
