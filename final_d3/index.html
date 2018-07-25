@@ -54,15 +54,19 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   data.forEach(function(d) {
       //d.Month = parseMonth(d.Month);
       d.Funding = +d.Funding;
-      d.fund = d.Fund_Name;
+      d.Fund_Name = d.Fund_Name;
       d.Year = formatYear(parseYear(+d.Year));
   });
+  
+  console.log(data[0])
 
   var nest = d3.nest()
 	  .key(function(d){
-	    return d.fund;
+	    return d.Fund_Name;
 	  })
 	  .entries(data)
+	  
+  console.log(nest[0)
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
