@@ -32,7 +32,7 @@ var y = d3.scaleLinear().range([height, 0]);
 // Define the line
 var valueLine = d3.line()
     .x(function(d) { return x(d.Year); })
-    .y(function(d) { return y(d.Funding); })
+    .y(function(d) { return y(d.Funding); });
 
 
 // Create the svg canvas in the "graph" div
@@ -59,15 +59,15 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
      
   });
   
-  console.log(data[0])
+  console.log(data[0]);
 
   var nest = d3.nest()
 	  .key(function(d){
 	    return d.Fund_Name;
 	  })
-	  .entries(data)
+	  .entries(data);
 	  
-  console.log(nest[0])
+  console.log(nest);
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
@@ -102,7 +102,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("class", "y axis label");
 
   // Create a dropdown
-    var fundMenu = d3.select("#fundDropdown")
+    var fundMenu = d3.select("#fundDropdown");
 
     fundMenu
 		.append("select")
@@ -115,7 +115,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         })
         .text(function(d){
             return d.key;
-        })
+        });
 
 
  
@@ -125,7 +125,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d){
                 return d.key == Fund_Name;
-              })
+              });
 
 	    var selectFundGroups = svg.selectAll(".fundGroups")
 		    .data(selectFund, function(d){
@@ -133,24 +133,23 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		    })
 		    .enter()
 		    .append("g")
-		    .attr("class", "fundGroups")
+		    .attr("class", "fundGroups");
 
 		var initialPath = selectFundGroups.selectAll(".line")
 			.data(function(d) { return d.values; })
 			.enter()
-			.append("path")
+			.append("path");
 
 		initialPath
 			.attr("d", function(d){
-console.log(d.values);
 				return valueLine(d.values);
 			})
-			.attr("class", "line")
+			.attr("class", "line");
 
  	}
 
  	// Create initial graph
- 	initialGraph("BELLWOOD POLICE PENSION FUND")
+ 	initialGraph("BELLWOOD POLICE PENSION FUND");
 
 
  	// Update the data
@@ -159,11 +158,11 @@ console.log(d.values);
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d){
                 return d.key == Fund_Name;
-              })
+              });
 
  		// Select all of the grouped elements and update the data
 	    var selectFundGroups = svg.selectAll(".fundGroups")
-		    .data(selectFund)
+		    .data(selectFund);
 
 		    // Select all the lines and transition to new positions
             selectFundGroups.selectAll("path.line")
@@ -174,7 +173,7 @@ console.log(d.values);
                   .duration(1000)
                   .attr("d", function(d){
                     return valueLine(d.values);
-                  })
+                  });
 
 
  	}
@@ -186,10 +185,10 @@ console.log(d.values);
  		// Find which Fund_Name was selected from the dropdown
  		var selectedFund = d3.select(this)
             .select("select")
-            .property("value")
+            .property("value");
 
         // Run update function with the selected Fund_Name
-        updateGraph(selectedFund)
+        updateGraph(selectedFund);
 
 
     });
