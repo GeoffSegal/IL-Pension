@@ -1,56 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Dynamic Annotations in a Visualization Stepper</title>
-  <meta name="author" content="Jim Vallandingham">
+  <title>Illinois Pension Visualization</title>
+  <meta name="author" content="Geoff Segal">
   <meta name="description" content="">
 
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/stepper.css">
-
-  <script src="js/d3.v2.min.js"></script>
 </head>
-<body>
-  <div id="container">
-    <h1>Dynamic Annotations in a Visualization Stepper</h1>
-    <h2 class="subtitle">Example of using jQuery to switch between annotations for different steps of a visualization</h2>
-    <div id="vis-nav">
-      <a href="#" id="step1" class="step-link active">Step1</a>
-      <a href="#" id="step2" class="step-link">Step2</a>
-      <a href="#" id="step3" class="step-link">Step3</a>
-    </div>
-    <div id="vis-container">
-      <div id="annotation-steps">
-        <div class="annotation-step" id="step1-annotation" style="display:block;">
-          <div class="annotation" id="step1-left-annotation" >
-            <h4>Left Annotation Title</h4>
-            <p>Here is the annotation text for the <strong>left</strong> annotation of step 1</p>
-          </div>
-          <div class="annotation" id="step1-right-annotation" >
-            <h4>Right Annotation Title</h4>
-            <p>Here is the annotation text for the <strong>right</strong> annotation of step 1</p>
-          </div>
-        </div>
-        <div class="annotation-step" id="step2-annotation">
-          <div class="annotation" id="step2-center-annotation" >
-            <h4>Center Annotation Title</h4>
-            <p>Here is the annotation text for the center annotation of step 2.<br/> 
-              We are using absolute positioning of these divs</p>
-          </div>
-        </div>
-        <div class="annotation-step" id="step3-annotation">
-          <div class="annotation" id="step3-high-annotation" >
-            <h4>High Annotation Title</h4>
-            <p>This is text up high.</p>
-          </div>
-          <div class="annotation" id="step3-low-annotation" >
-            <h4>Low Annotation Title</h4>
-            <p>This is text down low.</p>
-          </div>
-        </div>
-      </div>
-      <div id="vis-canvas"></div>
-    </div>
-  </div>
-  <script src="js/stepper.js"></script>
+
+<style>
+.chart rect { fill: steelblue; }
+#tooltip {
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 60px; height: 40px;
+    background: white;
+    border: 0px;
+}
+</style>
+
+<html><body>
+<p>Here are the magic numbers from Lost: <span id="data"></span></p>
+
+<svg class="chart"></svg>
+
+<div id="tooltip"></div>
+
+<script>
+var width = 120, height = 300;
+
+var data = [4,8,15,16,23,42];
+document.getElementById("data").innerHTML = data;
+
+var x = d3.scaleLinear().domain([0,6]).range([0,width]);
+var y = d3.scaleLinear().domain([0,42]).range([height,0]);
+
+var tooltip = d3.select("#tooltip");
+
+d3.select(".chart")
+    .attr("width",width)
+    .attr("height",height)
+    .selectAll("rect")
+    .data(data)
+    .enter().append("rect")
+    .attr("width",19)
+    .attr("height",function(d) { return height - y(d); })
+    .attr("x",function(d,i) { return x(i); })
+    .attr("y",function(d) { return y(d); })
+    .on("mouseover", function(d,i) {
+        tooltip.style("opacity", 1)
+               .style("left",(d3.event.pageX)+"px")
+               .style("top",(d3.event.pageY)+"px")
+               .html("Item #"+i+" is "+d);
+    })
+    .on("mouseout", function() { tooltip.style("opacity", 0) })
+
+</script>
+
 </body>
+</html>
