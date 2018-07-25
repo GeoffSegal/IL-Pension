@@ -4,7 +4,7 @@
 <h1>IL Pension Viz</h1>
 
 
-<div id="fruitDropdown">
+<div id="fundDropdown">
 	<b>Fund Name:</b>
 </div>
 
@@ -54,13 +54,13 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   data.forEach(function(d) {
       //d.Month = parseMonth(d.Month);
       d.Funding = +d.Funding;
-      d.Fruit = d.Fund_Name;
+      d.fund = d.Fund_Name;
       d.Year = formatYear(parseYear(+d.Year));
   });
 
   var nest = d3.nest()
 	  .key(function(d){
-	    return d.Fruit;
+	    return d.fund;
 	  })
 	  .key(function(d){
 	  	return d.Year;
@@ -102,9 +102,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("class", "y axis label");
 
   // Create a dropdown
-    var fruitMenu = d3.select("#fruitDropdown")
+    var fundMenu = d3.select("#fundDropdown")
 
-    fruitMenu
+    fundMenu
 		.append("select")
 		.selectAll("option")
         .data(nest)
@@ -120,22 +120,22 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 
  
  	// Function to create the initial graph
- 	var initialGraph = function(fruit){
+ 	var initialGraph = function(fund){
 
- 		// Filter the data to include only fruit of interest
- 		var selectFruit = nest.filter(function(d){
-                return d.key == fruit;
+ 		// Filter the data to include only fund of interest
+ 		var selectFund = nest.filter(function(d){
+                return d.key == fund;
               })
 
-	    var selectFruitGroups = svg.selectAll(".fruitGroups")
-		    .data(selectFruit, function(d){
+	    var selectFundGroups = svg.selectAll(".fundGroups")
+		    .data(selectFund, function(d){
 		      return d ? d.key : this.key;
 		    })
 		    .enter()
 		    .append("g")
-		    .attr("class", "fruitGroups")
+		    .attr("class", "fundGroups")
 
-		var initialPath = selectFruitGroups.selectAll(".line")
+		var initialPath = selectFundGroups.selectAll(".line")
 			.data(function(d) { return d.values; })
 			.enter()
 			.append("path")
@@ -149,23 +149,23 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  	}
 
  	// Create initial graph
- 	initialGraph("strawberry")
+ 	initialGraph("BELLWOOD POLICE PENSION FUND")
 
 
  	// Update the data
- 	var updateGraph = function(fruit){
+ 	var updateGraph = function(fund){
 
- 		// Filter the data to include only fruit of interest
- 		var selectFruit = nest.filter(function(d){
-                return d.key == fruit;
+ 		// Filter the data to include only fund of interest
+ 		var selectFund = nest.filter(function(d){
+                return d.key == fund;
               })
 
  		// Select all of the grouped elements and update the data
-	    var selectFruitGroups = svg.selectAll(".fruitGroups")
-		    .data(selectFruit)
+	    var selectFundGroups = svg.selectAll(".fundGroups")
+		    .data(selectFund)
 
 		    // Select all the lines and transition to new positions
-            selectFruitGroups.selectAll("path.line")
+            selectFundGroups.selectAll("path.line")
                .data(function(d){
                   return (d.values);
                 })
@@ -180,15 +180,15 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 
 
  	// Run update function when dropdown selection changes
- 	fruitMenu.on('change', function(){
+ 	fundMenu.on('change', function(){
 
- 		// Find which fruit was selected from the dropdown
- 		var selectedFruit = d3.select(this)
+ 		// Find which fund was selected from the dropdown
+ 		var selectedFund = d3.select(this)
             .select("select")
             .property("value")
 
-        // Run update function with the selected fruit
-        updateGraph(selectedFruit)
+        // Run update function with the selected fund
+        updateGraph(selectedFund)
 
 
     });
