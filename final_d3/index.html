@@ -100,7 +100,7 @@ var initialGraph = function(fund) {
 	var selectFund = nest.filter(function(d) { return d.key == fund;})
 	
 	var selectedFunds = svg.selectAll(".funds")
-		.data(selectFun, function(d) { return d ? d.key: this.key;})
+		.data(selectFund, function(d) { return d ? d.key: this.key;})
 		.enter()
 		.append("g")
 		.attr("class", "funds")
