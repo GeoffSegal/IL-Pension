@@ -28,7 +28,7 @@ var line = d3.line()
     .y(function(d) { return y(d.Position); });
 	
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(d) {
-		<!-- data.forEach(function(d) { -->
+		d.forEach(function(d) { 
 		d.Active_Female = +d.Active_Female;
 		d.Active_Male = +d.Active_Male;
 		d.Active_Members = +d.Active_Members;
@@ -38,7 +38,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		d.Position = +d.Position
 		d.Retired_Members = +d.Retired_Members
 		d.Year = +d.Year
-	<!--});-->
+	});
    return d;
     console.log(d[0]);
 
