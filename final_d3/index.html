@@ -33,7 +33,7 @@ var y = d3.scaleLinear().range([height, 0]);
 // Define the line
 var valueLine = d3.line()
     .x(function(d) { return x(d.Year); })
-    .y(function(d) { return y(+d.Funding); })
+    .y(function(d) { return y(d.Funding); })
 
 // Create the svg canvas in the "graph" div
 var svg = d3.select("#graph")
