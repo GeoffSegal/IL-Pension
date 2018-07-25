@@ -47,7 +47,7 @@ var svg = d3.select("#graph")
         .attr("class", "svg");
 
 // Import the CSV data
-d3.csv("/IL-Pension/data/totalpensiondata.csv", function(error, data) {
+d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(error, data) {
   if (error) throw error;
   
    // Format the data
