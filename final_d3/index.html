@@ -88,9 +88,9 @@ g.append("path")
 	options.text(function(d) {return d.Fund_Name; });
 	
 	dropDown.on("change", function() {
-		var selected = this.value;
-		displayOthers = this.checked > "inline" : "none";
-		display = this.checked ? "none" : "inline";
+      var selected = this.value;
+      displayOthers = this.checked ? "inline" : "none";
+      display = this.checked ? "none" : "inline";
 		
 		svg.selectAll("svg")
 			.filter(function(d) {return selected != d.Fund_Name;})
