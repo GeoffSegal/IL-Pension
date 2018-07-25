@@ -8,30 +8,27 @@
 	<b>Fund Name:</b>
 </div>
 
+<div id ="graph">
 <svg width="960" height="500"></svg>
-
+</div>
 
 <script>
 
-var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-var x = d3.scaleTime()
-    .rangeRound([0, width]);
 
 var y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
-var line = d3.line()
-    .x(function(d) { return x(d.Year); })
+var valueLine = d3.line()
+    .x(function(d) { return d.Year; })
     .y(function(d) { return y(d.Funding); });
 	
-var dropDown = d3.select("#filter").append("select")
-				.attr("name","fund-name");
+				
+var svg = d3.select("#graph").append("svg"),
+    margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
 //Bring in Data, do everything that is data-driven
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(d) {
@@ -52,6 +49,15 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 
 }, function(error,data) {
 	if (error) throw error;
+	
+	var nest = d3.nest()
+		.key(function(d){
+			return d.Fund_Name;
+		})
+		.key(function(d) {
+			return d.Year;
+		})
+		.entries(data)
 
   x.domain(d3.extent(data, function(d) { return d.Year; }));
   y.domain(d3.extent(data, function(d) { return d.Funding; }));
@@ -71,27 +77,82 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
       .text("Funding");
-
-g.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
-      .attr("d", line);
 	  
-	var options = dropDown.selectAll("option")
-						.data(data)
-						.enter()
-						.append("option");
-	options.text(function(d) {return d.Fund_Name; });
+	  var options = d3.select("#filter")
+	  
+	  options
+		.append("select")
+		.selectAll("option")
+		.data(nest)
+		.enter()
+		.append("option")
+		.attr("value",function(d) {
+			return d.key;
+		})
+		.text(function(d){
+			return d.key;
+		})
+		
+var initialGraph = function(fund) {
+
+	var selectFund = nest.filter(function(d) { return d.key == fund;})
 	
-	dropDown.on("change", function() {
-      var selected = this.value;
-      var fdata = filteredData(selected)
-	  d3.select('#svg').selectAll(*).remove();
-	  makeGraph('#svg',fdata);
+	var selectedFunds = svg.SelectAll(".funds")
+		.data(selectFund)
+	
+	selectedFunds.selectAll("path.line")
+		.data(function(d) { return (d.values);})
+		.transition()
+		 .duration(1000)
+		 .attr("d", function(d) { return valueLine(d.values)
+		 })
+}
+
+initialGraph("ALGONQUIN POLICE PENSION FUND")
+
+var updateGraph = function(fund) {
+	var selectFund = nest.filter(function(d) {
+	return d.key == fund;
+	})
+	var selectedFunds = svg.selectAll(".funds")
+		.data(selectFund)
+	selectedFunds.selectAll("path.line")
+		.data(function(d) { return (d.values);})
+		.transition()
+		 .duration(1000)
+		 .attr("d", function(d) { return valueLine(d.values)
+		 })
+}
+
+options.on('change', function() {
+	var selectedFund = d3.select(this)
+						.select("select")
+						.property("value")
+						
+	updateGraph(selectedFund)
+	});
+
+
+//g.append("path")
+ //     .datum(data)
+   //   .attr("fill", "none")
+     // .attr("stroke", "steelblue")
+      //.attr("stroke-linejoin", "round")
+      //.attr("stroke-linecap", "round")
+      //.attr("stroke-width", 1.5)
+      //.attr("d", line);
+	  
+	//var options = dropDown.selectAll("option")
+		//				.data(data)
+			//			.enter()
+				//		.append("option");
+	//options.text(function(d) {return d.Fund_Name; });
+	
+	//dropDown.on("change", function() {
+      //var selected = this.value;
+      //var fdata = filteredData(selected)
+	  //d3.select('#svg').selectAll(*).remove();
+	  //makeGraph('#svg',fdata);
 		
 	});
 });
