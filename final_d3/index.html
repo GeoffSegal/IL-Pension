@@ -54,8 +54,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   data.forEach(function(d) {
       //d.Month = parseMonth(d.Month);
       d.Funding = +d.Funding;
+	  d.Year = +d.Year;
       d.Fund_Name = d.Fund_Name;
-      d.Year = formatYear(parseYear(+d.Year));
+     ));
   });
   
   console.log(data[0])
