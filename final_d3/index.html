@@ -25,7 +25,7 @@ var y = d3.scaleLinear()
 
 var line = d3.line()
     .x(function(d) { return x(d.Year); })
-    .y(function(d) { return y(d.Funding); });
+    .y(function(d) { return y(d.Position); });
 	
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(d) {
 		<!-- data.forEach(function(d) { -->
