@@ -67,7 +67,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 	  })
 	  .entries(data);
 	  
-  console.log(nest);
+  console.log(nest[0].values);
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
