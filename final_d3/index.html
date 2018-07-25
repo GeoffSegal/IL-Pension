@@ -66,7 +66,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 	  })
 	  .entries(data)
 	  
-  console.log(nest[0)
+  console.log(nest[0])
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
@@ -99,7 +99,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Monthly Funding")
+        .text("Funding")
         .attr("class", "y axis label");
 
   // Create a dropdown
