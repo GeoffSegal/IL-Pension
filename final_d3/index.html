@@ -89,15 +89,10 @@ g.append("path")
 	
 	dropDown.on("change", function() {
       var selected = this.value;
-      displayOthers = this.checked ? "inline" : "none";
-      display = this.checked ? "none" : "inline";
+      var fdata = filteredData(selected)
+	  d3.select('#svg').selectAll(*).remove();
+	  makeGraph('#svg',fdata);
 		
-		svg.selectAll()
-			.filter(function(d) {return selected != d.Fund_Name;})
-			.attr("display",displayOthers);
-		svg.selectAll()
-			.filter(function(d) {return selected == d.Fund_Name;})
-			.attr("display",display);
 	});
 });
 </script>
