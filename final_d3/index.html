@@ -58,7 +58,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
       d.Year = formatYear(parseYear(+d.Year));
   });
   
-  console.log(data[0])
+  //console.log(data[0])
 
   var nest = d3.nest()
 	  .key(function(d){
@@ -66,7 +66,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 	  })
 	  .entries(data)
 	  
-  console.log(nest[0])
+  //console.log(nest[0])
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
@@ -77,9 +77,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
        .attr("transform", "translate(0," + height + ")")
        .attr("class", "x axis")
        .call(d3.axisBottom(x)
-          .ticks(d3.timeMonth)
+          .ticks(d3.timeYear)
           .tickSize(0, 0)
-          .tickFormat(d3.timeFormat("%B"))
+          .tickFormat(d3.timeFormat("%Y"))
           .tickSizeInner(0)
           .tickPadding(10));
 
