@@ -126,6 +126,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  		var selectFund = nest.filter(function(d){
                 return d.key == Fund_Name;
               });
+		console.log(selectFund);
 
 	    var selectFundGroups = svg.selectAll(".fundGroups")
 		    .data(selectFund, function(d){
@@ -134,12 +135,15 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		    .enter()
 		    .append("g")
 		    .attr("class", "fundGroups");
-
+			
+		console.log(selectFundGroups);
+		
 		var initialPath = selectFundGroups.selectAll(".line")
 			.data(function(d) { return d.values; })
 			.enter()
 			.append("path");
-
+		console.log(initialPath);
+		
 		initialPath
 			.attr("d", function(d){
 				return valueLine(d.values);
