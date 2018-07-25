@@ -146,7 +146,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		
 		initialPath
 			.attr("d", function(d){
-				return valueLine(d.values);
+				return valueLine(d.__data__);
 			})
 			.attr("class", "line");
 		console.log(initialPath);
