@@ -8,6 +8,16 @@ Hi Hannah
 
 <script>
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(data) {
+    data.forEach(function(d) {
+		d.Active_Members = +d.Active_Members;
+		d.Assets = +d.Assets
+		d.Funding = +d.Funding
+		d.Liabilities = +d.Liabilities
+		d.Position = +d.Position
+		d.Retired_Members = +d.Retired_Members
+		d.Year = +d.Year
+	});
+   
    console.log(data[0]);
 
 });
