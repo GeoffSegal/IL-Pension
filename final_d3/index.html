@@ -92,10 +92,10 @@ g.append("path")
       displayOthers = this.checked ? "inline" : "none";
       display = this.checked ? "none" : "inline";
 		
-		svg.select("svg")
+		svg.selectAll()
 			.filter(function(d) {return selected != d.Fund_Name;})
 			.attr("display",displayOthers);
-		svg.select("svg")
+		svg.selectAll()
 			.filter(function(d) {return selected == d.Fund_Name;})
 			.attr("display",display);
 	});
