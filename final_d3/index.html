@@ -24,23 +24,22 @@ body {
 var margin = {top: 60, right: 100, bottom: 20, left: 80},
   width = 850 - margin.left - margin.right,
   height = 370 - margin.top - margin.bottom;
-
 //LOOK INTO YEAR FORMAT LATER
 var formatYear = d3.timeFormat("%Y");
 var parseYear = d3.timeParse("%Y");
 //
-
 // Set the ranges
 var x = d3.scaleLinear().range([0, width]);
 var y = d3.scaleLinear().range([height, 0]);
-
-
 // Define the line
 var valueLine = d3.line()
     .x(function(d) { return x(d.Year); })
-    .y(function(d) { return y(d.Funding); });
-
-
+    .y(function(d) { return y(d.Assets); });
+	
+var valueLine2 = d3.line()
+	.x(function(d) { return x(d.Year);})
+	.y(function(d) { return y(d.Liabilities);})
+	
 // Create the svg canvas in the "graph" div
 var svg = d3.select("#graph")
         .append("svg")
@@ -51,9 +50,6 @@ var svg = d3.select("#graph")
         .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.top + ")")
         .attr("class", "svg");
-
-
-
 // Import the CSV data
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(error, data) {
   if (error) throw error;
@@ -73,7 +69,8 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 	  
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
-  y.domain([0,1])
+  //y.domain([0,1])
+  y.domain(d3.extent(data, function(d) { return d.Assets;}));
   
   // Set up the x axis
   var xaxis = svg.append("g")
@@ -83,7 +80,6 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
           .ticks(4)
           .tickSizeInner(0)
           .tickPadding(10));
-
   // Add the y Axis
    var yaxis = svg.append("g")
        .attr("class", "y axis")
@@ -102,10 +98,8 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .style("text-anchor", "end")
         .text("Funding")
         .attr("class", "y axis label");
-
   // Create a dropdown
     var fundMenu = d3.select("#fundDropdown");
-
     fundMenu
 		.append("select")
 		.selectAll("option")
@@ -119,13 +113,11 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  
  	// Function to create the initial graph
  	var initialGraph = function(Fund_Name){
-
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d) {return d.key == Fund_Name;});
-
 		
 		
-		var initialPath = svg.selectAll(".line")
+		var initialPath = svg.selectAll(".line1")
 			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
 			.enter()
 			.append("g")
@@ -134,53 +126,64 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		initialPath
 			.datum(function(d) { return d.values;})
 			.attr("d", valueLine)
-			.attr("class", "line")
+			.attr("class", "line1")
 			.attr("fill", "none")
-			.attr("stroke", "steelblue")
+			.attr("stroke", "green")
 			.attr("stroke-linejoin", "round")
 			.attr("stroke-linecap", "round")
 			.attr("stroke-width", 1.5);
+			
+		var initialPath2 = svg.selectAll(".line2")
+			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
+			.enter()
+			.append("g")
+			.append("path");
+		
+		initialPath2
+			.datum(function(d) { return d.values;})
+			.attr("d", valueLine2)
+			.attr("class", "line2")
+			.attr("fill", "none")
+			.attr("stroke", "red")
+			.attr("stroke-linejoin", "round")
+			.attr("stroke-linecap", "round")
+			.attr("stroke-width", 1.5);
+				
+			
+	
  	}
-
  	// Create initial graph
  	initialGraph("ADDISON POLICE PENSION FUND");
-
-
  	// Update the data
  	var updateGraph = function(Fund_Name){
-
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
-
  		// Select all of the grouped elements and update the data
-
 		    // Select all the lines and transition to new positions
-        svg.selectAll("path.line")
+        svg.selectAll(".line1")
 			.data(selectFund)
             .transition()
             .duration(1000)
             .attr("d", function(d){return valueLine(d.values);});
+        svg.selectAll(".line2")
+			.data(selectFund)
+            .transition()
+            .duration(1000)
+            .attr("d", function(d){return valueLine2(d.values);});
  	}
-
-
  	// Run update function when dropdown selection changes
  	fundMenu.on('change', function(){
-
  		// Find which Fund_Name was selected from the dropdown
  		var selectedFund = d3.select(this)
             .select("select")
             .property("value");
-
         // Run update function with the selected Fund_Name
         updateGraph(selectedFund);
 		
 		
     });
-
-
   
 })
-
 </script>
 
 </body>
