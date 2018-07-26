@@ -125,7 +125,12 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d) {return d.key == Fund_Name;});
 		
-		
+		y.domain([0, d3.max(selectFund[0].values, function(d) {return d3.max([d.Liabilities,d.Assets]);})]);
+		svg.select(".y")
+			.transition()
+			.duration(500)
+			.call(yaxis)
+			
 		var initialPath = svg.selectAll(".line1")
 			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
 			.enter()
@@ -169,12 +174,11 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
 		
 		
-		y.domain(d3.extent(data, function(d) { return d.Liabilities;}));
-		
+		y.domain([0, d3.max(selectFund[0].values, function(d) {return d3.max([d.Liabilities,d.Assets]);})]);
 		svg.select(".y")
-		.transition()
-		.duration(500)
-		.call(yaxis)
+			.transition()
+			.duration(500)
+			.call(yaxis)
 		
  		// Select all of the grouped elements and update the data
 		    // Select all the lines and transition to new positions
