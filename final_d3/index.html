@@ -72,22 +72,31 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   //y.domain([0,1])
   y.domain(d3.extent(data, function(d) { return d.Assets;}));
   
+  
   // Set up the x axis
-  var xaxis = svg.append("g")
+  
+  var xaxis = d3.axisBottom(x)
+	.ticks(4)
+		.tickSizeInner(0)
+		.tickPadding(10);
+		
+  svg.append("g")
        .attr("transform", "translate(0," + height + ")")
        .attr("class", "x axis")
-       .call(d3.axisBottom(x)
-          .ticks(4)
-          .tickSizeInner(0)
-          .tickPadding(10));
+       .call(xaxis);
+	   
   // Add the y Axis
-   var yaxis = svg.append("g")
+  
+	var yaxis = d3.axisLeft(y)
+		.ticks(5)
+		.tickSizeInner(0)
+		.tickPadding(6)
+		.tickSize(0,0);
+		
+		
+  svg.append("g")
        .attr("class", "y axis")
-       .call(d3.axisLeft(y)
-          .ticks(5)
-          .tickSizeInner(0)
-          .tickPadding(6)
-          .tickSize(0, 0));
+       .call(yaxis);
   
   // Add a label to the y axis
   svg.append("text")
@@ -158,6 +167,15 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  	var updateGraph = function(Fund_Name){
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
+		
+		
+		y.domain(d3.extent(data, function(d) { return d.Liabilities;}));
+		
+		svg.select(".y")
+		.transition()
+		.duration(500)
+		.call(yaxis)
+		
  		// Select all of the grouped elements and update the data
 		    // Select all the lines and transition to new positions
         svg.selectAll(".line1")
@@ -170,6 +188,11 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
             .transition()
             .duration(1000)
             .attr("d", function(d){return valueLine2(d.values);});
+		
+	
+
+
+			
  	}
  	// Run update function when dropdown selection changes
  	fundMenu.on('change', function(){
@@ -180,6 +203,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         // Run update function with the selected Fund_Name
         updateGraph(selectedFund);
 		
+
 		
     });
   
