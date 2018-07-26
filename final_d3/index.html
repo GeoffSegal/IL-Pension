@@ -3,26 +3,19 @@
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <h1>IL Pension Viz</h1>
 
+<div id="fundDropdown"> <b>Fund_Name Name:</b> </div>
 
-<div id="fundDropdown">
-	<b>Fund_Name Name:</b>
-</div>
-
-<div id ="graph">
-</div>
+<div id ="graph"></div>
 
 <script>
 var margin = {top: 60, right: 100, bottom: 20, left: 80},
   width = 850 - margin.left - margin.right,
   height = 370 - margin.top - margin.bottom;
 
-// Parse the month variable
-//var parseMonth = d3.timeParse("%b");
-//var formatMonth = d3.timeFormat("%b");
-
+//LOOK INTO YEAR FORMAT LATER
 var formatYear = d3.timeFormat("%Y");
 var parseYear = d3.timeParse("%Y");
-
+//
 
 // Set the ranges
 var x = d3.scaleLinear().range([0, width]);
@@ -54,23 +47,17 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   
    // Format the data
   data.forEach(function(d) {
-      //d.Month = parseMonth(d.Month);
       d.Funding = +d.Funding;
+	  d.Assets = +d.Assets;
+	  d.Liabilities = +d.Liabilities;
 	  d.Year = +d.Year;
       d.Fund_Name = d.Fund_Name;
-     
   });
   
-  console.log(data[0]);
-
   var nest = d3.nest()
-	  .key(function(d){
-	    return d.Fund_Name;
-	  })
+	  .key(function(d){return d.Fund_Name;})
 	  .entries(data);
 	  
-  console.log(nest[0].values);
-
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
   y.domain([0,1])
@@ -84,7 +71,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
           .tickSizeInner(0)
           .tickPadding(10));
 
-  // Add the Y Axis
+  // Add the y Axis
    var yaxis = svg.append("g")
        .attr("class", "y axis")
        .call(d3.axisLeft(y)
@@ -95,11 +82,11 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   
   // Add a label to the y axis
   svg.append("text")
+		.attr("fill","#000")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - 60)
-        .attr("x", 0 - (height / 2))
+        .attr("y", 6)
         .attr("dy", "1em")
-        .style("text-anchor", "middle")
+        .style("text-anchor", "end")
         .text("Funding")
         .attr("class", "y axis label");
 
@@ -112,35 +99,24 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .data(nest)
         .enter()
         .append("option")
-        .attr("value", function(d){
-            return d.key;
-        })
-        .text(function(d){
-            return d.key;
-        });
-
-
+        .attr("value", function(d){return d.key;})
+        .text(function(d){return d.key;});
+		
+		
  
  	// Function to create the initial graph
  	var initialGraph = function(Fund_Name){
 
  		// Filter the data to include only Fund_Name of interest
- 		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
-		console.log(selectFund);
+ 		var selectFund = nest.filter(function(d) {return d.key == Fund_Name;});
 
-	    var selectFundGroups = svg.selectAll(".fundGroups")
-		    .data(selectFund, function(d){return d ? d.key : this.key;})
-		    .enter()
-		    .append("g")
-		    .attr("class", "fundGroups");
-			
-		console.log(selectFundGroups);
 		
-		var initialPath = selectFundGroups.selectAll(".line")
-			.data(selectFund)
+		
+		var initialPath = svg.selectAll(".line")
+			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
 			.enter()
+			.append("g")
 			.append("path");
-		console.log(initialPath);
 		
 		initialPath
 			.datum(function(d) { return d.values;})
@@ -151,11 +127,10 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.attr("stroke-linejoin", "round")
 			.attr("stroke-linecap", "round")
 			.attr("stroke-width", 1.5);
-		console.log(initialPath);
  	}
 
  	// Create initial graph
- 	initialGraph("BELLWOOD POLICE PENSION FUND");
+ 	initialGraph("ADDISON POLICE PENSION FUND");
 
 
  	// Update the data
@@ -165,19 +140,13 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
  		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
 
  		// Select all of the grouped elements and update the data
-	    var selectFundGroups = svg.selectAll(".fundGroups")
-		    .data(selectFund);
 
 		    // Select all the lines and transition to new positions
-            selectFundGroups.selectAll("path.line")
-               .data(selectFund)
-                .transition()
-                  .duration(1000)
-                  .attr("d", function(d){
-                    return valueLine(d.values);
-                  });
-
-
+        svg.selectAll("path.line")
+			.data(selectFund)
+            .transition()
+            .duration(1000)
+            .attr("d", function(d){return valueLine(d.values);});
  	}
 
 
@@ -191,8 +160,8 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 
         // Run update function with the selected Fund_Name
         updateGraph(selectedFund);
-
-
+		
+		
     });
 
 
