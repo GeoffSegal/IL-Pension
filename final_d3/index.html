@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title> Illinois Pension Funding</title>
+<style>
+body {
+  font: 10px sans-serif;
+}
+</style>
+</head>
+
+
+<body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <h1>IL Pension Viz</h1>
@@ -6,6 +18,7 @@
 <div id="fundDropdown"> <b>Fund_Name Name:</b> </div>
 
 <div id ="graph"></div>
+
 
 <script>
 var margin = {top: 60, right: 100, bottom: 20, left: 80},
@@ -169,3 +182,6 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 })
 
 </script>
+
+</body>
+</html>
