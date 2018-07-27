@@ -14,7 +14,7 @@ body {
   fill: rgba(231,180,22,0.3);
 }
 .areagreen {
-  fill: rgba(153,193,64,0.3);
+  fill: rgba(45,201,55,0.3);
 }
   
 .chart:hover .line1 {
@@ -67,7 +67,7 @@ var areayellow = d3.area()
 var areared = d3.area()
 	.x(function(d,i) { return x(d.Year);})
 	.y0(height)
-	.y1(function(d) { return y(d.Liabilities);});
+	.y1(function(d) { return y(0.65*d.Liabilities);});
 	
 // Create the svg canvas in the "graph" div
 var svg = d3.select("#graph")
