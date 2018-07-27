@@ -8,18 +8,31 @@ body {
 }
 
 .areared {
-  fill: rgba(204,50,50,0.3);
+  fill: rgba(204,50,50,0.2);
 }
 .areayellow {
-  fill: rgba(231,180,22,0.3);
+  fill: rgba(231,180,22,0.2);
 }
 .areagreen {
-  fill: rgba(45,201,55,0.3);
+  fill: rgba(45,201,55,0.2);
 }
   
-.chart:hover .line1 {
-  stroke: rgba(0,128,255,1);
-
+.line1 {
+ fill: none;
+  stroke: rgba(45,201,55,0.9);
+  stroke-width: 4px;
+}
+.line2{
+ fill: none;
+  stroke: rgba(204,50,50,0.9);
+  stroke-width: 4px;
+}
+.svg:hover .line1 {
+  stroke: rgba(45,201,55,1);
+}
+.svg:hover .line2 {
+  stroke: rgba(204,50,50,1);
+}
 </style>
 </head>
 
@@ -35,9 +48,9 @@ body {
 
 
 <script>
-var margin = {top: 60, right: 100, bottom: 20, left: 80},
-  width = 850 - margin.left - margin.right,
-  height = 370 - margin.top - margin.bottom;
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+  width = 960 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
 //LOOK INTO YEAR FORMAT LATER
 var formatYear = d3.timeFormat("%Y");
 var parseYear = d3.timeParse("%Y");
@@ -57,7 +70,7 @@ var valueLine2 = d3.line()
 var areagreen = d3.area()
 	.x(function(d,i) { return x(d.Year);})
 	.y0(function(d) { return y(0.8*d.Liabilities);})
-	.y1(function(d) { return y(d.Liabilities);});
+	.y1(0);
 	
 var areayellow = d3.area()
 	.x(function(d,i) { return x(d.Year);})
@@ -197,12 +210,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		initialPath
 			.datum(function(d) { return d.values;})
 			.attr("d", valueLine)
-			.attr("class", "line1")
-			.attr("fill", "none")
-			.attr("stroke", "green")
-			.attr("stroke-linejoin", "round")
-			.attr("stroke-linecap", "round")
-			.attr("stroke-width", 1.5);
+			.attr("class", "line1");
 			
 
 				
@@ -210,24 +218,13 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
 			.enter()
 			.append("g")
-			.append("path")
-			;
+			.append("path");
 		
 		initialPath2
 			.datum(function(d) { return d.values;})
 			.attr("d", valueLine2)
-			.attr("class", "line2")
-			.attr("fill", "none")
-			.attr("stroke", "red")
-			.attr("stroke-linejoin", "round")
-			.attr("stroke-linecap", "round")
-			.attr("stroke-width", 1.5);
-			
-
-
-				
-			
-	
+			.attr("class", "line2");
+		
  	}
 	
 	
