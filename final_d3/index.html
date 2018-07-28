@@ -37,6 +37,7 @@ float:left;
 
 .container2 {
 float:right;
+  font: 40px verdana;
 }
 
 </style>
@@ -138,10 +139,10 @@ var svg = d3.select("#graph")
         
 var svg2 = d3.select("#fundinfo")
 	.append("svg")
-        .style("width", 200 + margin.left + margin.right + "px")
-        .style("height", 200 + margin.top + margin.bottom + "px")
-        .attr("width", 200 + margin.left + margin.right)
-        .attr("height", 200 + margin.top + margin.bottom)
+        .style("width", 500 + margin.left + margin.right + "px")
+        .style("height", 500 + margin.top + margin.bottom + "px")
+        .attr("width", 500 + margin.left + margin.right)
+        .attr("height", 500 + margin.top + margin.bottom)
         .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.top + ")")
         .attr("class","svg2")
@@ -308,7 +309,8 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   var xaxis = d3.axisBottom(x)
 	.ticks(4)
 		.tickSizeInner(0)
-		.tickPadding(10);
+		.tickPadding(10)
+        .tickFormat(d3.format("d"));
 		
   svg.append("g")
        .attr("transform", "translate(0," + height + ")")
@@ -389,6 +391,31 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.datum(function(d) { return d.values;})
 			.attr("d", valueLine2)
 			.attr("class", "line2");
+        
+        console.log(selectFund[0].values[0]["Funding"]);
+        
+        
+        fund2016 = selectFund[0].values[0]["Funding"];
+        year2016 = selectFund[0].values[0]["Year"];
+
+
+        var textspace = d3.select(".svg2").selectAll(".svg2-category")
+    	.data(selectFund)
+    	.enter().append("g")
+    	.attr("class", "svg2-category");
+        
+        
+        var initialText = textspace.selectAll(".text")
+          .data(function(d) {return d.values;})
+          .enter()
+          .append("text")
+          .attr("class","text")
+          .attr("dy", ".75em")
+          //.attr("text-anchor", "middle")
+          .text("Funding in "+year2016+ ":"+
+          d3.format(".01%")(fund2016));
+          
+
 		
  	}
 	
@@ -423,6 +450,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
             .transition()
             .duration(1000)
             .attr("d", function(d){return valueLine(d.values);});
+            
         svg.selectAll(".line2")
 			.data(selectFund)
             .transition()
@@ -430,6 +458,20 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
             .attr("d", function(d){return valueLine2(d.values);});
 	
 
+        fund2016 = selectFund[0].values[0]["Funding"];
+        year2016 = selectFund[0].values[0]["Year"];
+
+
+        svg2.selectAll(".svg2-category")
+    	.data(selectFund)
+    	.transition();
+        
+        
+    svg2.selectAll(".svg2-category").selectAll(".text")
+          .data(function(d) {return d.values;})
+          .transition()
+          .text("Funding in "+year2016+ ":"+
+          d3.format(".01%")(fund2016));
 
 			
  	}
