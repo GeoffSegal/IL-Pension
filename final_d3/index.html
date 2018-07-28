@@ -22,10 +22,17 @@ body {
   stroke: rgba(85,170,0,1.0);
   stroke-width: 4px;
 }
+
+.dot1{
+ fill: rgba(85,170,0,1.0);
+}
 .line2{
  fill: none;
   stroke: rgba(170,0,0,0.9);
   stroke-width: 4px;
+}
+.dot2 {
+	fill:rgba(170,0,0,0.9);
 }
 .svg:hover .line1 {
   stroke: rgba(0,128,255,1);
@@ -80,7 +87,7 @@ float:right;
 <div class="container">
   <div class="container1" id ="graph"></div>
   <div class="container2" id="fundinfo">
-      The Funding ratio in 2016 for the<span id="FundName2016"></span> was <span id="fund2016"></span>
+      The Funding ratio in 2016 for the <span id="FundName2016"></span> was <span id="fund2016"></span>
   </div>
 </div>
 
@@ -103,6 +110,8 @@ var y = d3.scaleLinear().range([height, 0]);
 var valueLine = d3.line()
     .x(function(d) { return x(d.Year); })
     .y(function(d) { return y(d.Assets); });
+    
+var valueCircle = d3
 	
 var valueLine2 = d3.line()
 	.x(function(d) { return x(d.Year);})
@@ -309,6 +318,18 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 	  .key(function(d){return d.Fund_Name;})
 	  .sortKeys(d3.ascending)
 	  .entries(data);
+      
+      //summarize the total assets/liabilities
+      var nest2 = d3.nest()
+      .key(function(d){return d.Year;})
+      .rollup(function(v) { return {
+    Assets: d3.sum(v, function(d) { return d.Assets; }),
+    Liabilities: d3.sum(v, function(d) { return d.Liabilities; })
+  }; })
+  .entries(data);
+  
+  
+  console.log(JSON.stringify(nest2));
 	  // Set up the x axis
 
   // Scale the range of the data
@@ -389,6 +410,16 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.attr("d", valueLine)
 			.attr("class", "line1");
 			
+svg.selectAll("g.dot1")
+        .data(selectFund, function(d){return d ? d.key : this.key;})
+        .enter().append("g")
+        .attr("class", "dot1")
+        .selectAll("circle")
+        .data(function(d) { return d.values; })
+        .enter().append("circle")
+        .attr("r", 6)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Assets); });
 
 				
 		var initialPath2 = svg.selectAll(".line2")
@@ -398,24 +429,26 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.append("path");
 			//.style("stroke-dasharray",("3,3"));
 		
-		
+
 		initialPath2
 			.datum(function(d) { return d.values;})
 			.attr("d", valueLine2)
 			.attr("class", "line2");
         
-        
-        testvar = selectFund[0].values[0]["Fund_Name"]
-        console.log(Fund_Name);
-     
-        
-        
+            svg.selectAll("g.dot2")
+        .data(selectFund, function(d){return d ? d.key : this.key;})
+        .enter().append("g")
+        .attr("class", "dot2")
+        .selectAll("circle")
+        .data(function(d) { return d.values; })
+        .enter().append("circle")
+        .attr("r", 6)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Liabilities); });
+		    
         fund2016 = selectFund[0].values[0]["Funding"];
-        
         document.getElementById("FundName2016").innerHTML=Fund_Name;
-
-        
-  document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
+		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
 
 
        // var textspace = d3.select(".svg2").selectAll(".svg2-category")
@@ -470,17 +503,37 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
             .duration(1000)
             .attr("d", function(d){return valueLine(d.values);});
             
+            
+        svg.selectAll("g.dot1")
+        .data(selectFund)
+        .transition().duration(1000);
+        
+     svg.selectAll("g.dot1").selectAll("circle")
+        .data(function(d) { return d.values; })
+        .transition().duration(1000)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Assets); });
+            
         svg.selectAll(".line2")
 			.data(selectFund)
             .transition()
             .duration(1000)
             .attr("d", function(d){return valueLine2(d.values);});
 	
+        svg.selectAll("g.dot2")
+        .data(selectFund)
+        .transition().duration(1000);
+        
+     svg.selectAll("g.dot2").selectAll("circle")
+        .data(function(d) { return d.values; })
+        .transition().duration(1000)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Liabilities); });
+       
 
         fund2016 = selectFund[0].values[0]["Funding"];
-        year2016 = selectFund[0].values[0]["Year"];
-
-        document.getElementById("test").innerHTML=d3.format(".01%")(fund2016);
+        document.getElementById("FundName2016").innerHTML=Fund_Name;
+		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
 
         //svg2.selectAll(".svg2-category")
     	//.data(selectFund)
