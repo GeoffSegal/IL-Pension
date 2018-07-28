@@ -447,8 +447,22 @@ svg.selectAll("g.dot1")
         .attr("cy", function(d,i) { return y(d.Liabilities); });
 		    
         fund2016 = selectFund[0].values[0]["Funding"];
-        document.getElementById("FundName2016").innerHTML=Fund_Name;
+     
+
+     function colorPicker(v){
+           if(v<0.65) { return "#aa0000";}
+           else if (v<0.8){ return "#f0bd27";}
+           else { return "#55aa00" ;};
+}
+   press=document.getElementById("fundinfo");
+ press.style.color = colorPicker(fund2016);    
+  
+ document.getElementById("FundName2016").innerHTML=Fund_Name;
+        
+
 		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
+        
+        
 
 
        // var textspace = d3.select(".svg2").selectAll(".svg2-category")
