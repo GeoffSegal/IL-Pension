@@ -31,6 +31,14 @@ body {
   stroke: rgba(0,128,255,1);
 }
 
+.container1 {
+float:left;
+}
+
+.container2 {
+float:right;
+}
+
 </style>
 </head>
 
@@ -42,16 +50,26 @@ body {
 <p style="text-align: center;">&nbsp;</p>
 
 
+
+
+<div id="bar" align="center"></div>
 <form id="years" align="center">
   <input  type='radio' id=2013 name="mode" checked>2013</input>
   <input type='radio' id=2014 name="mode">2014</input>
 	<input type='radio' id=2015 name="mode">2015</input>
     <input type='radio' id=2016 name="mode">2016</input>
 </form>
-
-<div id="bar" align="center"></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <div id="fundDropdown" align="center"> <b>Fund Name:</b> </div>
-<div id ="graph" align="center"></div>
+<div class="container1" id ="graph"></div>
+<div class="container2" id="fundinfo"> TEST </div>
 
 
 <script>
@@ -168,7 +186,7 @@ if (error) throw error;
      	.data(function(d) {return d.values;})
      	.enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d,i) {return x((0.5*i)+0.7);})
+        .attr("x", function(d,i) {return x((0.6*i+0.5));})
         .attr("y", function(d) {return y(d.Percent);})
         .attr("width", 150)
         .attr("height", function(d) {return height - y(d.Percent);})
@@ -310,34 +328,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.transition()
 			.duration(500)
 			.call(yaxis);
-            
-			
-		var a1 = svg.selectAll('.areagreen')
-		.data(selectFund,function(d){return d ? d.key : this.key;})
-		.enter()
-		.append("path")
-		.attr("class","areagreen")
-		.transition()
-		.duration(250)
-		.attr("d",function(d) { return areagreen(d.values);})
-		
-		var a2 = svg.selectAll('.areayellow')
-		.data(selectFund,function(d){return d ? d.key : this.key;})
-		.enter()
-		.append("path")
-		.attr("class","areayellow")
-		.transition()
-		.duration(250)
-		.attr("d",function(d) { return areayellow(d.values);})
-		
-		var a3 = svg.selectAll('.areared')
-		.data(selectFund,function(d){return d ? d.key : this.key;})
-		.enter()
-		.append("path")
-		.attr("class","areared")
-		.transition()
-		.duration(250)
-		.attr("d",function(d) { return areared(d.values);})
+       
   
 		
 		var initialPath = svg.selectAll(".line1")
@@ -393,21 +384,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
   
         
          
-		svg.selectAll(".areagreen")
-			.data(selectFund)
-			.transition()
-			.duration(1000)
-			.attr("d",function(d){return areagreen(d.values);});
-		svg.selectAll(".areayellow")
-			.data(selectFund)
-			.transition()
-			.duration(1000)
-			.attr("d", function(d){return areayellow(d.values);});
-		svg.selectAll(".areared")
-			.data(selectFund)
-			.transition()
-			.duration(1000)
-			.attr("d", function(d){return areared(d.values);});
+
         svg.selectAll(".line1")
 			.data(selectFund)
             .transition()
