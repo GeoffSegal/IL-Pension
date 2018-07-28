@@ -41,6 +41,8 @@ body {
 <p style="text-align: center;"><span style="color: #003366;">An interactive visualization story</span></p>
 <p style="text-align: center;">&nbsp;</p>
 
+<div id="barDropdown"></div>
+	<button id="start">Transition</button>
 
 <div id="bar" align="center"></div>
 <div id="fundDropdown" align="center"> <b>Fund Name:</b> </div>
@@ -124,28 +126,37 @@ if (error) throw error;
 		.sortKeys(d3.ascending)
 		.entries(data);
         
-        
-        x.domain([0,3]);
-        y.domain([0,1]);
-        
+      
+ var barMenu = d3.select("#barDropdown");
+    barMenu
+		.append("select")
+		.selectAll("option")
+        .data(nest)
+        .enter()
+        .append("option")
+        .attr("value", function(d){return d.key;})
+        .text(function(d){return d.key;});
+       
         
 
-                                        
-     var initialBar = function(year) {
-     	var selectYear = nest.filter(function(d) {return d.key == year;});
-        
-              function colorPicker(v){
+        function colorPicker(v){
            if(v=="Red") { return "#aa0000";}
            else if (v =="Yellow"){ return "#f0bd27";}
            else { return "#55aa00" ;};
 }
+                                        
+     var initialBar = function(year) {
+     	var selectYear = nest.filter(function(d) {return d.key == year;});
+        
+        x.domain([0,3]);
+        y.domain([0,1]);
         
        var barspace = d3.select(".svg1").selectAll(".g-category")
     	.data(selectYear)
     	.enter().append("g")
-    	.attr("class", "g-category")
+    	.attr("class", "g-category");
         
-        var bars = barspace.selectAll(".bar")
+        var bars = d3.select(".svg1").selectAll(".g-category").selectAll(".bar")
      	.data(function(d) {return d.values;})
      	.enter().append("rect")
         .attr("class", "bar")
@@ -155,11 +166,52 @@ if (error) throw error;
         .attr("height", function(d) {return height - y(d.Percent);})
         .attr("fill", function(d) {return colorPicker(d.Fund_Zone);}); //fund zone is already labeled green/yellow/red
         
+        
+
+        
 
      };
+    
      
 
-     initialBar(2016);
+     initialBar(2013);
+     
+     var updateBar = function(year) {
+    	 
+         
+     	var selectYear2 = nest.filter(function(d) {return d.key == year;});
+        
+        x.domain([0,3]);
+        y.domain([0,1]);
+        
+
+      svg1.selectAll(".g-category")
+      .data(selectYear2)
+      .transition();
+      
+      
+
+    svg1.selectAll(".g-category").selectAll(".bar")
+     	.data(function(d) {return d.values;})
+        .transition()
+        .attr("y", function(d) {return y(d.Percent);})
+        .attr("height", function(d) {return 2*height - y(d.Percent);});
+
+      
+     };
+     
+      	barMenu.on('change', function(){
+ 		// Find which Fund_Name was selected from the dropdown
+ 		var selectedYear = d3.select(this)
+            .select("select")
+            .property("value");
+        // Run update function with the selected Year
+        updateBar(selectedYear);
+		
+    });
+     
+ 
+
      
 	
 
@@ -364,8 +416,6 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
             .property("value");
         // Run update function with the selected Fund_Name
         updateGraph(selectedFund);
-		
-
 		
     });
   
