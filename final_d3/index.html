@@ -133,7 +133,20 @@ var svg = d3.select("#graph")
         .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 		//.attr("align","center")
-        .attr("class", "svg");
+        .attr("class", "svg")
+        ;
+        
+var svg2 = d3.select("#fundinfo")
+	.append("svg")
+        .style("width", 200 + margin.left + margin.right + "px")
+        .style("height", 200 + margin.top + margin.bottom + "px")
+        .attr("width", 200 + margin.left + margin.right)
+        .attr("height", 200 + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+        .attr("class","svg2")
+        ;
+         
 		
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/fundzonestotal.csv", function(error, data) {
 if (error) throw error;
