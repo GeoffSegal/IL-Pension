@@ -42,7 +42,7 @@ body {
 <p style="text-align: center;">&nbsp;</p>
 
 
-<form id="years">
+<form id="years" align="center">
   <input  type='radio' id=2013 name="mode" checked>2013</input>
   <input type='radio' id=2014 name="mode">2014</input>
 	<input type='radio' id=2015 name="mode">2015</input>
@@ -168,7 +168,7 @@ if (error) throw error;
      	.data(function(d) {return d.values;})
      	.enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d,i) {return x(0.5+i)/1.7;})
+        .attr("x", function(d,i) {return x((0.5*i)+0.7);})
         .attr("y", function(d) {return y(d.Percent);})
         .attr("width", 150)
         .attr("height", function(d) {return height - y(d.Percent);})
