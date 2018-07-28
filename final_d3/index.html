@@ -128,8 +128,17 @@ if (error) throw error;
         x.domain([0,3]);
         y.domain([0,1]);
         
+        
+
+                                        
      var initialBar = function(year) {
      	var selectYear = nest.filter(function(d) {return d.key == year;});
+        
+              function colorPicker(v){
+           if(v=="Red") { return "#aa0000";}
+           else if (v =="Yellow"){ return "#f0bd27";}
+           else { return "#55aa00" ;};
+}
         
        d3.select(".svg1").selectAll(".g-category")
     	.data(selectYear)
@@ -143,8 +152,8 @@ if (error) throw error;
         .attr("x", function(d,i) {return x(i);})
         .attr("y", function(d) {return y(d.Percent);})
         .attr("width", 150)
-        .attr("height", function(d) {return height - y(d.Percent)})
-        .attr("fill", function(d) {return d.Fund_Zone}) //fund zone is already labeled green/yellow/red
+        .attr("height", function(d) {return height - y(d.Percent);})
+        .attr("fill", function(d) {return colorPicker(d.Fund_Zone);}); //fund zone is already labeled green/yellow/red
         
      };
      
