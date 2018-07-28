@@ -8,23 +8,23 @@ body {
 }
 
 .areared {
-  fill: rgba(204,50,50,0.2);
+  fill: rgba(170,0,0,0.2);
 }
 .areayellow {
-  fill: rgba(231,180,22,0.2);
+  fill: rgba(240,189,39,0.2);
 }
 .areagreen {
-  fill: rgba(45,201,55,0.2);
+  fill: rgba(85,170,0,0.2);
 }
   
 .line1 {
  fill: none;
-  stroke: rgba(0,176,24,0.9);
+  stroke: rgba(85,170,0,1.0);
   stroke-width: 4px;
 }
 .line2{
  fill: none;
-  stroke: rgba(216,31,42,0.9);
+  stroke: rgba(170,0,0,0.9);
   stroke-width: 4px;
 }
 .svg:hover .line1 {
@@ -37,8 +37,8 @@ body {
 
 <body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<h2 style="text-align: center;"><span style="color: #003366;"><strong>Illinois Downstate Pension Database</strong></span></h2>
-<p style="text-align: center;"><span style="color: #003366;">Which one is the next to burst?</span></p>
+<h2 style="text-align: center;"><span style="color: #003366;"><strong>Illinois Downstate Pension Funding</strong></span></h2>
+<p style="text-align: center;"><span style="color: #003366;">An interactive visualization story</span></p>
 <p style="text-align: center;">&nbsp;</p>
 
 
@@ -140,21 +140,22 @@ if (error) throw error;
            else { return "#55aa00" ;};
 }
         
-       d3.select(".svg1").selectAll(".g-category")
+       var barspace = d3.select(".svg1").selectAll(".g-category")
     	.data(selectYear)
     	.enter().append("g")
     	.attr("class", "g-category")
         
-        d3.selectAll(".g-category").selectAll(".bar")
+        var bars = barspace.selectAll(".bar")
      	.data(function(d) {return d.values;})
      	.enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d,i) {return x(i);})
+        .attr("x", function(d,i) {return x(0.5+i)/1.7;})
         .attr("y", function(d) {return y(d.Percent);})
         .attr("width", 150)
         .attr("height", function(d) {return height - y(d.Percent);})
         .attr("fill", function(d) {return colorPicker(d.Fund_Zone);}); //fund zone is already labeled green/yellow/red
         
+
      };
      
 
