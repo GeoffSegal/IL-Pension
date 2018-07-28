@@ -195,7 +195,7 @@ if (error) throw error;
      	.data(function(d) {return d.values;})
         .transition()
         .attr("y", function(d) {return y(d.Percent);})
-        .attr("height", function(d) {return 2*height - y(d.Percent);});
+        .attr("height", function(d) {return height - y(d.Percent);});
 
       
      };
