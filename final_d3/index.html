@@ -195,7 +195,18 @@ if (error) throw error;
     	.enter().append("g")
     	.attr("class", "g-category");
         
-        var bars = d3.select(".svg1").selectAll(".g-category").selectAll(".bar")
+        var bartext = barspace.selectAll(".text")
+          .data(function(d) {return d.values;})
+          .enter()
+          .append("text")
+          .attr("class","text")
+          .attr("dy", ".75em")
+          .attr("y", function(d) { return y(d.Percent+0.05); })
+          .attr("x", function(d,i) { return x((0.6*i+0.75)); })
+          .attr("text-anchor", "middle")
+          .text(function(d) { return d3.format(".01%")(d.Percent); });
+        
+        var bars = barspace.selectAll(".bar")
      	.data(function(d) {return d.values;})
      	.enter().append("rect")
         .attr("class", "bar")
@@ -231,13 +242,22 @@ if (error) throw error;
       .data(selectYear)
       .transition();
       
-      
+
+    svg1.selectAll(".g-category").selectAll(".text")
+    	.data(function(d) {return d.values;})
+        .transition()
+        .attr("y", function(d) { return y(d.Percent+0.05); })
+        .text(function(d) { return d3.format(".01%")(d.Percent); })
+        .duration(1000)
+        ;
 
     svg1.selectAll(".g-category").selectAll(".bar")
      	.data(function(d) {return d.values;})
             .transition()
         .attr("y", function(d) {return y(d.Percent);})
-        .attr("height", function(d) {return height - y(d.Percent);}).duration(1000);
+        .attr("height", function(d) {return height - y(d.Percent);})
+        .duration(1000)
+        ;
 
       
      };
