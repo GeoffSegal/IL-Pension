@@ -121,36 +121,29 @@ if (error) throw error;
 	
 	var nest = d3.nest()
 		.key(function(d){return d.Year;})
-		.sortKeys(d3.ascending)
 		.entries(data);
         
-     
-     var testdata = [4,8,15,16,23,42];
-     //console.log(testdata);
         
-        x.domain([0,6]);
+        x.domain([0,3]);
         y.domain([0,1]);
         
      var initialBar = function(year) {
      	var selectYear = nest.filter(function(d) {return d.key == year;});
-
-     	var selectYear2 = selectYear[0].values;
-     	//console.log(test[]["Percent"])
         
-        d3.select(".svg1").selectAll(".g-category")
+       d3.select(".svg1").selectAll(".g-category")
     	.data(selectYear)
     	.enter().append("g")
     	.attr("class", "g-category")
         
-        d3.selectAll(".g-category").selectAll(".bars")
+        d3.selectAll(".g-category").selectAll(".bar")
      	.data(function(d) {return d.values;})
      	.enter().append("rect")
         .attr("class", "bar")
         .attr("x", function(d,i) {return x(i);})
         .attr("y", function(d) {return y(d.Percent);})
-        .attr("width", 80)
+        .attr("width", 150)
         .attr("height", function(d) {return height - y(d.Percent)})
-        //.attr("fill", function(d) {return color(d.Category)})
+        .attr("fill", function(d) {return d.Fund_Zone}) //fund zone is already labeled green/yellow/red
         
      };
      
@@ -243,6 +236,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 			.transition()
 			.duration(500)
 			.call(yaxis);
+            
 			
 		var a1 = svg.selectAll('.areagreen')
 		.data(selectFund,function(d){return d ? d.key : this.key;})
