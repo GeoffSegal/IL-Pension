@@ -114,14 +114,14 @@ section:after {
 .container1 {
 width:60%;
 float:left;
-height: 600px;
+height: 800px;
 }
 
 .container2 {
 width:30%;
 float:left;
   font: 40px verdana;
-  height: 600px;
+  height: 800px;
 }
 
 
@@ -142,7 +142,7 @@ float:left;
 
 <section style="text-align: center; color: #003366" class="narrative" id="narrative">
 
-Illinois has the largest amount of public pension plans in the nation. If you live in Illinois, chances are your local police and fire department have plans that are managed by your town. Chances also are these funds are struggling to keep up with what they owe. Much attenton has been given to the funding crisis for Illinois' statewide pensions. This is not just a state-level problem, as it is deeply sowed throughout the state's many municipalities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.
+Illinois has the largest amount of public pension plans in the nation. If you live in Illinois, chances are your local police and fire department have plans that are managed by your town. Chances also are these funds are struggling to keep up with what they owe. Much attenton has been given to the funding crisis for Illinois' statewide pensions. This is not just a state-level problem, as it is deeply sowed throughout the state's small communities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.
 </section>
 
 <section class="top" id="top">
@@ -483,7 +483,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 
   var xaxis = d3.axisBottom(x)
 	.ticks(4)
-		.tickSizeInner(0)
+		.tickSizeInner(10)
 		.tickPadding(10)
         .tickFormat(d3.format("d"));
 		
@@ -511,9 +511,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", 10)
-		.attr("x",-5)
+		.attr("x",-350)
         .style("text-anchor", "end")
-        .text("Funding")
+        .text("Funding ($)")
         .attr("class", "y axis label");
   // Create a dropdown
     var fundMenu = d3.select("#fundDropdown");
@@ -551,9 +551,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", 10)
-		.attr("x",-5)
+		.attr("x",-350)
         .style("text-anchor", "end")
-        .text("Funding")
+        .text("Funding ($)")
         .attr("class", "y axis label");
         
     
