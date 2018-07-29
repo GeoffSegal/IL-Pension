@@ -3,6 +3,10 @@
 <meta charset="utf-8">
 <title> Illinois Pension Funding</title>
 <style>
+
+body {
+
+}
 #tooltip {
     opacity: 0;
     position: absolute;
@@ -12,12 +16,21 @@
     border: 0px;
 }
 header {
-    background-color: #666;
+
     text-align: center;
     font-size: 35px;
+    font-family:verdana;
     color: white;
 }
 
+body {
+font-family:verdana;
+}
+.narrative{
+	width: 50%;
+    margin: auto;
+    height: 250px;
+}
 .top {
 	display:block;
 }
@@ -111,21 +124,34 @@ float:left;
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
 <header>
-<h2 style="text-align: center;"><span style="color: #003366;"><strong>Illinois Downstate Pension Funding</strong></span></h2>
-<p style="text-align: center;"><span style="color: #003366;">An interactive visualization story</span></p>
-<p style="text-align: center;">&nbsp;</p>
+
+<h2 style="text-align: center"><span style="color: #003366"><strong>Illinois Downstate Pension Funding</strong></span></h2>
 
 </header>
 
-<button onclick="myFunction()"><span id="buttontext"></span></button>
+
+<section style="text-align: center; color: #003366" class="narrative" id="narrative">
+
+If you live in Illinois, chances are your town is big enough to manage its own municipal retirement funds for its public fire and police staff. Chances also are these funds are struggling to keep up with its liabilities. Much attenton has been given to the funding crisis for Illinois' statewide pensions. This is not just a statewide problem, as it is deeply sowed throughout the state's many municipalities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.
+</section>
 
 <section class="top" id="top">
 
 <section class="totalgraph">
+<p style="text-align: center; color: #003366">
+<strong>How much money do we owe?</strong ><br>A pension fund's viability is measured by comparing the actuarial valuation of its assets to its liabilities. As payrolls increase, towns grow larger, and obligations grow, we expect these liabilities to rise. A fund has a mandate to keep the growth of its assets in line.<br><br>
+The combined total of all Illinois' downstate (meaning outside Chicago) pension liabilities, topping 20 billion dollars, continues to increase. Assets have increased too, but not fast enough to close the gap.
+</p>
+
 <div id="totalfundinggraph"></div>
 </section>
 
 <section class="barsection">
+<p style="text-align: center; color: #003366">
+<strong>How are the pensions doing?</strong ><br>A pension fund is considered to be at risk its funding ratio, being the assets divided by liabilities, is below 80%. Below 65% is futher considerd to be in critical danger.<br><br>
+An astounding number of Illinois' pensions are in critical danger. Compare the distribution of funding zones by year with this ineractive chart. Green is healthy (>80%), yellow is endangered (65%-80%), and red is critically endangered (<65%)
+</p>
+
 <div id="bar" align="center"></div>
 <form id="years" align="center">
   <input  type='radio' id=2013 name="mode" checked>2013</input>
@@ -150,13 +176,16 @@ float:left;
 
 </section>
 
+<button onclick="myFunction()"><span id="buttontext"></span></button>
+
+
 
 <script>
 
-d3.json("https://geoffsegal.github.io/IL-Pension/data/data.json", function(data) {
-	console.log(data[0])
-});
- document.getElementById("buttontext").innerHTML="Look up a particular local fund";
+//d3.json("https://geoffsegal.github.io/IL-Pension/data/data.json", function(data) {
+	//console.log(data[0])
+//});
+document.getElementById("buttontext").innerHTML="Look up a particular local fund";
  
 function myFunction() {
     var x = document.getElementById("top");
