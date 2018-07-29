@@ -3,7 +3,14 @@
 <meta charset="utf-8">
 <title> Illinois Pension Funding</title>
 <style>
-
+#tooltip {
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 100px; height: 100px;
+    background: white;
+    border: 0px;
+}
 header {
     background-color: #666;
     text-align: center;
@@ -11,10 +18,14 @@ header {
     color: white;
 }
 
+.top {
+	display:block;
+}
 .totalgraph {
     float: left;
     width: 50%;
     height: 600px; /* only for demonstration, should be removed */
+    
 }
 
 .barsection {
@@ -28,6 +39,7 @@ section:after {
     clear: both;
 }
 .fundsection {
+	display:none;
     float: left;
     padding: 20px;
     width: 100%;
@@ -105,6 +117,9 @@ float:left;
 
 </header>
 
+<button onclick="myFunction()"><span id="buttontext"></span></button>
+
+<section class="top" id="top">
 
 <section class="totalgraph">
 <div id="totalfundinggraph"></div>
@@ -120,8 +135,10 @@ float:left;
 </form>
 </section>
 
+</section>
 
-<section class="fundsection">
+
+<section class="fundsection" id="fundsection">
 <div id="fundDropdown" align="center"> <b>Fund Name:</b> </div>
 
 <div class="container">
@@ -135,6 +152,25 @@ float:left;
 
 
 <script>
+
+ document.getElementById("buttontext").innerHTML="Look up a particular local fund";
+ 
+function myFunction() {
+    var x = document.getElementById("top");
+    var y = document.getElementById("fundsection");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+        y.style.display = "none";
+ 
+        document.getElementById("buttontext").innerHTML="Look up a particular local fund";
+    } else {
+        x.style.display = "none";
+        y.style.display= "block";
+        document.getElementById("buttontext").innerHTML="Go back to Overview";
+    }
+}
+
+
 var margin = {top: 20, right: 20, bottom: 30, left: 100},
   width = 700 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
@@ -297,7 +333,10 @@ if (error) throw error;
         .attr("y", function(d) {return y(d.Percent);})
         .attr("width", 100)
         .attr("height", function(d) {return height - y(d.Percent);})
-        .attr("fill", function(d) {return colorPicker(d.Fund_Zone);}); //fund zone is already labeled green/yellow/red
+        .attr("fill", function(d) {return colorPicker(d.Fund_Zone);})
+        
+        
+        ; //fund zone is already labeled green/yellow/red
         
         
 
@@ -476,18 +515,24 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("class", "y axis label");
         
     
-			
+		  //var tooltip = d3.select("#tooltip");	
+    
+    
        svg2.append("path")
       .datum(nest2)
       .attr("fill", "none")
       .attr("class","line1")
-      .attr("d", valueLine1);
+      .attr("d", valueLine1)
+       
+      ;
       
        svg2.append("path")
       .datum(nest2)
       .attr("fill", "none")
       .attr("class","line2")
       .attr("d", valueLine0);
+      
+    
       
       
         svg2.selectAll(".circle1")
@@ -496,7 +541,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("class","circle1")
         .attr("r", 6)
         .attr("cx", function(d,i) {  return x(d.key); })
-        .attr("cy", function(d,i) { return y(d.value.Assets); });
+        .attr("cy", function(d,i) { return y(d.value.Assets); })
+         
+        ;
         
          svg2.selectAll(".circle2")
         .data(nest2)
