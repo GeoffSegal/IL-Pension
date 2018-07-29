@@ -153,6 +153,9 @@ float:left;
 
 <script>
 
+d3.json("https://geoffsegal.github.io/IL-Pension/data/data.json", function(data) {
+	console.log(data[0])
+}
  document.getElementById("buttontext").innerHTML="Look up a particular local fund";
  
 function myFunction() {
