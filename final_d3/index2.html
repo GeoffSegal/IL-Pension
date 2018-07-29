@@ -52,6 +52,12 @@ section:after {
   stroke-width: 4px;
 }
 
+.circle1{
+ fill: rgba(85,170,0,1.0);
+}
+.circle2 {
+	fill:rgba(170,0,0,0.9);
+}
 .dot1{
  fill: rgba(85,170,0,1.0);
 }
@@ -101,7 +107,7 @@ float:right;
 
 
 <section class="totalgraph">
-Text
+<div id="totalfundinggraph"></div>
 </section>
 
 <section class="barsection">
@@ -147,8 +153,11 @@ var valueLine = d3.line()
     .x(function(d) { return x(d.Year); })
     .y(function(d) { return y(d.Assets); });
     
-var valueCircle = d3
-	
+
+var valueLine1 = d3.line()
+	.x(function(d) { return x(d.key);})
+	.y(function(d) { return y(d.Assets);});
+    
 var valueLine2 = d3.line()
 	.x(function(d) { return x(d.Year);})
 	.y(function(d) { return y(d.Liabilities);});
@@ -204,6 +213,18 @@ var svg = d3.select("#graph")
   // .attr("transform","translate(" + margin.left + "," + margin.top + ")")
      //  .attr("class","svg2")
     // ;
+    
+    var svg2 = d3.select("#totalfundinggraph")
+    		.append("svg")
+    .style("width", width + margin.left + margin.right + "px")
+    .style("height", height + margin.top + margin.bottom + "px")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+    .attr("class", "svg2");	
+	
+        
          
 		
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/fundzonestotal.csv", function(error, data) {
@@ -359,13 +380,13 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
       var nest2 = d3.nest()
       .key(function(d){return d.Year;})
       .rollup(function(v) { return {
-    Assets: d3.sum(v, function(d) { return d.Assets; }),
-    Liabilities: d3.sum(v, function(d) { return d.Liabilities; })
-  }; })
+      	Assets: d3.sum(v, function(d) { return d.Assets; }),
+        Liabilities: d3.sum(v, function(d) { return d.Liabilities; })
+  		};})
   .entries(data);
   
   
-  console.log(JSON.stringify(nest2));
+ // console.log(JSON.stringify(nest2));
 	  // Set up the x axis
 
   // Scale the range of the data
@@ -404,7 +425,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
 		.attr("fill","#000")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
-        .attr("dy", 1)
+        .attr("dy", 10)
 		.attr("x",-5)
         .style("text-anchor", "end")
         .text("Funding")
@@ -420,7 +441,54 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .attr("value", function(d){return d.key;})
         .text(function(d){return d.key;});
 		
-		
+
+//Total Graph
+
+  svg2.append("g")
+       .attr("transform", "translate(0," + height + ")")
+       .attr("class", "x axis")
+       .call(xaxis);
+       
+       
+      y.domain([0, 25000000000]);
+       
+         svg2.append("g")
+       .attr("class", "y axis")
+       .call(yaxis);
+
+		svg.select(".y")
+			.transition()
+			.duration(500)
+			.call(yaxis);
+       
+         svg2.append("text")
+		.attr("fill","#000")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", 10)
+		.attr("x",-5)
+        .style("text-anchor", "end")
+        .text("Funding")
+        .attr("class", "y axis label");
+        
+        svg2.selectAll(".circle1")
+        .data(nest2)
+        .enter().append("circle")
+        .attr("class","circle1")
+        .attr("r", 6)
+        .attr("cx", function(d,i) {  return x(d.key); })
+        .attr("cy", function(d,i) { return y(d.value.Assets); });
+        
+         svg2.selectAll(".circle2")
+        .data(nest2)
+        .enter().append("circle")
+        .attr("class","circle2")
+        .attr("r", 6)
+        .attr("cx", function(d,i) {  return x(d.key); })
+        .attr("cy", function(d,i) { return y(d.value.Liabilities); });
+        
+       
+        
  
  	// Function to create the initial graph
  	var initialGraph = function(Fund_Name){
