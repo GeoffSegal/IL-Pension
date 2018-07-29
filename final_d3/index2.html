@@ -8,6 +8,16 @@ body {
 
 }
 
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
 .legend {
             padding: 5px;
             font: 10px sans-serif;
@@ -180,7 +190,7 @@ An astounding number of Illinois' pensions are in critical danger. Compare the d
 <div class="container">
   <div class="container1" id ="graph"></div>
   <div class="container2" id="fundinfo">
-      The Funding ratio in 2016 for the <span id="FundName2016"></span> was <span id="fund2016"></span>
+     <p style="color: #003366"> The Funding ratio in 2016 for the <span id="FundName2016"></span> was <strong><span id="fund2016"></span></strong></p>
   </div>
 </div>
 
@@ -574,7 +584,34 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
     .text("Assets")
     ;
 		
+// gridlines in x axis function
+function make_x_gridlines() {		
+    return d3.axisBottom(x)
+        .ticks(3)
+}
 
+// gridlines in y axis function
+function make_y_gridlines() {		
+    return d3.axisLeft(y)
+        .ticks(5)
+}
+
+ // add the X gridlines
+  svg.append("g")			
+      .attr("class", "grid")
+      .attr("transform", "translate(0," + height + ")")
+      .call(make_x_gridlines()
+          .tickSize(-height)
+          .tickFormat("")
+      )
+      
+        // add the Y gridlines
+  svg.append("g")			
+      .attr("class", "grid")
+      .call(make_y_gridlines()
+          .tickSize(-width)
+          .tickFormat("")
+      )
 //Total Graph
 
   svg2.append("g")
@@ -604,6 +641,23 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .text("Funding ($)")
         .attr("class", "y axis label");
         
+        
+          // add the X gridlines
+          svg2.append("g")			
+      .attr("class", "grid")
+      .attr("transform", "translate(0," + height + ")")
+      .call(make_x_gridlines()
+          .tickSize(-height)
+          .tickFormat("")
+      )
+      
+        // add the Y gridlines
+  svg2.append("g")			
+      .attr("class", "grid")
+      .call(make_y_gridlines()
+          .tickSize(-width)
+          .tickFormat("")
+      )
     
 		  //var tooltip = d3.select("#tooltip");	
     
@@ -760,7 +814,7 @@ svg.selectAll("g.dot1")
            else if (v<0.8){ return "#f0bd27";}
            else { return "#55aa00" ;};
 }
-   press=document.getElementById("fundinfo");
+   press=document.getElementById("fund2016");
  press.style.color = colorPicker(fund2016);    
   
  document.getElementById("FundName2016").innerHTML=Fund_Name;
@@ -858,8 +912,9 @@ svg.selectAll("g.dot1")
            else if (v<0.8){ return "#f0bd27";}
            else { return "#55aa00" ;};
 }
-   press=document.getElementById("fundinfo");
- press.style.color = colorPicker(fund2016);   
+  press=document.getElementById("fund2016");
+ press.style.color = colorPicker(fund2016);    
+  
         document.getElementById("FundName2016").innerHTML=Fund_Name;
 		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
 
