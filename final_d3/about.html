@@ -1,5 +1,80 @@
 <html>
 <body>
 About this Visualization
+<p>
+This visualization is an exploration of the health of Illinois' downstate municipal pension funds.
+The data comes from a publicly available report from the Illinois Department of Insurance. This contains
+many metrics about each fund's assets, liabilitlies, and health. 
+
+Utilizing this data, which was transformed and structured to feed into the d3 graphs, we are able to
+tell a narrative story about how the performance of Illinois' pension funds are doing.
+
+This website was built using only html, css, and javascript. No templates were used.
+ 
+</p>
+
+<p>
+The structure of this visualization closely follows the martini glass narrative structure. 
+We start by giving an overview of the context of the problem. The first scene in this visualization is given
+by the context descriptions, and then a line chart and bar chart.
+This scene gives an overview of what the data contains, and also at a macro scale, the funding of the entire state of Illinois.
+The line graph on the left in this scene compares the parameters assets and liabilities by year. 
+<br>The y-axis goes from 0
+to the maximum of either the assets or liabilities. Starting at 0 gives a visual context as to how far apart 
+the assets and liabilities truly are. Tick-marks are shown to point to a few different dollar amounts, and gridlines follow
+these tick marks so a viewer can easily infer what the data values are.
+The x-axis contains 4 tickmarks for the 4 years of data in this graph, with gridlines as well.
+<br> The lines and circles
+on this graph are colored red and green to represent assets and liabilities, with a legend annotation in the bottom
+right to show this relationship. Circles were added at the data points to emphasize where the actual data lies.
+The line is nice since it reminds the viewer that this is data changing over time, but there are only 4 actual data points,
+so the circles  highlight that.
+There is also an annotation pointing to the last value of liabilities. This annotation answers the question posed
+in the context description of "How much does Illinois owe?" It is an important big picture number, and without 
+overwhelming the viewer with numbers and annotations, adds a lot of context to this graph. 
+</p>
+
+<p>
+To the right of the line chart in this scene is a bar chart. This uses the parameters year and funding ratio zone.
+This section gives the viewer additional information on how to judge if a fund has enough assets compared to its liabilities.
+The bar chart shows the distribution of the given funding ratio zones to highlight the problem at hand. The bar chart
+is a good way to display the distribution since the area of each rectangle is proportional to the percent in each category.
+An annotation is also added to this graph, above each rectangle, showing the data value for each category.
+Without overcrowding with information, this lets the viewer more precisely compare the exact values for each category
+without having to guess based off how large the bars are.
+<br>
+A trigger is also present in this scene, where the viewer and change the year selection and the bar chart updates accordingly.
+This lets the viewer explore to see how the distribution of funding zones is changing over time. They can decide for themselves
+is it getting better or is it getting worse.
+This is a turning point in the martini glass structure where we are transitioning from data overview and story
+to user exploration.
+<br>
+Below both the line chart and bar chart is a trigger button to move to the next scene.
+<br>
+</p>
+
+<p>
+Once a viewer clicks a button to move to the second scene, the graph objects change slightly, but enough
+visual consistency is kept as to not disorientate the viewer. In this section, a viewer can select any
+of the hundreds of funds and explore the data themselves. The line graph on the left maintains visual consistency in its
+structure. The parameters are kept the same, being assets, liabilities, and year, however it is now drilled down
+to contain only the data for the selected fund in the drop down. A viewer can change the selected fund in the drop down
+to trigger a change in the values displayed in this entire scene.
+<br>
+The axes and legend annotation are kept on the line graph for consistency. The annotation pointing out the 2016
+liabilities number is removed. On the first graph, since we were giving an overview of the data,
+that was a good way to provide one big key number to understand the data as a whole. Now that the viewer understands the data
+and is exploring on their own, it seemed fitting to remove this annotation.
+<br>
+The right portion of the scene now changes to highlight a key value for a particular fund - its funding ratio.
+Even though the same exact bar chart isn't kept, visual consistency is maintained in that this space of the visualization
+provides information on the funding ratio. The color of the key funding ratio value changes according to what
+zone it is in as provided in the overview scene. The parameters in this portion are the assets and liabilities and the
+selected fund name. The funding ratio for the most recent year is highlighted in this annotation, as having all 4 values
+could be overwhelming.
+</p>
+
+
+
 </body>
 </html>
