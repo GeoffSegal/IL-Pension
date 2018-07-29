@@ -85,7 +85,7 @@ float:left;
 
 .container2 {
 width:30%;
-float:right;
+float:left;
   font: 40px verdana;
 }
 
@@ -154,9 +154,13 @@ var valueLine = d3.line()
     .y(function(d) { return y(d.Assets); });
     
 
+var valueLine0 = d3.line()
+	.x(function(d) { return x(d.key);})
+	.y(function(d) { return y(d.value.Liabilities);});
+    
 var valueLine1 = d3.line()
 	.x(function(d) { return x(d.key);})
-	.y(function(d) { return y(d.Assets);});
+	.y(function(d) { return y(d.value.Assets);});
     
 var valueLine2 = d3.line()
 	.x(function(d) { return x(d.Year);})
@@ -471,6 +475,21 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
         .text("Funding")
         .attr("class", "y axis label");
         
+    
+			
+       svg2.append("path")
+      .datum(nest2)
+      .attr("fill", "none")
+      .attr("class","line1")
+      .attr("d", valueLine1);
+      
+       svg2.append("path")
+      .datum(nest2)
+      .attr("fill", "none")
+      .attr("class","line2")
+      .attr("d", valueLine0);
+      
+      
         svg2.selectAll(".circle1")
         .data(nest2)
         .enter().append("circle")
