@@ -7,6 +7,13 @@
 body {
 
 }
+
+.legend {
+            padding: 5px;
+            font: 10px sans-serif;
+            background: yellow;
+            box-shadow: 2px 2px 1px #888;
+        }
 #tooltip {
     opacity: 0;
     position: absolute;
@@ -132,7 +139,7 @@ float:left;
 
 <section style="text-align: center; color: #003366" class="narrative" id="narrative">
 
-If you live in Illinois, chances are your town is big enough to manage its own municipal retirement funds for its public fire and police staff. Chances also are these funds are struggling to keep up with its liabilities. Much attenton has been given to the funding crisis for Illinois' statewide pensions. This is not just a statewide problem, as it is deeply sowed throughout the state's many municipalities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.
+Illinois has the largest amount of public pension plans in the nation. If you live in Illinois, chances are your local police and fire department have plans that are managed by your town. Chances also are these funds are struggling to keep up with what they owe. Much attenton has been given to the funding crisis for Illinois' statewide pensions. This is not just a state-level problem, as it is deeply sowed throughout the state's many municipalities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.
 </section>
 
 <section class="top" id="top">
@@ -148,8 +155,8 @@ The combined total of all Illinois' downstate (meaning outside Chicago) pension 
 
 <section class="barsection">
 <p style="text-align: center; color: #003366">
-<strong>How are the pensions doing?</strong ><br>A pension fund is considered to be at risk its funding ratio, being the assets divided by liabilities, is below 80%. Below 65% is futher considerd to be in critical danger.<br><br>
-An astounding number of Illinois' pensions are in critical danger. Compare the distribution of funding zones by year with this ineractive chart. Green is healthy (>80%), yellow is endangered (65%-80%), and red is critically endangered (<65%)
+<strong>How are the pensions doing?</strong ><br>A pension fund is considered to be healthy if its funding ratio, being the assets divided by liabilities, is above 80%. Below that is considered to be in danger, and below 65% is further considered to be in critical danger.<br><br>
+An astounding number of Illinois' pensions are in critical danger. Compare the distribution of funding zones with this interactive chart by changing the year. Green is healthy, yellow is endangered, and red is critically endangered
 </p>
 
 <div id="bar" align="center"></div>
@@ -564,7 +571,53 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", func
       .attr("class","line2")
       .attr("d", valueLine0);
       
+    var legend1 = svg2.selectAll(".legend1")
+    .data(nest2)
+    .enter()
+    .append("rect")
+  	.attr("class", "legend")
+  	.attr("x", width -65)
+ 	 .attr("y", 300)
+  	.attr("width", 20)
+  	.attr("height", 20)
+    .style("fill","rgb(170,0,0)")
+	;
+	
+    var legend2 = svg2.selectAll(".legend2")
+    .data(nest2)
+    .enter()
+    .append("rect")
+  	.attr("class", "legend")
+  	.attr("x", width -65)
+ 	 .attr("y", 330)
+  	.attr("width", 20)
+  	.attr("height", 20)
+    .style("fill","rgb(85,170,0)")
+	;
     
+    svg2.selectAll(".text1")
+    .data(nest2)
+    .enter()
+    .append("text")
+    .attr("class","text1")
+    .attr("dy", ".75em")
+    .attr("y", 305)
+    .attr("x",width-150)
+    .text("Liabilities")
+    ;
+    
+     svg2.selectAll(".text2")
+    .data(nest2)
+    .enter()
+    .append("text")
+    .attr("class","text2")
+    .attr("dy", ".75em")
+    .attr("y", 335)
+    .attr("x",width-127)
+    .text("Assets")
+    ;
+ // .style("fill", function(d) { return color_hash[dataset.indexOf(d)][1] });
+
       
       
         svg2.selectAll(".circle1")
