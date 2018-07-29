@@ -23,6 +23,7 @@ button {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+    border-radius: 5px;
 }
 .grid line {
   stroke: lightgrey;
@@ -167,7 +168,13 @@ float:left;
 
 <section style="text-align: center; color: #003366" class="narrative" id="narrative">
 
-Illinois has the largest amount of public pension plans in the nation. If you live in Illinois, chances are your local police and fire department have plans that are managed by your town. Chances also are these funds are struggling to keep up with what they owe. Much attenton has been given to the funding crisis for Illinois' statewide pensions. This is not just a state-level problem, as it is deeply sowed throughout the state's small communities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.
+Illinois has the largest amount of public pension plans in the nation. If you live in Illinois, 
+chances are your local police and fire department have plans that are managed by your town. 
+Chances also are these funds are struggling to keep up with what they owe. 
+Much attention has been given to the funding crisis for Illinois' statewide pensions. 
+This is not just a state-level problem, as it is deeply sowed throughout the state's small communities. 
+In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. 
+This could just be the tip of the iceberg.
 </section>
 
 <section class="top" id="top">
@@ -681,7 +688,7 @@ function make_y_gridlines() {
         .attr("y",-15)
         .attr("dy",10)
         .attr("x",80)
-        .text("Total Illinois Pension Fund Assets vs Liabilities")
+        .text("Total Illinois Combined Pension Fund Assets vs Liabilities")
         .attr("class","svg2title");
         
         
@@ -702,8 +709,9 @@ function make_y_gridlines() {
           .tickFormat("")
       )
     
-		  //var tooltip = d3.select("#tooltip");	
-    
+
+     
+    .on("mouseout", function() { tooltip.style("opacity", 0) })
     
        svg2.append("path")
       .datum(nest2)
@@ -777,6 +785,34 @@ function make_y_gridlines() {
         .attr("cy", function(d,i) { return y(d.value.Assets); })
          
         ;
+        
+        var maxliability = d3.max(nest2, function(d) {return d.value.Liabilities;});
+        
+        svg2.selectAll(".textannotation")
+        	.data(nest2)
+            .enter()
+            .append("text")
+            .attr("class","textannotation")
+            .attr("dy", ".75em")
+            .attr("x", x(2015.5))
+            .attr("y",y(20000000000))
+            .text(d3.format(".2")(maxliability/1000000000)+" Billion")
+            ;
+
+                     
+         svg2.selectAll(".lineannotation")
+         	.data(nest2)
+            .enter()
+            .append("line")
+            .attr("class","lineannotation")
+            .attr("x1", x(2015.75))
+            .attr("y1", y(20500000000))
+            .attr("x2", x(2016))
+            .attr("y2", y(maxliability))
+            .attr("stroke-width", 2)
+            .attr("stroke", "black")
+            ;   
+         
         
          svg2.selectAll(".circle2")
         .data(nest2)
