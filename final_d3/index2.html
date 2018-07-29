@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title> Illinois Pension Funding</title>
+<style>
+
+header {
+    background-color: #666;
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+}
+
+.totalgraph {
+    float: left;
+    width: 30%;
+    height: 600px; /* only for demonstration, should be removed */
+    background: #ccc;
+    padding: 20px;
+}
+
+.barsection {
+    float: left;
+    padding: 20px;
+    width: 70%;
+    background-color: #f1f1f1;
+    height: 600px; /* only for demonstration, should be removed */
+}
+section:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.fundsection {
+    float: left;
+    padding: 20px;
+    width: 100%;
+    height: 1000px; /* only for demonstration, should be removed */
+}
+
+
+
+.areared {
+  fill: rgba(170,0,0,0.2);
+}
+.areayellow {
+  fill: rgba(240,189,39,0.2);
+}
+.areagreen {
+  fill: rgba(85,170,0,0.2);
+}
+  
+.line1 {
+ fill: none;
+  stroke: rgba(85,170,0,1.0);
+  stroke-width: 4px;
+}
+
+.dot1{
+ fill: rgba(85,170,0,1.0);
+}
+.line2{
+ fill: none;
+  stroke: rgba(170,0,0,0.9);
+  stroke-width: 4px;
+}
+.dot2 {
+	fill:rgba(170,0,0,0.9);
+}
+.svg:hover .line1 {
+  stroke: rgba(0,128,255,1);
+}
+
+
+.container {
+    width: 100%;
+    margin: auto;
+}
+.container1 {
+width:60%;
+float:left;
+}
+
+.container2 {
+width:30%;
+float:right;
+  font: 40px verdana;
+}
+
+
+
+</style>
+</head>
+
+
+<body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<header>
+<h2 style="text-align: center;"><span style="color: #003366;"><strong>Illinois Downstate Pension Funding</strong></span></h2>
+<p style="text-align: center;"><span style="color: #003366;">An interactive visualization story</span></p>
+<p style="text-align: center;">&nbsp;</p>
+
+</header>
+
+
+<section class="totalgraph">
+Text
+</section>
+
+<section class="barsection">
+<div id="bar"></div>
+<form id="years">
+  <input  type='radio' id=2013 name="mode" checked>2013</input>
+  <input type='radio' id=2014 name="mode">2014</input>
+	<input type='radio' id=2015 name="mode">2015</input>
+    <input type='radio' id=2016 name="mode">2016</input>
+</form>
+</section>
+
+
+<section class="fundsection">
+<div id="fundDropdown" align="center"> <b>Fund Name:</b> </div>
+
+<div class="container">
+  <div class="container1" id ="graph"></div>
+  <div class="container2" id="fundinfo">
+      The Funding ratio in 2016 for the <span id="FundName2016"></span> was <span id="fund2016"></span>
+  </div>
+</div>
+
+</section>
+
+
+<script>
+var margin = {top: 20, right: 20, bottom: 30, left: 100},
+  width = 960 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
+//LOOK INTO YEAR FORMAT LATER
+var formatYear = d3.timeFormat("%Y");
+var parseYear = d3.timeParse("%Y");
+//
+
+	  // Set the ranges
+var x = d3.scaleLinear().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+  
+// Define the line
+var valueLine = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.Assets); });
+    
+var valueCircle = d3
+	
+var valueLine2 = d3.line()
+	.x(function(d) { return x(d.Year);})
+	.y(function(d) { return y(d.Liabilities);});
+	
+var areagreen = d3.area()
+	.x(function(d,i) { return x(d.Year);})
+	.y0(function(d) { return y(0.8*d.Liabilities);})
+	.y1(0);
+	
+var areayellow = d3.area()
+	.x(function(d,i) { return x(d.Year);})
+	.y0(function(d) { return y(0.65*d.Liabilities);})
+	.y1(function(d) { return y(0.8*d.Liabilities);});
+	
+var areared = d3.area()
+	.x(function(d,i) { return x(d.Year);})
+	.y0(height)
+	.y1(function(d) { return y(0.65*d.Liabilities);});
+	
+	
+//svg that will contain the barchart
+var svg1 = d3.select("#bar")
+	.append("svg")
+    .style("width", width + margin.left + margin.right + "px")
+    .style("height", height + margin.top + margin.bottom + "px")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+    .attr("class", "svg1");	
+	
+	
+// Create the svg canvas in the "graph" div
+var svg = d3.select("#graph")
+        .append("svg")
+        .style("width", width + margin.left + margin.right + "px")
+        .style("height", height + margin.top + margin.bottom + "px")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+		//.attr("align","center")
+        .attr("class", "svg")
+        ;
+        
+//var svg2 = d3.select("#fundinfo")
+	//.append("svg")
+      //.style("width", 100 + margin.left + margin.right + "px")
+      //.style("height", 500 + margin.top + margin.bottom + "px")
+       //.attr("width", 100 + margin.left + margin.right)
+       // .attr("height", 500 + margin.top + margin.bottom)
+        //.append("g")
+  // .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+     //  .attr("class","svg2")
+    // ;
+         
+		
+d3.csv("https://geoffsegal.github.io/IL-Pension/data/fundzonestotal.csv", function(error, data) {
+if (error) throw error;
+
+	data.forEach(function(d) {
+		d.Year = +d.Year;
+		d.Count = +d.Count;
+		d.Percent = +d.Percent;
+	});
+	
+	var nest = d3.nest()
+		.key(function(d){return d.Year;})
+		.sortKeys(d3.ascending)
+		.entries(data);
+        
+      
+ var barMenu = d3.select("#barDropdown");
+    barMenu
+		.append("select")
+		.selectAll("option")
+        .data(nest)
+        .enter()
+        .append("option")
+        .attr("value", function(d){return d.key;})
+        .text(function(d){return d.key;});
+       
+        
+
+        function colorPicker(v){
+           if(v=="Red") { return "#aa0000";}
+           else if (v =="Yellow"){ return "#f0bd27";}
+           else { return "#55aa00" ;};
+}
+                                        
+     var initialBar = function(year) {
+     
+     
+    
+     	var selectYear = nest.filter(function(d) {return d.key == year;});
+        
+        x.domain([0,3]);
+        y.domain([0,1]);
+        
+       var barspace = d3.select(".svg1").selectAll(".g-category")
+    	.data(selectYear)
+    	.enter().append("g")
+    	.attr("class", "g-category");
+        
+        var bartext = barspace.selectAll(".text")
+          .data(function(d) {return d.values;})
+          .enter()
+          .append("text")
+          .attr("class","text")
+          .attr("dy", ".75em")
+          .attr("y", function(d) { return y(d.Percent+0.05); })
+          .attr("x", function(d,i) { return x((0.6*i+0.75)); })
+          .attr("text-anchor", "middle")
+          .text(function(d) { return d3.format(".01%")(d.Percent); });
+        
+        var bars = barspace.selectAll(".bar")
+     	.data(function(d) {return d.values;})
+     	.enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d,i) {return x((0.6*i+0.5));})
+        .attr("y", function(d) {return y(d.Percent);})
+        .attr("width", 150)
+        .attr("height", function(d) {return height - y(d.Percent);})
+        .attr("fill", function(d) {return colorPicker(d.Fund_Zone);}); //fund zone is already labeled green/yellow/red
+        
+        
+
+        
+
+     };
+    
+     
+ var form = document.getElementById("years")
+ for(var i=0; i<form.length; i++){
+        if(form[i].checked){
+          form_val = form[i].id;}}
+ console.log(form_val)
+     initialBar(form_val);
+     
+     var updateBar = function(year) {
+    	
+     	var selectYear = nest.filter(function(d) {return d.key == year;});
+        
+        x.domain([0,3]);
+        y.domain([0,1]);
+        
+
+      svg1.selectAll(".g-category")
+      .data(selectYear)
+      .transition();
+      
+
+    svg1.selectAll(".g-category").selectAll(".text")
+    	.data(function(d) {return d.values;})
+        .transition()
+        .attr("y", function(d) { return y(d.Percent+0.05); })
+        .text(function(d) { return d3.format(".01%")(d.Percent); })
+        .duration(1000)
+        ;
+
+    svg1.selectAll(".g-category").selectAll(".bar")
+     	.data(function(d) {return d.values;})
+            .transition()
+        .attr("y", function(d) {return y(d.Percent);})
+        .attr("height", function(d) {return height - y(d.Percent);})
+        .duration(1000)
+        ;
+
+      
+     };
+     
+     var dataDim = d3.select("#years")
+	dataDim.on("change", function() {
+    
+     //var form = document.getElementById("years")
+ for(var i=0; i<form.length; i++){
+        if(form[i].checked){
+          form_val = form[i].id;}}
+ console.log(form_val);
+    updateBar(form_val);
+    
+    });
+
+     
+	
+
+});
+// Import the CSV data
+d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(error, data) {
+  if (error) throw error;
+  
+   // Format the data
+  data.forEach(function(d) {
+      d.Funding = +d.Funding;
+	  d.Assets = +d.Assets;
+	  d.Liabilities = +d.Liabilities;
+	  d.Year = +d.Year;
+      d.Fund_Name = d.Fund_Name;
+	
+  });
+  
+  var nest = d3.nest()
+	  .key(function(d){return d.Fund_Name;})
+	  .sortKeys(d3.ascending)
+	  .entries(data);
+      
+      //summarize the total assets/liabilities
+      var nest2 = d3.nest()
+      .key(function(d){return d.Year;})
+      .rollup(function(v) { return {
+    Assets: d3.sum(v, function(d) { return d.Assets; }),
+    Liabilities: d3.sum(v, function(d) { return d.Liabilities; })
+  }; })
+  .entries(data);
+  
+  
+  console.log(JSON.stringify(nest2));
+	  // Set up the x axis
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.Year; }));
+  //y.domain([0,1])
+  y.domain(d3.extent(data, function(d) { return d.Assets;}));
+  
+  
+
+  var xaxis = d3.axisBottom(x)
+	.ticks(4)
+		.tickSizeInner(0)
+		.tickPadding(10)
+        .tickFormat(d3.format("d"));
+		
+  svg.append("g")
+       .attr("transform", "translate(0," + height + ")")
+       .attr("class", "x axis")
+       .call(xaxis);
+	   
+  // Add the y Axis
+  
+	var yaxis = d3.axisLeft(y)
+		.ticks(5)
+		.tickSizeInner(0)
+		.tickPadding(6)
+		.tickSize(0,0);
+		
+		
+  svg.append("g")
+       .attr("class", "y axis")
+       .call(yaxis);
+  
+  // Add a label to the y axis
+  svg.append("text")
+		.attr("fill","#000")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", 1)
+		.attr("x",-5)
+        .style("text-anchor", "end")
+        .text("Funding")
+        .attr("class", "y axis label");
+  // Create a dropdown
+    var fundMenu = d3.select("#fundDropdown");
+    fundMenu
+		.append("select")
+		.selectAll("option")
+        .data(nest)
+        .enter()
+        .append("option")
+        .attr("value", function(d){return d.key;})
+        .text(function(d){return d.key;});
+		
+		
+ 
+ 	// Function to create the initial graph
+ 	var initialGraph = function(Fund_Name){
+ 		// Filter the data to include only Fund_Name of interest
+ 		var selectFund = nest.filter(function(d) {return d.key == Fund_Name;});
+		
+		y.domain([0, d3.max(selectFund[0].values, function(d) {return 		d3.max([d.Liabilities,d.Assets]);})]);
+		svg.select(".y")
+			.transition()
+			.duration(500)
+			.call(yaxis);
+       
+  
+		
+		var initialPath = svg.selectAll(".line1")
+			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
+			.enter()
+			.append("g")
+			.append("path")
+			
+		initialPath
+			.datum(function(d) { return d.values;})
+			.attr("d", valueLine)
+			.attr("class", "line1");
+			
+svg.selectAll("g.dot1")
+        .data(selectFund, function(d){return d ? d.key : this.key;})
+        .enter().append("g")
+        .attr("class", "dot1")
+        .selectAll("circle")
+        .data(function(d) { return d.values; })
+        .enter().append("circle")
+        .attr("r", 6)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Assets); });
+
+				
+		var initialPath2 = svg.selectAll(".line2")
+			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
+			.enter()
+			.append("g")
+			.append("path");
+			//.style("stroke-dasharray",("3,3"));
+		
+
+		initialPath2
+			.datum(function(d) { return d.values;})
+			.attr("d", valueLine2)
+			.attr("class", "line2");
+        
+            svg.selectAll("g.dot2")
+        .data(selectFund, function(d){return d ? d.key : this.key;})
+        .enter().append("g")
+        .attr("class", "dot2")
+        .selectAll("circle")
+        .data(function(d) { return d.values; })
+        .enter().append("circle")
+        .attr("r", 6)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Liabilities); });
+		    
+        fund2016 = selectFund[0].values[0]["Funding"];
+     
+
+     function colorPicker(v){
+           if(v<0.65) { return "#aa0000";}
+           else if (v<0.8){ return "#f0bd27";}
+           else { return "#55aa00" ;};
+}
+   press=document.getElementById("fundinfo");
+ press.style.color = colorPicker(fund2016);    
+  
+ document.getElementById("FundName2016").innerHTML=Fund_Name;
+        
+
+		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
+        
+        
+
+
+       // var textspace = d3.select(".svg2").selectAll(".svg2-category")
+    	//.data(selectFund)
+    	//.enter().append("g")
+    	//.attr("class", "svg2-category");
+        
+        
+      //  var initialText = textspace.selectAll(".text")
+        //  .data(function(d) {return d.values;})
+         // .enter()
+          //.append("text")
+          //.attr("class","text")
+         // .attr("dy", ".75em")
+          //.attr("text-anchor", "middle")
+          //.text("Funding in "+year2016+ ":"+
+          //d3.format(".01%")(fund2016));
+          
+
+		
+ 	}
+	
+	
+ 	// Create initial graph
+ 	initialGraph("ADDISON POLICE PENSION FUND");
+	
+	
+ 	// Update the data
+ 	var updateGraph = function(Fund_Name){
+    
+ 		// Filter the data to include only Fund_Name of interest
+ 		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
+        
+     
+		
+		 x.domain(d3.extent(data, function(d) { return d.Year; }));
+		y.domain([0, d3.max(selectFund[0].values, function(d) {return d3.max([d.Liabilities,d.Assets]);})]);
+		svg.select(".y")
+			.transition()
+			.duration(500)
+			.call(yaxis)
+		
+ 		// Select all of the grouped elements and update the data
+		    // Select all the lines and transition to new positions
+  
+        
+         
+
+        svg.selectAll(".line1")
+			.data(selectFund)
+            .transition()
+            .duration(1000)
+            .attr("d", function(d){return valueLine(d.values);});
+            
+            
+        svg.selectAll("g.dot1")
+        .data(selectFund)
+        .transition().duration(1000);
+        
+     svg.selectAll("g.dot1").selectAll("circle")
+        .data(function(d) { return d.values; })
+        .transition().duration(1000)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Assets); });
+            
+        svg.selectAll(".line2")
+			.data(selectFund)
+            .transition()
+            .duration(1000)
+            .attr("d", function(d){return valueLine2(d.values);});
+	
+        svg.selectAll("g.dot2")
+        .data(selectFund)
+        .transition().duration(1000);
+        
+     svg.selectAll("g.dot2").selectAll("circle")
+        .data(function(d) { return d.values; })
+        .transition().duration(1000)
+        .attr("cx", function(d,i) {  return x(d.Year); })
+        .attr("cy", function(d,i) { return y(d.Liabilities); });
+       
+
+        fund2016 = selectFund[0].values[0]["Funding"];
+        
+             function colorPicker(v){
+           if(v<0.65) { return "#aa0000";}
+           else if (v<0.8){ return "#f0bd27";}
+           else { return "#55aa00" ;};
+}
+   press=document.getElementById("fundinfo");
+ press.style.color = colorPicker(fund2016);   
+        document.getElementById("FundName2016").innerHTML=Fund_Name;
+		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
+
+        //svg2.selectAll(".svg2-category")
+    	//.data(selectFund)
+    	//.transition();
+        
+        
+    //svg2.selectAll(".svg2-category").selectAll(".text")
+         // .data(function(d) {return d.values;})
+          //.transition()
+          //.text("Funding in "+year2016+ ":"+
+          //d3.format(".01%")(fund2016));
+
+			
+ 	}
+    
+    
+ 	// Run update function when dropdown selection changes
+ 	fundMenu.on('change', function(){
+ 		// Find which Fund_Name was selected from the dropdown
+ 		var selectedFund = d3.select("#fundDropdown")
+            .select("select")
+            .property("value");
+            
+        console.log(selectedFund);
+        // Run update function with the selected Fund_Name
+        updateGraph(selectedFund);
+		
+    });
+  
+})
+</script>
+
+
+
+</body>
+</html>
