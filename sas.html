@@ -1,251 +1,286 @@
-
 <!DOCTYPE html>
+<!--
+Copyright 2018 SAS Institute Inc.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    https://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!--
+	Bar Chart original code based on:
+	https://bost.ocks.org/mike/bar/3/
+	http://animateddata.co.uk/articles/d3/responsive/
+	
+	This example implements some basic chart functionality/characteristics, such as:
+	1. Default visualization (template/placeholder chart)
+	2. Roles validation
+	3. Formats
+	4. Selection (including multiple selections via crtl key)
+	5. Window resizing
+-->
 <html>
 <head>
-    <title>SAS Visual Analytics Custom Data Table</title>
-    <style>
-        body {
-            font-family: AvenirNext, Helvetica, Arial, sans-serif;
-            font-size: .8889rem;
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-        }
-
-        th, td {
-            padding: 0.25rem .5rem;
-        }
-
-        tbody, tr + tr {
-            border-top: 1px solid rgb(231, 231, 231);
-        }
-
-        th + th, td + td {
-            border-left: 1px solid rgb(231, 231, 231);
-        }
-
-        .numeric {
-            text-align: right;
-        }
-
-        body::-webkit-scrollbar {
-            width: 0.5em;
-        }
-
-        body::-webkit-scrollbar:horizontal {
-            height: 0.5em;
-        }
-
-        body::-webkit-scrollbar-thumb {
-            background-color: darkgrey;
-            outline: 1px solid slategrey;
-        }
-
-        body::-webkit-scrollbar-button {
-            display: none;
-        }
-
-        #sample {
-            display: block;
-        }
-    </style>
+	<meta charset="utf-8">
+	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../util/messagingUtil.js"></script>
+    <script type="text/javascript" src="../util/contentUtil.js"></script>
+    <script type="text/javascript" src="../thirdPartyHelpers/d3.js"></script>
 </head>
 <body>
-<div id="instruction">
-    <p>The data-driven content object enables you to incorporate your own content, like a calendar object, into a SAS Visual Analytics report.</p>
-</div>
-<div id="sample">
-</div>
+<style>
+	html {
+		overflow: hidden;
+	}
+	html, body, #chart {
+		margin: 0px;
+		padding: 0px;
+		height: 100%;
+		width: 100%;
+	}
+		
+	.bar {
+	  fill: steelblue;
+	}
+	.bar:hover {
+	  fill: #3d63a0; 
+	}
+	.bar-selected {
+	  stroke: #000;
+	  stroke-width: 3.0px;
+	}
+	
+	.axis-label {
+	  font: 15px sans-serif;
+	}
+	.axis text {
+	  font: 12px sans-serif;
+	}
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+	.x.axis path {
+	  display: none;
+	}
+</style>
+
+<div id="chart"></div>
 
 <script>
-    
-    var sampleData = {data:[
-        ["Denmark","Western Europe",1,7.526,1.44178,1.16374,0.79504,0.57941,0.44453,0.36171,2.73939],
-        ["Switzerland","Western Europe",2,7.509,1.52733,1.14524,0.86303,0.58557,0.41203,0.28083,2.69463],
-        ["Iceland","Western Europe",3,7.501,1.42666,1.18326,0.86733,0.56624,0.14975,0.47678,2.83137],
-        ["Norway","Western Europe",4,7.498,1.57744,1.1269,0.79579,0.59609,0.35776,0.37895,2.66465],
-        ["Finland","Western Europe",5,7.413,1.40598,1.13464,0.81091,0.57104,0.41004,0.25492,2.82596],
-        ["Canada","North America",6,7.404,1.44015,1.0961,0.8276,0.5737,0.31329,0.44834,2.70485],
-        ["Netherlands","Western Europe",7,7.339,1.46468,1.02912,0.81231,0.55211,0.29927,0.47416,2.70749],
-        ["New Zealand","Australia and New Zealand",8,7.334,1.36066,1.17278,0.83096,0.58147,0.41904,0.49401,2.47553],
-        ["Australia","Australia and New Zealand",9,7.313,1.44443,1.10476,0.8512,0.56837,0.32331,0.47407,2.5465],
-        ["Sweden","Western Europe",10,7.291,1.45181,1.08764,0.83121,0.58218,0.40867,0.38254,2.54734],
-        ["Israel","Middle East and Northern Africa",11,7.267,1.33766,0.99537,0.84917,0.36432,0.08728,0.32288,3.31029],
-        ["Austria","Western Europe",12,7.119,1.45038,1.08383,0.80565,0.54355,0.21348,0.32865,2.69343],
-        ["United States","North America",13,7.104,1.50796,1.04782,0.779,0.48163,0.14868,0.41077,2.72782],
-        ["Costa Rica","Latin America and Caribbean",14,7.087,1.06879,1.02152,0.76146,0.55225,0.10547,0.22553,3.35168],
-        ["Puerto Rico","Latin America and Caribbean",15,7.039,1.35943,1.08113,0.77758,0.46823,0.12275,0.22202,3.0076]
-    ]};
-
-    /* EVENT HANDLERS */
-    var self = this;
-    var sampleColumnInfo = [{label: "Country", type: "string"},
-        {label: "Region", type: "string"},
-        {label: "Happiness Rank", type: "number"},
-        {label: "Happiness Score", type: "number"},
-        {label: "Economy (GDP per Capita)", type: "number"},
-        {label: "Family", type: "number"},
-        {label: "Health (Life Expectancy)", type: "number"},
-        {label: "Freedom", type: "number"},
-        {label: "Trust (Government Corruption)", type: "number"},
-        {label: "Generosity", type: "number"},
-        {label: "Dystopia Residual", type: "number"}
-    ];
-
-    // Retrieve data and begin processing
-    function onMessage(evt) {
-        if (evt && evt.data && evt.data.hasOwnProperty("data")) {
-            var results = null;
-            var columnInfo = sampleColumnInfo;
-
-            self.resultName = evt.data.resultName;
-
-            if (evt.data.availableRowCount >= 0) {
-                results = evt.data;
-                columnInfo = evt.data.columns;
-            }
-
-            if (results == null) {
-                results = sampleData;
-                var message = {
-                    resultName: self.resultName,
-                    message: "No data items are assigned.\nAssign one or more columns to view the data."
-                };
-
-                sendMessage(message);
-            }
-            jsonToTable(columnInfo, results.data);
-        }
-    }
-
-    if (window.addEventListener) {
-        // For standards-compliant web browsers
-        window.addEventListener("message", onMessage, false);
-    } else {
-        window.attachEvent("onmessage", onMessage);
-    }
-
-    // Update the object's selection when a row is checked/unchecked
-    function sendSelection(evt) {
-        var selectedRows = document.querySelectorAll(':checked');
-        var selection = [];
-        for (var i = 0; i < selectedRows.length; i++)
+		var _resultData = null;
+		var _resultName = null;
+		var _selections = null;
+		var _axisFormatter = null;
+		var _data = null;
+		var _chart = null;
+		// This sample data is used to render the chart even if roles haven't been assigned to the Data-Driven Content object yet
+		var _sampleColLabels = ["Country", "GDP"];
+		var _sampleFormatter = {};
+		_sampleFormatter[_sampleColLabels[1]] = function(d) { return "$" + d3.format(",.")(d); };
+		var _sampleData = [
+				['China', 9181204],
+				['US', 16768100],
+				['Japan', 4898532],
+				['Germany', 3730261]
+			];
+			
+		var _margin = {top: 40, right: 20, bottom: 60, left: 80},
+			_width = window.innerWidth - _margin.left - _margin.right,
+			_height = window.innerHeight - _margin.top - _margin.bottom;
+	
+		var _xScale, _yScale, _xAxisComponent, _yAxisComponent;
+		var _svg = d3.select("#chart").append("svg")
+			.style("width", "100%")
+			.style("height", "100%")
+			.on("click", function(d,i){deselectAllBars(d, i);});
+			
+		var _chart = _svg.append("g")
+		    .attr("class", "chart")
+			.attr("transform", "translate(" + _margin.left + "," + _margin.top + ")");
+		var _barGroup = _chart.append("g")
+			  .attr("class", "bars");
+			  
+		var _xAxis = _chart.append("g")
+			  .attr("class", "x axis")
+			  .attr('transform', 'translate(0,' + _height + ')');
+			  
+		var _yAxis = _chart.append("g")
+			  .attr("class", "y axis");
+		// text label for the x axis
+		_chart.append("text")
+			.attr("class", "axis-label axis-label-x")
+			.style("text-anchor", "middle");
+		// text label for the y axis
+		_chart.append("text")
+			.attr("class", "axis-label axis-label-y")
+			.style("text-anchor", "begin");
+		function initChart() {			  
+			// Set up event listener for resizes
+			va.contentUtil.setupResizeListener(updateChart);
+			
+			// Initialize scales
+			_xScale = d3.scale.ordinal(); 
+			_yScale = d3.scale.linear(); 
+			// Build the x-axis
+			_xAxisComponent = d3.svg.axis() 
+				.scale(_xScale)
+				.orient("bottom");
+			// Build the y-axis
+			_yAxisComponent = d3.svg.axis()
+				.scale(_yScale)
+				.orient("left");
+		}
+		
+		function updateChart() {
+			updateScales();
+			updateAxes();
+			updateBars();
+			applySelections();
+		}
+		
+		
+		function updateScales() {
+			var data = (_data ? _data : _sampleData);
+			
+			_width = window.innerWidth - _margin.left - _margin.right;
+			_height = window.innerHeight - _margin.top - _margin.bottom;
+			_xScale
+				.domain(data.map(function(d) { return d[0]; }))
+				.rangeRoundBands([0, _width], .1);
+			_xAxis.attr('transform', 'translate(0,' + _height + ')');
+			_yScale
+				.domain([0, d3.max(data, function(d) { return d[1]; })])
+				.range([_height, 0]);
+		}
+		
+		function updateAxes() {
+			var formatter;
+			var xLabel, yLabel;
+			
+			if (_resultData) {
+				formatter = _axisFormatter;
+				xLabel = _resultData.columns[0].label;
+				yLabel = _resultData.columns[1].label;
+			}
+			else {
+				formatter = _sampleFormatter;
+				xLabel = _sampleColLabels[0];
+				yLabel = _sampleColLabels[1];
+			}
+			
+			_xAxis.call(_xAxisComponent);
+			_yAxis.call(_yAxisComponent.tickFormat(formatter[yLabel]));
+		  
+			// text label for the x axis
+			_chart.select("text.axis-label-x")
+				.attr("transform", "translate(" + (_width/2) + " ," + (_height + _margin.bottom * 0.7) + ")")
+				.text(xLabel);  
+			// text label for the y axis
+			_chart.select("text.axis-label-y")
+				.attr("transform", "translate(" + (-_margin.left/2) + " ," + (-_margin.top/2) + ")")
+				.text(yLabel);;
+		}
+		
+		function updateBars() {
+			var data = (_data ? _data : _sampleData);
+			
+			var bars = _barGroup
+				.selectAll('rect.bar')
+				.data(data);
+			bars.enter()
+				.append('rect')
+				.classed('bar', true);
+			bars.exit()
+				.remove();
+			bars
+				.attr('x', function(d) { return _xScale(d[0]); })
+				.attr('y', function(d) { return _yScale(d[1]); })
+				.attr('width', _xScale.rangeBand())
+				.attr('height', function(d) { return _height - _yScale(d[1]); });
+				
+			bars.on("click", function(d,i){selectBar(d, i, this);});
+		}
+		
+		function applySelections() {
+			// Deselect all bars
+			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
+			// Select bars
+			if (_selections) {
+				_selections.forEach(function(selection) {
+					var i = selection.row + 1;
+					d3.select("rect.bar:nth-of-type(" + i + ")").classed("bar-selected", true);
+				});	
+			}
+		}
+		
+		
+        function onDataReceived(messageFromVA)
         {
-            var row = selectedRows[i];
-            selection.push({row: row.id});
+			_resultData = messageFromVA;
+			_resultName = messageFromVA.resultName;
+			_selections = va.contentUtil.initializeSelections(messageFromVA);
+			if (!va.contentUtil.validateRoles(messageFromVA, ["string","number"], null)) {
+				va.messagingUtil.postInstructionalMessage(_resultName, 
+					"D3 Bar Chart expects columns to be assigned in this order:\n" +
+					" 1. X axis (string)\n" +
+					" 2. Y axis (number)");
+				return;
+			}
+			_data = messageFromVA.data;
+			// Numeric values can be assigned to the tooltip, so we should format the data
+			_axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
+			updateChart();
         }
-
-        var message = {
-            resultName: self.resultName,
-            selections: selection
-        };
-
-        sendMessage(message);
-    }
-
-    function sendMessage(message)
-    {
-        var url = (window.location != window.parent.location)
-            ? document.referrer
-            : document.location.href;
-
-        window.parent.postMessage(message, url);
-    }
-
-    /*  TABLE CREATION  */
-
-    // Create an HTML DOM element of the given type containing the given text
-    function createElementWithText(element, text) {
-        var e = document.createElement(element);
-        e.appendChild(document.createTextNode(text));
-        return e;
-    }
-    
-    // Process the array of CSV data and create a table
-    function jsonToTable(columnInfo, jsonData) {
-
-        // Create table
-        var tableDivId = 'sample'; // identifier for the table's parent/container
-        var tableDiv = document.getElementById(tableDivId);
-
-        // If a table already exists in our custom div, remove it
-        tableDiv.innerHTML = "";
-
-        var table = tableDiv.appendChild(document.createElement('table'));
-        var lastColumnIsSelectionData = false;
-        // Create headers from column info
-        addHeaderRow(columnInfo.filter(function (c) {
-            if (c.usage == "brush") {
-                lastColumnIsSelectionData = true;
-                return false;
-            }
-            return true;
-        }).map(function (c) {
-            return c.label;
-        }));
-
-        // Create table body for incoming data
-        var tableBody = table.appendChild(document.createElement('tbody'));
-
-        // Add remaining rows to table body
-        for (var i = 0; i < jsonData.length; i++)
-        {
-            addDataRow(jsonData[i], lastColumnIsSelectionData);
-        }
-
-        // Append a header row to the table
-        function addHeaderRow(columnLabels) {
-            // Create table row
-            var tableHead = document.createElement('thead');
-            var tr = document.createElement('tr');
-
-            // Add a blank cell for checkbox/selection column
-            tr.appendChild(document.createElement('th'));
-
-            // Add a header cell for each column heading
-            columnLabels.forEach(function (header) {
-                tr.appendChild(createElementWithText('th', header));
-            });
-            tableHead.appendChild(tr);
-            table.appendChild(tableHead);
-        }
-
-        // Append a data row to the table
-        function addDataRow(dataFields, lastColumnIsSelectionData) {
-            addDataRow.rowNum = ++addDataRow.rowNum || 0;
-            var tr = document.createElement('tr');
-
-            // Add a checkbox/selector with ID to each row
-            var checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.setAttribute('id', addDataRow.rowNum);
-            checkbox.addEventListener('click', sendSelection);
-            var checkboxCell = document.createElement('td');
-            checkboxCell.appendChild(checkbox);
-            tr.appendChild(checkboxCell);
-
-            // Add table cell for each data field
-            dataFields.forEach(function (field, index) {
-                if (lastColumnIsSelectionData && index == dataFields.length - 1) {
-                    if (field > 0)
-                        checkbox.checked = true;
-                    return;
-                }
-                var td = createElementWithText('td', field);
-                if (!isNaN(field)) {
-                    td.className = 'numeric'; // Set numeric class to align numeric cells
-                }
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
-        }
-    }
-
+		//
+		// Event handlers for interactions with the Bar Chart
+		//
+		
+		// Called when clicked on the chart background
+		//
+		function deselectAllBars(d, i) {
+			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
+			va.messagingUtil.postSelectionMessage(_resultName, []);
+		}
+			
+			
+		// Called when clicked on a bar
+		//
+		function selectBar(d,i,clickedBar){
+			d3.event.stopPropagation();
+			
+			var bars = d3.selectAll("rect.bar");
+			var selectedFlag = d3.select(clickedBar).classed("bar-selected");
+			if (d3.event.ctrlKey) {
+				// Change selection status of selected bar and leave others unchanged
+				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
+			}
+			else {
+				// Clear all selections
+				bars.classed("bar-selected", false);
+				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
+			}
+			
+			// Send selections back to VA
+			var selections = [];
+			d3.selectAll("rect.bar").each(function(d,i){
+				if (d3.select(this).classed("bar-selected")) {
+					selections.push({row: i});
+				}
+			});
+			va.messagingUtil.postSelectionMessage(_resultName, selections);
+		}
+		
+		va.messagingUtil.setOnDataReceivedCallback(onDataReceived);
+		initChart();
+		updateChart();
+	
 </script>
 </body>
 </html>
