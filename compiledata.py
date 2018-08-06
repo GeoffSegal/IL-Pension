@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Read in all data
+
 nameslist = ["fire","police"]
 names_master = []
 assets_master = []
@@ -31,9 +31,9 @@ for idx in range(len(nameslist)):
 df = pd.DataFrame()
 df['Year'] = years_master
 df['Type'] = classes_master
-df['Name'] = names_master
+df['Fund_Name'] = names_master
 df['Assets'] = assets_master
 df['Liabilities'] = liabilities_master
-df = df[~df['Name'].str.contains("Grand")]
-df = df[~df['Name'].str.contains("Summary")]
+df = df[~df['Fund_Name'].str.contains("Grand")]
+df = df[~df['Fund_Name'].str.contains("Summary")]
 df.to_csv('C:/Users/geoff/IL-Pension/data/PensionData20052017.csv', index=False)
