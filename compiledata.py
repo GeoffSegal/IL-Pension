@@ -15,9 +15,9 @@ for idx in range(len(nameslist)):
         names = df.iloc[2:,0].tolist()
         assets = df.iloc[2:,1].tolist()
         if year > 2010:
-            liabilities = [x + y for x, y in zip(df.iloc[2:,4].tolist(),  df.iloc[2:,5].tolist())]
-        else:
             liabilities = [x + y for x, y in zip(df.iloc[2:,3].tolist(),  df.iloc[2:,4].tolist())]
+        else:
+            liabilities = [x + y for x, y in zip(df.iloc[2:,4].tolist(),  df.iloc[2:,5].tolist())]
       
         years = [year] * len(names)
         classes = [nameslist[idx]] * len(names)
