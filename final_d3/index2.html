@@ -502,13 +502,13 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
 	
   });
   
-var nest = d3.nest()
+  var nest = d3.nest()
 	  .key(function(d){return d.Fund_Name;})
 	  .sortKeys(d3.ascending)
 	  .entries(data);
       
       //summarize the total assets/liabilities
-var nest2 = d3.nest()
+      var nest2 = d3.nest()
       .key(function(d){return d.Year;})
       .rollup(function(v) { return {
       	Assets: d3.sum(v, function(d) { return d.Assets; }),
@@ -517,7 +517,8 @@ var nest2 = d3.nest()
   .entries(data);
   
   
- 
+ // console.log(JSON.stringify(nest2));
+	  // Set up the x axis
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Year; }));
@@ -824,7 +825,7 @@ function make_y_gridlines() {
  		// Filter the data to include only Fund_Name of interest
  		var selectFund = nest.filter(function(d) {return d.key == Fund_Name;});
 		
-		y.domain([0, d3.max(selectFund[0].values, function(d) {return d3.max([d.Liabilities,d.Assets]);})]);
+		y.domain([0, d3.max(selectFund[0].values, function(d) {return 		d3.max([d.Liabilities,d.Assets]);})]);
 		svg.select(".y")
 			.transition()
 			.duration(500)
@@ -920,7 +921,7 @@ svg.selectAll("g.dot1")
 	
 	
  	// Create initial graph
- 	initialGraph("Addison Firefighters Pension Fund");
+ 	initialGraph("ADDISON FIREFIGHTERS PENSION FUND");
 	
 	
  	// Update the data
