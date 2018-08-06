@@ -9,7 +9,7 @@ years_master = []
 classes_master = []
 
 for idx in range(len(nameslist)):
-    for year in range(2005,2017):
+    for year in range(2005,2017+1):
         xl = pd.ExcelFile('C:/Users/geoff/IL-Pension/data/raw/{}{}.xlsx'.format(nameslist[idx],year))
         df = xl.parse('AnnualFundingRateReport')
         names = df.iloc[2:,0].tolist()
