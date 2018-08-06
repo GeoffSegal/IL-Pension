@@ -489,7 +489,6 @@ if (error) throw error;
 
 });
 // Import the CSV data
-// d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(error, data) {
 d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", function(error, data) {
   if (error) throw error;
   
@@ -504,12 +503,12 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
   });
   
   var nest = d3.nest()
-	  .key(function(d){return d.Fund_Name;})
+	  .key(function(d){return d.Name;})
 	  .sortKeys(d3.ascending)
 	  .entries(data);
       
       //summarize the total assets/liabilities
-      var nest2 = d3.nest()
+var nest2 = d3.nest()
       .key(function(d){return d.Year;})
       .rollup(function(v) { return {
       	Assets: d3.sum(v, function(d) { return d.Assets; }),

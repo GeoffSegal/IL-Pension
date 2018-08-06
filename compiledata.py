@@ -13,12 +13,12 @@ for idx in range(len(nameslist)):
         xl = pd.ExcelFile('C:/Users/geoff/IL-Pension/data/raw/{}{}.xlsx'.format(nameslist[idx],year))
         df = xl.parse('AnnualFundingRateReport')
         names = df.iloc[2:,0].tolist()
+        names = [x.strip() for x in names]
         assets = df.iloc[2:,1].tolist()
-        if year > 2010:
+        if df.shape[1] == 6:
             liabilities = [x + y for x, y in zip(df.iloc[2:,3].tolist(),  df.iloc[2:,4].tolist())]
-        else:
+        elif df.shape[1] == 7:
             liabilities = [x + y for x, y in zip(df.iloc[2:,4].tolist(),  df.iloc[2:,5].tolist())]
-      
         years = [year] * len(names)
         classes = [nameslist[idx]] * len(names)
 
