@@ -1,6 +1,6 @@
 //Define global margins for SVG canvases
-var margin = {top: 20, right: 20, bottom: 30, left: 100},
-width = 700 - margin.left - margin.right,
+var margin = {top: 20, right: 100, bottom: 30, left: 100},
+width = 800 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
 // Set the ranges
