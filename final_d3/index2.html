@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title> Illinois Pension Funding</title>
+<title> Downstate Illinois Pension Funding</title>
 
 <!-- Bootstrap core CSS -->
  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -53,36 +53,17 @@ button {
     background: white;
     border: 0px;
 }
-header {
 
-    text-align: center;
-    font-size: 35px;
-    font-family:verdana;
 
-}
-
-body {
-font-family:verdana;
-}
-.narrative{
-	width: 50%;
-    margin: auto;
-    height: 180px;
-}
-.top {
-	display:block;
-}
 .totalgraph {
     float: left;
     width: 50%;
-    height: 750px; 
     
 }
 
 .barsection {
     float: left;
     width:50%;
-    height: 750px; 
 }
 section:after {
     content: "";
@@ -90,10 +71,8 @@ section:after {
     clear: both;
 }
 .fundsection {
-	display:none;
     float: left;
     width: 100%;
-    height: 750px;
 }
 
 
@@ -133,21 +112,16 @@ section:after {
 	fill:rgba(170,0,0,0.9);
 }
 
-.container {
-    width: 100%;
-    margin: auto;
-}
+
 .container1 {
 width:60%;
 float:left;
-height: 750px;
 }
 
 .container2 {
 width:30%;
 float:left;
   font: 40px verdana;
-  height: 750px;
 }
 
 
@@ -158,9 +132,10 @@ float:left;
 
 <body>
     <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-              <a class="navbar-brand" href="#">Illinois Pension Funding</a>
+              <a class="navbar-brand" href="#">Downstate Illinois Pension Funding</a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -180,11 +155,12 @@ float:left;
                 </ul>
               </div>
             </div>
-          </nav>
+    </nav>
 
 
 
 <header>
+
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -207,37 +183,30 @@ float:left;
               </div>
             </div>
             <!-- Slide Three - Set the background image for this slide in the line below -->
-            <div class="carousel-item">
-              
-                <section class="fundsection" id="fundsection">
-                    <div id="fundDropdown" align="center" style="color: #003366"> <b>Select a Fund:</b> </div>
-        
-                    <div class="container">
-                    <div class="container1" id ="graph"></div>
-                    <div class="container2" id="fundinfo">
-                    <p style="color: #003366"> The Funding ratio in 2016 for the <strong><span id="FundName2016"></span></strong> was <strong><span id="fund2016"></span></strong></p>
+            <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+
+                   
+                    <div id="fundDropdown" align="center" style="color: #003366"> 
+                        <b>Select a Fund:</b>
                     </div>
+                    <div class="row">
+                    <div class="col">
+                        <div  id ="graph" ></div>
                     </div>
-        
-                    </section>
-        
-                    <section id="endsection" class="endsection" style="color: #003366">
-        
-                    <p>
-                    <span id ="notbuttontext"></span><br>
-                    <button onclick="myFunction()">
-                    <span id="buttontext"></span>
-                    </button>
-                    </p>
-                    <p style="font-size:10px">
-                    Note: If the object/graph elements overlap due to your browser, please zoom out.
-                    </p>
-                    </section>
-                <div class="carousel-caption d-none d-md-block">
-                <h3>Third Slide</h3>
-                <p>This is a description for the third slide.</p>
-              </div>
+                    <div class="col">
+                        <div id="fundinfo">
+                        <p style="color: #003366"> The Funding ratio in 2016 for the <strong><span id="FundName2016"></span></strong> was <strong><span id="fund2016"></span></strong></p>
+                    </div> 
+                    </div>
+                   
             </div>
+               
+        
+
+ 
+
+                    
+
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -290,26 +259,26 @@ An astounding number of Illinois' pensions are in critical danger. Compare the d
 //d3.json("https://geoffsegal.github.io/IL-Pension/data/data.json", function(data) {
 	//console.log(data[0])
 //});
-document.getElementById("buttontext").innerHTML="Look up a particular local fund";
+// document.getElementById("buttontext").innerHTML="Look up a particular local fund";
 
-document.getElementById("notbuttontext").innerHTML = "Now, explore each and every local fire/police fund";
+// document.getElementById("notbuttontext").innerHTML = "Now, explore each and every local fire/police fund";
  
-function myFunction() {
-    var x = document.getElementById("top");
-    var y = document.getElementById("fundsection");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-        y.style.display = "none";
+// function myFunction() {
+//     var x = document.getElementById("top");
+//     var y = document.getElementById("fundsection");
+//     if (x.style.display === "none") {
+//         x.style.display = "block";
+//         y.style.display = "none";
  
-        document.getElementById("buttontext").innerHTML="Look up a particular local fund";
-        document.getElementById("notbuttontext").innerHTML = "Now, explore each and every local fire/police fund";
-    } else {
-        x.style.display = "none";
-        y.style.display= "block";
-        document.getElementById("buttontext").innerHTML="Go back to Overview";
-        document.getElementById("notbuttontext").innerHTML = "";
-    }
-}
+//         document.getElementById("buttontext").innerHTML="Look up a particular local fund";
+//         document.getElementById("notbuttontext").innerHTML = "Now, explore each and every local fire/police fund";
+//     } else {
+//         x.style.display = "none";
+//         y.style.display= "block";
+//         document.getElementById("buttontext").innerHTML="Go back to Overview";
+//         document.getElementById("notbuttontext").innerHTML = "";
+//     }
+// }
 
 
 var margin = {top: 20, right: 20, bottom: 30, left: 100},
@@ -948,13 +917,13 @@ svg.selectAll("g.dot1")
            else if (v<0.8){ return "#f0bd27";}
            else { return "#55aa00" ;};
 }
-   press=document.getElementById("fund2016");
- press.style.color = colorPicker(fund2016);    
+press=document.getElementById("fund2016");
+press.style.color = colorPicker(fund2016);    
   
- document.getElementById("FundName2016").innerHTML=Fund_Name;
+document.getElementById("FundName2016").innerHTML=Fund_Name;
         
 
-		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
+document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
         
         
 
@@ -1052,16 +1021,16 @@ svg.selectAll("g.dot1")
         document.getElementById("FundName2016").innerHTML=Fund_Name;
 		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
 
-        //svg2.selectAll(".svg2-category")
-    	//.data(selectFund)
-    	//.transition();
+    //     svg2.selectAll(".svg2-category")
+    // 	.data(selectFund)
+    // 	.transition();
         
         
-    //svg2.selectAll(".svg2-category").selectAll(".text")
-         // .data(function(d) {return d.values;})
-          //.transition()
-          //.text("Funding in "+year2016+ ":"+
-          //d3.format(".01%")(fund2016));
+    // svg2.selectAll(".svg2-category").selectAll(".text")
+    //      .data(function(d) {return d.values;})
+    //       .transition()
+    //       .text("Funding in "+year2016+ ":"+
+    //       d3.format(".01%")(fund2016));
 
 			
  	}
