@@ -24,7 +24,7 @@ var parseTime = d3.timeParse("%Y")
 
 
 // Do everything with Data
-d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", function(error, data) {
+d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", function(error, data) {
     if (error) throw error;
 
     // Format the data
@@ -172,7 +172,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
         .attr("class", "focusa")
         .style("display", "none");
         var focusl = svg.append("g")
-        .attr("class", "focusa")
+        .attr("class", "focusl")
         .style("display", "none");
 
         focusa.append("line")
@@ -233,15 +233,15 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
                 d0 = data[i - 1],
                 d1 = data[i],
                 d = x0 - d0.key > d1.key - x0 ? d1 : d0;
-            focusa.attr("transform", "translate(" + x(d.key) + "," + y(d.value.Assets) + ")");
-            focusa.select("text").text(function() { return "$"+d3.format(",.2f")(d.value.Assets/1000000000)+" Billion"; });
-            focusa.select(".x-hover-linea").attr("y2", height - y(d.value.Assets));
-            focusa.select(".y-hover-linea").attr("x2", width + y(d.key));
+            focusa.attr("transform", "translate(" + x(eval(yearvar)) + "," + y(eval(assetsvar)) + ")");
+            focusa.select("text").text(function() { return "$"+d3.format(",.2f")(eval(assetsvar)/1000000000)+" Billion"; });
+            focusa.select(".x-hover-linea").attr("y2", height - y(eval(assetsvar)));
+            focusa.select(".y-hover-linea").attr("x2", width + y(eval(yearvar)));
 
-            focusl.attr("transform", "translate(" + x(d.key) + "," + y(d.value.Liabilities) + ")");
-            focusl.select("text").text(function() { return "$"+d3.format(",.2f")(d.value.Liabilities/1000000000)+" Billion"; });
-            focusl.select(".x-hover-linel").attr("y2", - y(d.value.Liabilities));
-            focusl.select(".y-hover-linel").attr("x2", width + y(d.value.Liabilities));
+            focusl.attr("transform", "translate(" + x(eval(yearvar)) + "," + y(eval(liabilitiesvar)) + ")");
+            focusl.select("text").text(function() { return "$"+d3.format(",.2f")(eval(liabilitiesvar)/1000000000)+" Billion"; });
+            focusl.select(".x-hover-linel").attr("y2", - y(eval(liabilitiesvar)));
+            focusl.select(".y-hover-linel").attr("x2", width + y(eval(liabilitiesvar)));
         }
     }
 

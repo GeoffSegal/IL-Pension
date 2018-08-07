@@ -1,0 +1,1 @@
+df['my_channel'] = np.where(df.my_channel > 20000, 0, df.my_channel
