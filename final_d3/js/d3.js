@@ -4,7 +4,7 @@ width = 700 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
 // Set the ranges
-var x = d3.scaleLinear().range([0, width]);
+var x = d3.scaleTime().range([0, width]);
 var y = d3.scaleLinear().range([height, 0]);
 
 
@@ -19,6 +19,8 @@ var valueLineTotalLiabilities = d3.line()
     .y(function(d) { return y(d.value.Liabilities); })
 ;
     
+var parseTime = d3.timeParse("%Y")
+    bisectDate = d3.bisector(function(d) { return d.key; }).left;
 
 
 // Do everything with Data
@@ -47,11 +49,11 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
         })
         .entries(data);
     
-    function makeLineChart(canvas, data, assetsline, liabilitiesline) {
+    function makeLineChart(canvas, data, assetsline, liabilitiesline, yearvar, assetsvar, liabilitiesvar) {
         // Scale the range of the data
-        x.domain(d3.extent(data, function(d) { return d.key; }));
+        x.domain(d3.extent(data, function(d) { return eval(yearvar); }));
         //y.domain([0,1])
-        y.domain([0, d3.max(data, function(d) { return d.value.Liabilities;})]);
+        y.domain([0, d3.max(data, function(d) { return eval(liabilitiesvar);})*1.1]);
 
         // SVG canvas for graph
         var svg = d3.select(canvas)
@@ -137,8 +139,6 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
         .datum(data)
         .attr("fill", "none")
         .attr("class","line1")
-        .attr("stroke", "green")
-        .attr("stroke-width", 4)
         .attr("d", assetsline)
 
         ;
@@ -148,8 +148,6 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
         .datum(data)
         .attr("fill", "none")
         .attr("class","line2")
-        .attr("stroke", "red")
-        .attr("stroke-width", 4)
         .attr("d", liabilitiesline)
         ;
 
@@ -158,9 +156,8 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
         .enter().append("circle")
         .attr("class","circle1")
         .attr("r", 6)
-        .attr("fill","green")
-        .attr("cx", function(d,i) {  return x(d.key); })
-        .attr("cy", function(d,i) { return y(d.value.Assets); })
+        .attr("cx", function(d,i) {  return x(eval(yearvar)); })
+        .attr("cy", function(d,i) { return y(eval(assetsvar)); })
          
         ;
         svg.selectAll(".circle2")
@@ -168,13 +165,87 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052017.csv", f
         .enter().append("circle")
         .attr("class","circle2")
         .attr("r", 6)
-        .attr("fill","red")
-        .attr("cx", function(d,i) {  return x(d.key); })
-        .attr("cy", function(d,i) { return y(d.value.Liabilities); });
+        .attr("cx", function(d,i) {  return x(eval(yearvar)); })
+        .attr("cy", function(d,i) { return y(eval(liabilitiesvar)); });
         
+        var focusa = svg.append("g")
+        .attr("class", "focusa")
+        .style("display", "none");
+        var focusl = svg.append("g")
+        .attr("class", "focusa")
+        .style("display", "none");
+
+        focusa.append("line")
+            .attr("class", "x-hover-linea hover-linea")
+            .attr("y1", 0)
+            .attr("y2", height);
+
+            focusl.append("line")
+            .attr("class", "x-hover-linel hover-linel")
+            .attr("y1", 0)
+            .attr("y2", height);
+
+        focusa.append("line")
+            .attr("class", "y-hover-linea hover-linea")
+            .attr("x1", width)
+            .attr("x2", width);
+
+            focusl.append("line")
+            .attr("class", "y-hover-linel hover-linel")
+            .attr("x1", width)
+            .attr("x2", width);
+
+
+        focusa.append("circle")
+        .attr("class", "circlea")
+        .attr("fill","#F1F3F3")
+        .attr("stroke","rgba(85,170,0,1.0)")
+        .attr("stroke-width", "5px")
+        .attr("r", 7.5);
+
+        focusl.append("circle")
+        .attr("class", "circlel")
+        .attr("fill","#F1F3F3")
+        .attr("stroke","rgba(170,0,0,1.0)")
+        .attr("stroke-width", "5px")
+        .attr("r", 7.5);
+
+        focusa.append("text")
+        .attr("x", 0)
+        .attr("dy", 30);
+
+          focusl.append("text")
+          .attr("x", 0)
+          .attr("dy", 30);
+          
+        svg.append("rect")
+          //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .attr("class", "overlay")
+          .attr("width", width+20)
+          .attr("height", height+10)
+          .on("mouseover", function() { focusa.style("display", null);  focusl.style("display", null);})
+          .on("mouseout", function() { focusa.style("display", "none");  focusl.style("display", "none"); })
+          .on("mousemove", mousemove);
+  
+        function mousemove() {
+            var x0 = x.invert(d3.mouse(this)[0]),
+                i = bisectDate(data, x0, 1),
+                d0 = data[i - 1],
+                d1 = data[i],
+                d = x0 - d0.key > d1.key - x0 ? d1 : d0;
+            focusa.attr("transform", "translate(" + x(d.key) + "," + y(d.value.Assets) + ")");
+            focusa.select("text").text(function() { return "$"+d3.format(",.2f")(d.value.Assets/1000000000)+" Billion"; });
+            focusa.select(".x-hover-linea").attr("y2", height - y(d.value.Assets));
+            focusa.select(".y-hover-linea").attr("x2", width + y(d.key));
+
+            focusl.attr("transform", "translate(" + x(d.key) + "," + y(d.value.Liabilities) + ")");
+            focusl.select("text").text(function() { return "$"+d3.format(",.2f")(d.value.Liabilities/1000000000)+" Billion"; });
+            focusl.select(".x-hover-linel").attr("y2", - y(d.value.Liabilities));
+            focusl.select(".y-hover-linel").attr("x2", width + y(d.value.Liabilities));
+        }
     }
 
-    makeLineChart("#graphtotal", totaldata, valueLineTotalAssets, valueLineTotalLiabilities )
+    makeLineChart("#graphtotal", totaldata, valueLineTotalAssets, valueLineTotalLiabilities, "d.key", "d.value.Assets", "d.value.Liabilities")
 
 
 

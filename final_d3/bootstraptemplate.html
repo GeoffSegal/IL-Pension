@@ -26,7 +26,63 @@
       .grid path {
         stroke-width: 0;
       }
-    
+      
+      .line1 {
+      fill: none;
+        stroke: rgba(85,170,0,1.0);
+        stroke-width: 4px;
+      }
+
+      .circle1{
+      fill: rgba(85,170,0,1.0);
+      }
+      .circle2 {
+        fill:rgba(170,0,0,0.9);
+      }
+      .dot1{
+      fill: rgba(85,170,0,1.0);
+      }
+      .line2{
+      fill: none;
+        stroke: rgba(170,0,0,0.9);
+        stroke-width: 4px;
+      }
+      .dot2 {
+        fill:rgba(170,0,0,0.9);
+      }
+
+      .center-block {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .overlay {
+        fill: none;
+        pointer-events: all;
+      }
+
+      .focus circlel {
+        fill: #F1F3F3;
+        stroke: rgba(170,0,0,0.9);
+        stroke-width: 5px;
+      }
+
+      .focus circlea {
+        fill: #F1F3F3;
+        stroke: rgba(85,170,0,1.0);
+        stroke-width: 5px;
+      }
+        
+      .hover-linea {
+        stroke: rgba(85,170,0,1.0);
+        stroke-width: 2px;
+        stroke-dasharray: 3,3;
+      }
+      .hover-linel {
+        stroke: rgba(170,0,0,0.9);
+        stroke-width: 2px;
+        stroke-dasharray: 3,3;
+      }
     </style>
 
   </head>
@@ -71,8 +127,13 @@
         <div class="carousel-inner" role="listbox">
           <!-- Slide One - This is where the total Illinois funding graph will go -->
           <div class="carousel-item active" style="background-color: #cccccc">
-            
-            <div class="container mx-auto" id="graphtotal"> <p>&nbsp; &nbsp;</p> </div>
+            <div class="row">
+                <div class="center-block"  id="graphtotal"> 
+                    <p><br><br><br></p> 
+                  </div>
+               
+            </div>
+          
 
             <div class="carousel-caption d-none d-md-block">
               <h3>Illinois Total Performance</h3>
@@ -129,6 +190,8 @@
 
     <!-- d3 v4 library  -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="jquery.tipsy.js"></script>
 
     <!-- d3 visualization -->
     <script type ="text/javascript" src = "js/d3.js"></script>
