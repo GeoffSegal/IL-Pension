@@ -270,18 +270,18 @@ svg.append("rect")
 var g = svg.append("g")
     .style("stroke-width", "1.5px");
 
-d3.json("us.json", function(error, us) {
+d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, us) {
   if (error) throw error;
 
   g.selectAll("path")
-      .data(topojson.feature(us, us.objects.states).features)
+      .data(topojson.feature(us, us.objects.cb_2015_illinois_county_20m).features)
     .enter().append("path")
       .attr("d", path)
       .attr("class", "feature")
       .on("click", clicked);
 
   g.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+      .datum(topojson.mesh(us, us.objects.cb_2015_illinois_county_20m, function(a, b) { return a !== b; }))
       .attr("class", "mesh")
       .attr("d", path);
 });
@@ -299,7 +299,7 @@ function clicked(d) {
       scale = .9 / Math.max(dx / width, dy / height),
       translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-  g.transition()
+      d3.select("#illinoismap").transition()
       .duration(750)
       .style("stroke-width", 1.5 / scale + "px")
       .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
