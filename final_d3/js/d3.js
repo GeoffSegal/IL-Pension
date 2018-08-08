@@ -69,7 +69,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
 
         //Add the x axis
         var xaxis = d3.axisBottom(x)
-            .ticks(4)
+            .ticks(12)
             .tickSizeInner(10)
             .tickPadding(10)
             .tickFormat(d3.format("d"));
@@ -106,7 +106,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
         // gridlines in x axis function
         function make_x_gridlines() {		
             return d3.axisBottom(x)
-                .ticks(6)
+                .ticks(12)
         }
 
         // gridlines in y axis function
@@ -187,12 +187,12 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
 
         focusa.append("line")
             .attr("class", "y-hover-linea hover-linea")
-            .attr("x1", width)
+            .attr("x1", width+100)
             .attr("x2", width);
 
             focusl.append("line")
             .attr("class", "y-hover-linel hover-linel")
-            .attr("x1", width)
+            .attr("x1", width+100)
             .attr("x2", width);
 
 
@@ -232,7 +232,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
                 i = bisectDate(data, x0, 1),
                 d0 = data[i - 1],
                 d1 = data[i],
-                d = x0 - d0.key > d1.key - x0 ? d1 : d0;
+                d = x0 - d0.key > d1.key - x0 ? d1 : d0; //change variable input to account for this
             focusa.attr("transform", "translate(" + x(eval(yearvar)) + "," + y(eval(assetsvar)) + ")");
             focusa.select("text").text(function() { return "$"+d3.format(",.2f")(eval(assetsvar)/1000000000)+" Billion"; });
             focusa.select(".x-hover-linea").attr("y2", height - y(eval(assetsvar)));

@@ -17,6 +17,10 @@
     <link href="css/full-slider.css" rel="stylesheet">
 
     <style>
+
+      .axis {
+  shape-rendering: crispEdges;
+}
       .grid line {
         stroke: lightgrey;
         stroke-opacity: 0.7;
@@ -107,9 +111,6 @@
               <a class="nav-link" href="#">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#">Contact</a>
             </li>
           </ul>
@@ -126,7 +127,7 @@
         </ol>
         <div class="carousel-inner" role="listbox">
           <!-- Slide One - This is where the total Illinois funding graph will go -->
-          <div class="carousel-item active" style="background-color: #cccccc">
+          <div class="carousel-item active" style="background-color: #e9e9e9">
             <div class="row">
                 <div class="center-block"  id="graphtotal"> 
                     <p><br><br><br></p> 
@@ -135,7 +136,7 @@
             </div>
           
 
-            <div class="carousel-caption d-none d-md-block">
+            <div class="carousel-caption d-none d-md-block" style="color:#000000">
               <h3>Illinois Total Performance</h3>
               <p>Compare the aggregated assets vs liabilities for all downstate Illinois pension funds.</p>
             </div>
@@ -173,6 +174,8 @@
         <p>The background images for the slider are set directly in the HTML using inline CSS. The rest of the styles for this template are contained within the
           <code>full-slider.css</code>
           file.</p>
+
+          <div class="center-block" id="illinoismap"></div>
           <p>
             <br>
             <br>
