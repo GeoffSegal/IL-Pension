@@ -87,6 +87,29 @@
         stroke-width: 2px;
         stroke-dasharray: 3,3;
       }
+
+      /* For Map */
+            
+      .background {
+        fill: none;
+        pointer-events: all;
+      }
+
+      .feature {
+        fill: #ccc;
+        cursor: pointer;
+      }
+
+      .feature.active {
+        fill: orange;
+      }
+
+      .mesh {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
     </style>
 
   </head>
@@ -170,10 +193,8 @@
     <!-- Page Content -->
     <section class="py-5">
       <div class="container">
-        <h1>Full Slider by Start Bootstrap</h1>
-        <p>The background images for the slider are set directly in the HTML using inline CSS. The rest of the styles for this template are contained within the
-          <code>full-slider.css</code>
-          file.</p>
+        <h1>Drill Down on each county</h1>
+        <p>This is where the map with drill down functionality will go</p>
 
           <div class="center-block" id="illinoismap"></div>
           <p>
@@ -187,7 +208,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Geoff Segal 2018</p>
       </div>
       <!-- /.container -->
     </footer>
@@ -199,10 +220,20 @@
     <!-- d3 v4 library  -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="jquery.tipsy.js"></script>
+    <!-- <script type="text/javascript" src="jquery.tipsy.js"></script> -->
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+
+  <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+
+  <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+  <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
+  <script src="https://d3js.org/d3-request.v1.min.js"></script>
 
     <!-- d3 visualization -->
     <script type ="text/javascript" src = "js/d3.js"></script>
+    
 
   </body>
 
