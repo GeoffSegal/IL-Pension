@@ -251,15 +251,20 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
 var active = d3.select(null);
 
 var projection = d3.geoAlbersUsa()
-    .scale(1000)
-    .translate([width / 2, height / 2]);
+    .scale(4000)
+    .translate([-300+width / 2, 100+height / 2]);
 
-var path = d3.geoPath()
+var zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", zoomed);
+
+var path = d3.geoPath() // updated for d3 v4
     .projection(projection);
 
 var svg = d3.select("#illinoismap").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .on("click", stopped, true);
 
 svg.append("rect")
     .attr("class", "background")
@@ -267,21 +272,23 @@ svg.append("rect")
     .attr("height", height)
     .on("click", reset);
 
-var g = svg.append("g")
-    .style("stroke-width", "1.5px");
+var g = svg.append("g");
 
-d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, us) {
+//svg.call(zoom); // delete this line to disable free zooming
+
+
+d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, topology) {
   if (error) throw error;
 
   g.selectAll("path")
-      .data(topojson.feature(us, us.objects.cb_2015_illinois_county_20m).features)
+      .data(topojson.feature(topology, topology.objects.cb_2015_illinois_county_20m).features)
     .enter().append("path")
       .attr("d", path)
       .attr("class", "feature")
       .on("click", clicked);
 
   g.append("path")
-      .datum(topojson.mesh(us, us.objects.cb_2015_illinois_county_20m, function(a, b) { return a !== b; }))
+      .datum(topojson.mesh(topology, topology.objects.cb_2015_illinois_county_20m, function(a, b) { return a !== b; }))
       .attr("class", "mesh")
       .attr("d", path);
 });
@@ -290,7 +297,6 @@ function clicked(d) {
   if (active.node() === this) return reset();
   active.classed("active", false);
   active = d3.select(this).classed("active", true);
-
   var bounds = path.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
@@ -299,21 +305,32 @@ function clicked(d) {
       scale = .9 / Math.max(dx / width, dy / height),
       translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-      d3.select("#illinoismap").transition()
+      svg.transition()
       .duration(750)
-      .style("stroke-width", 1.5 / scale + "px")
-      .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
-}
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+    console.log(d.properties.NAME);
+    }
 
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
 
-  g.transition()
+  svg.transition()
       .duration(750)
-      .style("stroke-width", "1.5px")
-      .attr("transform", "");
+      .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
 }
+
+function zoomed() {
+    g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+    g.attr("transform", d3.event.transform); // updated for d3 v4
+  }
+  
+  // If the drag behavior prevents the default click,
+  // also stop propagation so we don’t click-to-zoom.
+  function stopped() {
+    if (d3.event.defaultPrevented) d3.event.stopPropagation();
+  }
+  
 
 
 })
