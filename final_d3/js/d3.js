@@ -309,6 +309,7 @@ function clicked(d) {
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
     console.log(d.properties.NAME);
+
     }
 
 function reset() {
