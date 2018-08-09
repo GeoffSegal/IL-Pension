@@ -38,7 +38,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
 
     //summarize the total assets/liabilities
     var totaldata = d3.nest()
-        .key(function(d){return d.Year;})
+        .key(function(d){return d.Year;}).sortKeys(d3.ascending)
         .rollup(function(v) { 
             return {
             Assets: d3.sum(v, function(d) { 
@@ -250,89 +250,112 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
     makeLineChart("#graphtotal", totaldata, valueLineTotalAssets, valueLineTotalLiabilities, "d.key", "d.value.Assets", "d.value.Liabilities")
 
 
-var active = d3.select(null);
 
-var projection = d3.geoAlbersUsa()
-    .scale(4000)
-    .translate([-300+width / 2, 100+height / 2]);
+    var active = d3.select(null);
 
-var zoom = d3.zoom()
-    .scaleExtent([1, 8])
-    .on("zoom", zoomed);
-
-var path = d3.geoPath() // updated for d3 v4
-    .projection(projection);
-
-var svg = d3.select("#illinoismap").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", stopped, true);
-
-svg.append("rect")
-    .attr("class", "background")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", reset);
-
-var g = svg.append("g");
-
-//svg.call(zoom); // delete this line to disable free zooming
-
-
-d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, topology) {
-  if (error) throw error;
-
-  g.selectAll("path")
-      .data(topojson.feature(topology, topology.objects.cb_2015_illinois_county_20m).features)
-    .enter().append("path")
-      .attr("d", path)
-      .attr("class", "feature")
-      .on("click", clicked);
-
-  g.append("path")
-      .datum(topojson.mesh(topology, topology.objects.cb_2015_illinois_county_20m, function(a, b) { return a !== b; }))
-      .attr("class", "mesh")
-      .attr("d", path);
-});
-
-function clicked(d) {
-  if (active.node() === this) return reset();
-  active.classed("active", false);
-  active = d3.select(this).classed("active", true);
-  var bounds = path.bounds(d),
-      dx = bounds[1][0] - bounds[0][0],
-      dy = bounds[1][1] - bounds[0][1],
-      x = (bounds[0][0] + bounds[1][0]) / 2,
-      y = (bounds[0][1] + bounds[1][1]) / 2,
-      scale = .9 / Math.max(dx / width, dy / height),
-      translate = [width / 2 - scale * x, height / 2 - scale * y];
-
+    var projection = d3.geoAlbersUsa()
+        .scale(4000)
+        .translate([-300+width / 2, 100+height / 2]);
+    
+    var zoom = d3.zoom()
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed);
+    
+    var map = d3.map();
+    var color = d3.scaleThreshold()
+        .domain(d3.range(0, 2))
+        .range(d3.schemeBlues[9]);
+    
+    
+    var path = d3.geoPath() // updated for d3 v4
+        .projection(projection);
+    
+    var svg = d3.select("#illinoismap").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", stopped, true);
+    
+    svg.append("rect")
+        .attr("class", "background")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", reset);
+    
+    var g = svg.append("g");
+    
+    //svg.call(zoom); // delete this line to disable free zooming
+    
+    d3.queue()
+        .defer(d3.json,"https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json")
+        .defer(d3.csv, "https://geoffsegal.github.io/IL-Pension/data/countiesdata.csv", function(d) {map.set(d.NAME, +d.value);})
+        .await(ready);
+    
+    function ready(error,topology) {
+    // d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, topology) {
+      if (error) throw error;
+    
+        var rateById = {};
+        data.forEach(function(d) {
+            rateById[d.id] =+d.v
+        }
+        )
+      g.selectAll("path")
+          .data(topojson.feature(topology, topology.objects.cb_2015_illinois_county_20m).features)
+        .enter().append("path")
+          .attr("fill", function(d) {return color(d.value = map.get(d.properties.NAME));})
+          .attr("d", path)
+          .attr("class", "feature")
+          .on("click", clicked);
+    
+      g.append("path")
+          .datum(topojson.mesh(topology, topology.objects.cb_2015_illinois_county_20m, function(a, b) { return a !== b; }))
+          .attr("class", "mesh")
+          .attr("d", path);
+    // });
+    };
+    
+    d3.select("#map")
+    .datum(data)
+    .call(Map.draw,map)
+    
+    function clicked(d) {
+      if (active.node() === this) return reset();
+      active.classed("active", false);
+      active = d3.select(this).classed("active", true);
+      var bounds = path.bounds(d),
+          dx = bounds[1][0] - bounds[0][0],
+          dy = bounds[1][1] - bounds[0][1],
+          x = (bounds[0][0] + bounds[1][0]) / 2,
+          y = (bounds[0][1] + bounds[1][1]) / 2,
+          scale = .9 / Math.max(dx / width, dy / height),
+          translate = [width / 2 - scale * x, height / 2 - scale * y];
+    
+          svg.transition()
+          .duration(750)
+          .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+        console.log(d.properties.NAME);
+    
+        }
+    
+    function reset() {
+      active.classed("active", false);
+      active = d3.select(null);
+    
       svg.transition()
-      .duration(750)
-      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
-    console.log(d.properties.NAME);
+          .duration(750)
+          .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
     }
-
-function reset() {
-  active.classed("active", false);
-  active = d3.select(null);
-
-  svg.transition()
-      .duration(750)
-      .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
-}
-
-function zoomed() {
-    g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-    g.attr("transform", d3.event.transform); // updated for d3 v4
-  }
-  
-  // If the drag behavior prevents the default click,
-  // also stop propagation so we don’t click-to-zoom.
-  function stopped() {
-    if (d3.event.defaultPrevented) d3.event.stopPropagation();
-  }
-  
+    
+    function zoomed() {
+        g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+        g.attr("transform", d3.event.transform); // updated for d3 v4
+      }
+      
+      // If the drag behavior prevents the default click,
+      // also stop propagation so we don’t click-to-zoom.
+      function stopped() {
+        if (d3.event.defaultPrevented) d3.event.stopPropagation();
+      }
 
 
 })
