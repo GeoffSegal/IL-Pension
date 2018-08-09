@@ -258,6 +258,12 @@ var zoom = d3.zoom()
     .scaleExtent([1, 8])
     .on("zoom", zoomed);
 
+var map = d3.map();
+var color = d3.scaleThreshold()
+    .domain(d3.range(0, 2))
+    .range(d3.schemeBlues[9]);
+
+
 var path = d3.geoPath() // updated for d3 v4
     .projection(projection);
 
@@ -276,13 +282,24 @@ var g = svg.append("g");
 
 //svg.call(zoom); // delete this line to disable free zooming
 
+// d3.queue()
+//     .defer(d3.json,"https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json")
+//     .defer(d3.csv, "https://geoffsegal.github.io/IL-Pension/data/countiesdata.csv", function(d) {map.set(d.NAME, +d.value);})
+//     .await(ready);
 
+// function ready(error,topology) {
 d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, topology) {
   if (error) throw error;
 
+    var rateById = {};
+    data.forEach(function(d) {
+        rateById[d.id] =+d.v
+    }
+    )
   g.selectAll("path")
       .data(topojson.feature(topology, topology.objects.cb_2015_illinois_county_20m).features)
     .enter().append("path")
+      .attr("fill", function(d) {return color(d.value = map.get(d.properties.NAME));})
       .attr("d", path)
       .attr("class", "feature")
       .on("click", clicked);
@@ -292,6 +309,11 @@ d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", f
       .attr("class", "mesh")
       .attr("d", path);
 });
+// };
+
+d3.select("#map")
+.datum(data)
+.call(Map.draw,map)
 
 function clicked(d) {
   if (active.node() === this) return reset();
