@@ -48,12 +48,14 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
                     };
         })
         .entries(data);
+
+        console.log(totaldata);
     
-    function makeLineChart(canvas, data, assetsline, liabilitiesline, yearvar, assetsvar, liabilitiesvar) {
+    function makeLineChart(canvas, dataset, assetsline, liabilitiesline, yearvar, assetsvar, liabilitiesvar) {
         // Scale the range of the data
-        x.domain(d3.extent(data, function(d) { return eval(yearvar); }));
+        x.domain(d3.extent(dataset, function(d) { return eval(yearvar); }));
         //y.domain([0,1])
-        y.domain([0, d3.max(data, function(d) { return eval(liabilitiesvar);})*1.1]);
+        y.domain([0, d3.max(dataset, function(d) { return eval(liabilitiesvar);})*1.1]);
 
         // SVG canvas for graph
         var svg = d3.select(canvas)
@@ -136,7 +138,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
 
 
         svg.append("path")
-        .datum(data)
+        .datum(dataset)
         .attr("fill", "none")
         .attr("class","line1")
         .attr("d", assetsline)
@@ -145,14 +147,14 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
         
         
         svg.append("path")
-        .datum(data)
+        .datum(dataset)
         .attr("fill", "none")
         .attr("class","line2")
         .attr("d", liabilitiesline)
         ;
 
         svg.selectAll(".circle1")
-        .data(data)
+        .data(dataset)
         .enter().append("circle")
         .attr("class","circle1")
         .attr("r", 6)
@@ -161,7 +163,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
          
         ;
         svg.selectAll(".circle2")
-        .data(data)
+        .data(dataset)
         .enter().append("circle")
         .attr("class","circle2")
         .attr("r", 6)
@@ -229,9 +231,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
   
         function mousemove() {
             var x0 = x.invert(d3.mouse(this)[0]),
-                i = bisectDate(data, x0, 1),
-                d0 = data[i - 1],
-                d1 = data[i],
+                i = bisectDate(dataset, x0, 1),
+                d0 = dataset[i - 1],
+                d1 = dataset[i],
                 d = x0 - d0.key > d1.key - x0 ? d1 : d0; //change variable input to account for this
             focusa.attr("transform", "translate(" + x(eval(yearvar)) + "," + y(eval(assetsvar)) + ")");
             focusa.select("text").text(function() { return "$"+d3.format(",.2f")(eval(assetsvar)/1000000000)+" Billion"; });
@@ -258,12 +260,6 @@ var zoom = d3.zoom()
     .scaleExtent([1, 8])
     .on("zoom", zoomed);
 
-var map = d3.map();
-var color = d3.scaleThreshold()
-    .domain(d3.range(0, 2))
-    .range(d3.schemeBlues[9]);
-
-
 var path = d3.geoPath() // updated for d3 v4
     .projection(projection);
 
@@ -282,24 +278,13 @@ var g = svg.append("g");
 
 //svg.call(zoom); // delete this line to disable free zooming
 
-// d3.queue()
-//     .defer(d3.json,"https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json")
-//     .defer(d3.csv, "https://geoffsegal.github.io/IL-Pension/data/countiesdata.csv", function(d) {map.set(d.NAME, +d.value);})
-//     .await(ready);
 
-// function ready(error,topology) {
 d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, topology) {
   if (error) throw error;
 
-    var rateById = {};
-    data.forEach(function(d) {
-        rateById[d.id] =+d.v
-    }
-    )
   g.selectAll("path")
       .data(topojson.feature(topology, topology.objects.cb_2015_illinois_county_20m).features)
     .enter().append("path")
-      .attr("fill", function(d) {return color(d.value = map.get(d.properties.NAME));})
       .attr("d", path)
       .attr("class", "feature")
       .on("click", clicked);
@@ -309,11 +294,6 @@ d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", f
       .attr("class", "mesh")
       .attr("d", path);
 });
-// };
-
-d3.select("#map")
-.datum(data)
-.call(Map.draw,map)
 
 function clicked(d) {
   if (active.node() === this) return reset();
@@ -331,7 +311,6 @@ function clicked(d) {
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
     console.log(d.properties.NAME);
-
     }
 
 function reset() {
