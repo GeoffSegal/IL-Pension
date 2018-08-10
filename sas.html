@@ -113,13 +113,7 @@
 		}
 		
 		function updateChart() {
-			updateScales();
-			updateAxes();
-			updateBars();
-		}
-		
-		
-		function updateScales() {
+			
 			var data = (_data ? _data : _sampleData);
 			
 			width = window.innerWidth - _margin.left - _margin.right;
@@ -134,9 +128,7 @@
 			y
 			.domain([0, d3.max(data, function(d) { return d[1]; })])
 			.range([height, 0]);
-		}
-		
-		function updateAxes() {
+			
 			var formatter;
 			var xLabel, yLabel;
 			
@@ -159,13 +151,11 @@
 				.attr("transform", "translate(" + (width/2) + " ," + (height + _margin.bottom * 0.7) + ")")
 				.text(xLabel);  
 			// text label for the y axis
-			_hart.select("text.axis-label-y")
+			chart.select("text.axis-label-y")
 				.attr("transform", "translate(" + (-_margin.left/2) + " ," + (-_margin.top/2) + ")")
 				.text(yLabel);;
-		}
-		
-		function updateBars() {
-			var data = (_data ? _data : _sampleData);
+			
+
 			
 			var bars = _barGroup
 				.selectAll('rect.bar')
@@ -180,6 +170,19 @@
 				.attr('y', function(d) { return y(d[1]); })
 				.attr('width', x.rangeBand())
 				.attr('height', function(d) { return height - y(d[1]); });
+		}
+		
+		
+		function updateScales() {
+
+		}
+		
+		function updateAxes() {
+
+		}
+		
+		function updateBars() {
+
 				
 			
 		}
