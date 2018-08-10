@@ -50,9 +50,7 @@
 <div id="chart"></div>
 
 <script>
-		var _resultData = null;
-		var _resultName = null;
-		var _selections = null;
+		var resultData = null;
 		var _axisFormatter = null;
 		var _data = null;
 		var _chart = null;
@@ -68,7 +66,7 @@
 			];
 			
 		var _margin = {top: 40, right: 20, bottom: 60, left: 80},
-			_width = window.innerWidth - _margin.left - _margin.right,
+			width = window.innerWidth - _margin.left - _margin.right,
 			_height = window.innerHeight - _margin.top - _margin.bottom;
 	
 		var x, y, _xAxisComponent, _yAxisComponent;
@@ -118,32 +116,34 @@
 			updateScales();
 			updateAxes();
 			updateBars();
-			applySelections();
 		}
 		
 		
 		function updateScales() {
 			var data = (_data ? _data : _sampleData);
 			
-			_width = window.innerWidth - _margin.left - _margin.right;
+			width = window.innerWidth - _margin.left - _margin.right;
 			_height = window.innerHeight - _margin.top - _margin.bottom;
+			
 			x
-				.domain(data.map(function(d) { return d[0]; }))
-				.rangeRoundBands([0, _width], .1);
+			.domain(data.map(function(d) { return d[0]; }))
+			.rangeRoundBands([0, width], .1);
+			
 			_xAxis.attr('transform', 'translate(0,' + _height + ')');
+			
 			y
-				.domain([0, d3.max(data, function(d) { return d[1]; })])
-				.range([_height, 0]);
+			.domain([0, d3.max(data, function(d) { return d[1]; })])
+			.range([_height, 0]);
 		}
 		
 		function updateAxes() {
 			var formatter;
 			var xLabel, yLabel;
 			
-			if (_resultData) {
+			if (resultData) {
 				formatter = _axisFormatter;
-				xLabel = _resultData.columns[0].label;
-				yLabel = _resultData.columns[1].label;
+				xLabel = resultData.columns[0].label;
+				yLabel = resultData.columns[1].label;
 			}
 			else {
 				formatter = _sampleFormatter;
@@ -156,7 +156,7 @@
 		  
 			// text label for the x axis
 			_chart.select("text.axis-label-x")
-				.attr("transform", "translate(" + (_width/2) + " ," + (_height + _margin.bottom * 0.7) + ")")
+				.attr("transform", "translate(" + (width/2) + " ," + (_height + _margin.bottom * 0.7) + ")")
 				.text(xLabel);  
 			// text label for the y axis
 			_chart.select("text.axis-label-y")
@@ -183,76 +183,18 @@
 				
 			
 		}
-		
-// 		function applySelections() {
-// 			// Deselect all bars
-// 			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
-// 			// Select bars
-// 			if (_selections) {
-// 				_selections.forEach(function(selection) {
-// 					var i = selection.row + 1;
-// 					d3.select("rect.bar:nth-of-type(" + i + ")").classed("bar-selected", true);
-// 				});	
-// 			}
-// 		}
+
 		
 		
         function onDataReceived(messageFromVA)
         {
-			_resultData = messageFromVA;
-			_resultName = messageFromVA.resultName;
-			_selections = va.contentUtil.initializeSelections(messageFromVA);
-			if (!va.contentUtil.validateRoles(messageFromVA, ["string","number"], null)) {
-				va.messagingUtil.postInstructionalMessage(_resultName, 
-					"D3 Bar Chart expects columns to be assigned in this order:\n" +
-					" 1. X axis (string)\n" +
-					" 2. Y axis (number)");
-				return;
-			}
+			resultData = messageFromVA;
+			resultName = messageFromVA.resultName;
 			_data = messageFromVA.data;
-			// Numeric values can be assigned to the tooltip, so we should format the data
 			_axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
 			updateChart();
         }
-		//
-		// Event handlers for interactions with the Bar Chart
-		//
-		
-		// Called when clicked on the chart background
-		//
-// 		function deselectAllBars(d, i) {
-// 			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
-// 			va.messagingUtil.postSelectionMessage(_resultName, []);
-// 		}
-			
-			
-		// Called when clicked on a bar
-		//
-// 		function (d,i,clickedBar){
-// 			d3.event.stopPropagation();
-			
-// 			var bars = d3.selectAll("rect.bar");
-// 			var selectedFlag = d3.select(clickedBar).classed("bar-selected");
-// 			if (d3.event.ctrlKey) {
-// 				// Change selection status of selected bar and leave others unchanged
-// 				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
-// 			}
-// 			else {
-// 				// Clear all selections
-// 				bars.classed("bar-selected", false);
-// 				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
-// 			}
-			
-// 			// Send selections back to VA
-// 			var selections = [];
-// 			d3.selectAll("rect.bar").each(function(d,i){
-// 				if (d3.select(this).classed("bar-selected")) {
-// 					selections.push({row: i});
-// 				}
-// 			});
-// 			va.messagingUtil.postSelectionMessage(_resultName, selections);
-// 		}
-		
+
 		va.messagingUtil.setOnDataReceivedCallback(onDataReceived);
 		initChart();
 		updateChart();
