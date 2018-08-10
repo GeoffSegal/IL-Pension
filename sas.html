@@ -116,8 +116,8 @@
 			
 			var data = (_data ? _data : _sampleData);
 			
-			width = window.innerWidth - margin.left - margin.right;
-			height = window.innerHeight - margin.top - margin.bottom;
+// 			width = window.innerWidth - margin.left - margin.right;
+// 			height = window.innerHeight - margin.top - margin.bottom;
 			
 			x
 			.domain(data.map(function(d) { return d[0]; }))
@@ -147,11 +147,11 @@
 			yAxis.call(yAxisComponent.tickFormat(formatter[yLabel]));
 
 			chart.select("text.axis-label-x")
-				.attr("transform", "translate(" + (width/2) + " ," + (height + margin.bottom * 0.7) + ")")
+// 				.attr("transform", "translate(" + (width/2) + " ," + (height + margin.bottom * 0.7) + ")")
 				.text(xLabel);  
 
 			chart.select("text.axis-label-y")
-				.attr("transform", "translate(" + (-margin.left/2) + " ," + (-margin.top/2) + ")")
+// 				.attr("transform", "translate(" + (-margin.left/2) + " ," + (-margin.top/2) + ")")
 				.text(yLabel);;
 			
 
