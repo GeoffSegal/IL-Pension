@@ -51,7 +51,7 @@
 
 <script>
 		var resultData = null;
-		var _axisFormatter = null;
+		var axisFormatter = null;
 		var _data = null;
 		var chart = null;
 		// This sample data is used to render the chart even if roles haven't been assigned to the Data-Driven Content object yet
@@ -65,11 +65,11 @@
 				['Germany', 3730261]
 			];
 			
-		var _margin = {top: 40, right: 20, bottom: 60, left: 80},
-			width = window.innerWidth - _margin.left - _margin.right,
-			height = window.innerHeight - _margin.top - _margin.bottom;
+		var margin = {top: 40, right: 20, bottom: 60, left: 80},
+			width = window.innerWidth - margin.left - margin.right,
+			height = window.innerHeight - margin.top - margin.bottom;
 	
-		var x, y, _xAxisComponent, _yAxisComponent;
+		var x, y, xAxisComponent, yAxisComponent;
 		var _svg = d3.select("#chart").append("svg")
 			.style("width", "100%")
 			.style("height", "100%")
@@ -77,15 +77,15 @@
 			
 		var chart = _svg.append("g")
 		    .attr("class", "chart")
-			.attr("transform", "translate(" + _margin.left + "," + _margin.top + ")");
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 		var _barGroup = chart.append("g")
 			  .attr("class", "bars");
 			  
-		var _xAxis = chart.append("g")
+		var xAxis = chart.append("g")
 			  .attr("class", "x axis")
 			  .attr('transform', 'translate(0,' + height + ')');
 			  
-		var _yAxis = chart.append("g")
+		var yAxis = chart.append("g")
 			  .attr("class", "y axis");
 		// text label for the x axis
 		chart.append("text")
@@ -103,11 +103,11 @@
 			x = d3.scale.ordinal(); 
 			y = d3.scale.linear(); 
 			// Build the x-axis
-			_xAxisComponent = d3.svg.axis() 
+			xAxisComponent = d3.svg.axis() 
 				.scale(x)
 				.orient("bottom");
 			// Build the y-axis
-			_yAxisComponent = d3.svg.axis()
+			yAxisComponent = d3.svg.axis()
 				.scale(y)
 				.orient("left");
 		}
@@ -116,14 +116,14 @@
 			
 			var data = (_data ? _data : _sampleData);
 			
-			width = window.innerWidth - _margin.left - _margin.right;
-			height = window.innerHeight - _margin.top - _margin.bottom;
+			width = window.innerWidth - margin.left - margin.right;
+			height = window.innerHeight - margin.top - margin.bottom;
 			
 			x
 			.domain(data.map(function(d) { return d[0]; }))
 			.rangeRoundBands([0, width], .1);
 			
-			_xAxis.attr('transform', 'translate(0,' + height + ')');
+			xAxis.attr('transform', 'translate(0,' + height + ')');
 			
 			y
 			.domain([0, d3.max(data, function(d) { return d[1]; })])
@@ -133,7 +133,7 @@
 			var xLabel, yLabel;
 			
 			if (resultData) {
-				formatter = _axisFormatter;
+				formatter = axisFormatter;
 				xLabel = resultData.columns[0].label;
 				yLabel = resultData.columns[1].label;
 			}
@@ -143,16 +143,15 @@
 				yLabel = _sampleColLabels[1];
 			}
 			
-			_xAxis.call(_xAxisComponent);
-			_yAxis.call(_yAxisComponent.tickFormat(formatter[yLabel]));
-		  
-			// text label for the x axis
+			xAxis.call(xAxisComponent);
+			yAxis.call(yAxisComponent.tickFormat(formatter[yLabel]));
+
 			chart.select("text.axis-label-x")
-				.attr("transform", "translate(" + (width/2) + " ," + (height + _margin.bottom * 0.7) + ")")
+				.attr("transform", "translate(" + (width/2) + " ," + (height + margin.bottom * 0.7) + ")")
 				.text(xLabel);  
-			// text label for the y axis
+
 			chart.select("text.axis-label-y")
-				.attr("transform", "translate(" + (-_margin.left/2) + " ," + (-_margin.top/2) + ")")
+				.attr("transform", "translate(" + (-margin.left/2) + " ," + (-margin.top/2) + ")")
 				.text(yLabel);;
 			
 
@@ -172,20 +171,6 @@
 				.attr('height', function(d) { return height - y(d[1]); });
 		}
 		
-		
-		function updateScales() {
-
-		}
-		
-		function updateAxes() {
-
-		}
-		
-		function updateBars() {
-
-				
-			
-		}
 
 		
 		
@@ -194,7 +179,7 @@
 			resultData = messageFromVA;
 			resultName = messageFromVA.resultName;
 			_data = messageFromVA.data;
-			_axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
+			axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
 			updateChart();
         }
 
