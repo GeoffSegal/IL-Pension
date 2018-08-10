@@ -46,63 +46,49 @@
 <div id="chart"></div>
 
 <script>
-// 		var resultData = null;
-// 		var axisFormatter = null;
-// 		var _data = null;
-// 		var chart = null;
-		// This sample data is used to render the chart even if roles haven't been assigned to the Data-Driven Content object yet
-// 		var _sampleColLabels = ["Country", "GDP"];
-// 		var _sampleFormatter = {};
-// 		_sampleFormatter[_sampleColLabels[1]] = function(d) { return "$" + d3.format(",.")(d); };
-// 		var _sampleData = [
-// 				['China', 9181204],
-// 				['US', 16768100],
-// 				['Japan', 4898532],
-// 				['Germany', 3730261]
-// 			];
-			
+
 		var margin = {top: 40, right: 20, bottom: 60, left: 80},
 			width = window.innerWidth - margin.left - margin.right,
 			height = window.innerHeight - margin.top - margin.bottom;
 	
 		var x, y, xAxisComponent, yAxisComponent;
-		var _svg = d3.select("#chart").append("svg")
+		var svg = d3.select("#chart").append("svg")
 			.style("width", "100%")
 			.style("height", "100%")
 			;
 			
-		var chart = _svg.append("g")
-		    .attr("class", "chart")
+		var chart = svg.append("g")
+		    	.attr("class", "chart")
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-		var _barGroup = chart.append("g")
-			  .attr("class", "bars");
+		var barGroup = chart.append("g")
+			.attr("class", "bars");
 			  
 		var xAxis = chart.append("g")
-			  .attr("class", "x axis")
-			  .attr('transform', 'translate(0,' + height + ')');
+			.attr("class", "x axis")
+			.attr('transform', 'translate(0,' + height + ')');
 			  
 		var yAxis = chart.append("g")
-			  .attr("class", "y axis");
-		// text label for the x axis
+			.attr("class", "y axis");
+
 		chart.append("text")
 			.attr("class", "axis-label axis-label-x")
 			.style("text-anchor", "middle");
-		// text label for the y axis
+
 		chart.append("text")
 			.attr("class", "axis-label axis-label-y")
 			.style("text-anchor", "begin");
+	
 		function initChart() {			  
-			// Set up event listener for resizes
 			va.contentUtil.setupResizeListener(updateChart);
 			
-			// Initialize scales
+			
 			x = d3.scale.ordinal(); 
 			y = d3.scale.linear(); 
-			// Build the x-axis
+			
 			xAxisComponent = d3.svg.axis() 
 				.scale(x)
 				.orient("bottom");
-			// Build the y-axis
+			
 			yAxisComponent = d3.svg.axis()
 				.scale(y)
 				.orient("left");
@@ -110,38 +96,18 @@
 		
 		function updateChart() {
 			
-// 			var data = (_data ? _data : _sampleData);
-			var data=_data;
-			
-// 			width = window.innerWidth - margin.left - margin.right;
-// 			height = window.innerHeight - margin.top - margin.bottom;
-			
-			x
-			.domain(data.map(function(d) { return d[0]; }))
-			.rangeRoundBands([0, width], .1);
-			
+			x.domain(data.map(function(d) { return d[0]; })).rangeRoundBands([0, width], .1);
 			xAxis.attr('transform', 'translate(0,' + height + ')');
 			
-			y
-			.domain([0, d3.max(data, function(d) { return d[1]; })])
-			.range([height, 0]);
+			y.domain([0, d3.max(data, function(d) { return d[1]; })]).range([height, 0]);
 			
-			var formatter;
 			var xLabel, yLabel;
 			
-// 			if (resultData) {
-				formatter = axisFormatter;
-				xLabel = resultData.columns[0].label;
-				yLabel = resultData.columns[1].label;
-// 			}
-// 			else {
-// 				formatter = _sampleFormatter;
-// 				xLabel = _sampleColLabels[0];
-// 				yLabel = _sampleColLabels[1];
-// 			}
-			
+			xLabel = resultData.columns[0].label;
+			yLabel = resultData.columns[1].label;
+
 			xAxis.call(xAxisComponent);
-			yAxis.call(yAxisComponent.tickFormat(formatter[yLabel]));
+			yAxis.call(yAxisComponent.tickFormat(axisFormatter[yLabel]));
 
 			chart.select("text.axis-label-x")
 				.attr("transform", "translate(" + (width/2) + " ," + (height + margin.bottom * 0.7) + ")")
@@ -153,7 +119,7 @@
 			
 
 			
-			var bars = _barGroup
+			var bars = barGroup
 				.selectAll('rect.bar')
 				.data(data);
 			bars.enter()
@@ -175,7 +141,7 @@
         {
 			resultData = messageFromVA;
 			resultName = messageFromVA.resultName;
-			_data = messageFromVA.data;
+			data = messageFromVA.data;
 			axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
 			updateChart();
         }
