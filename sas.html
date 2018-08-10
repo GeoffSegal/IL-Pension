@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../IL-Pension/messagingUtil.js"></script>
-    <script type="text/javascript" src="../IL-Pension/contentUtil.js"></script>
-    <script type="text/javascript" src="../IL-Pension/d3.js"></script>
+<meta charset="utf-8">
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../IL-Pension/messagingUtil.js"></script>
+<script type="text/javascript" src="../IL-Pension/contentUtil.js"></script>
+<script type="text/javascript" src="../IL-Pension/d3.js"></script>
 </head>
 <body>
 <style>
@@ -71,7 +71,7 @@
 			_width = window.innerWidth - _margin.left - _margin.right,
 			_height = window.innerHeight - _margin.top - _margin.bottom;
 	
-		var _xScale, _yScale, _xAxisComponent, _yAxisComponent;
+		var x, y, _xAxisComponent, _yAxisComponent;
 		var _svg = d3.select("#chart").append("svg")
 			.style("width", "100%")
 			.style("height", "100%")
@@ -102,15 +102,15 @@
 			va.contentUtil.setupResizeListener(updateChart);
 			
 			// Initialize scales
-			_xScale = d3.scale.ordinal(); 
-			_yScale = d3.scale.linear(); 
+			x = d3.scale.ordinal(); 
+			y = d3.scale.linear(); 
 			// Build the x-axis
 			_xAxisComponent = d3.svg.axis() 
-				.scale(_xScale)
+				.scale(x)
 				.orient("bottom");
 			// Build the y-axis
 			_yAxisComponent = d3.svg.axis()
-				.scale(_yScale)
+				.scale(y)
 				.orient("left");
 		}
 		
@@ -127,11 +127,11 @@
 			
 			_width = window.innerWidth - _margin.left - _margin.right;
 			_height = window.innerHeight - _margin.top - _margin.bottom;
-			_xScale
+			x
 				.domain(data.map(function(d) { return d[0]; }))
 				.rangeRoundBands([0, _width], .1);
 			_xAxis.attr('transform', 'translate(0,' + _height + ')');
-			_yScale
+			y
 				.domain([0, d3.max(data, function(d) { return d[1]; })])
 				.range([_height, 0]);
 		}
@@ -176,25 +176,25 @@
 			bars.exit()
 				.remove();
 			bars
-				.attr('x', function(d) { return _xScale(d[0]); })
-				.attr('y', function(d) { return _yScale(d[1]); })
-				.attr('width', _xScale.rangeBand())
-				.attr('height', function(d) { return _height - _yScale(d[1]); });
+				.attr('x', function(d) { return x(d[0]); })
+				.attr('y', function(d) { return y(d[1]); })
+				.attr('width', x.rangeBand())
+				.attr('height', function(d) { return _height - y(d[1]); });
 				
 			
 		}
 		
-		function applySelections() {
-			// Deselect all bars
-			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
-			// Select bars
-			if (_selections) {
-				_selections.forEach(function(selection) {
-					var i = selection.row + 1;
-					d3.select("rect.bar:nth-of-type(" + i + ")").classed("bar-selected", true);
-				});	
-			}
-		}
+// 		function applySelections() {
+// 			// Deselect all bars
+// 			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
+// 			// Select bars
+// 			if (_selections) {
+// 				_selections.forEach(function(selection) {
+// 					var i = selection.row + 1;
+// 					d3.select("rect.bar:nth-of-type(" + i + ")").classed("bar-selected", true);
+// 				});	
+// 			}
+// 		}
 		
 		
         function onDataReceived(messageFromVA)
