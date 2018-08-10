@@ -25,10 +25,6 @@
 	.bar:hover {
 	  fill: #3d63a0; 
 	}
-	.bar-selected {
-	  stroke: #000;
-	  stroke-width: 3.0px;
-	}
 	
 	.axis-label {
 	  font: 15px sans-serif;
@@ -50,20 +46,20 @@
 <div id="chart"></div>
 
 <script>
-		var resultData = null;
-		var axisFormatter = null;
-		var _data = null;
-		var chart = null;
+// 		var resultData = null;
+// 		var axisFormatter = null;
+// 		var _data = null;
+// 		var chart = null;
 		// This sample data is used to render the chart even if roles haven't been assigned to the Data-Driven Content object yet
-		var _sampleColLabels = ["Country", "GDP"];
-		var _sampleFormatter = {};
-		_sampleFormatter[_sampleColLabels[1]] = function(d) { return "$" + d3.format(",.")(d); };
-		var _sampleData = [
-				['China', 9181204],
-				['US', 16768100],
-				['Japan', 4898532],
-				['Germany', 3730261]
-			];
+// 		var _sampleColLabels = ["Country", "GDP"];
+// 		var _sampleFormatter = {};
+// 		_sampleFormatter[_sampleColLabels[1]] = function(d) { return "$" + d3.format(",.")(d); };
+// 		var _sampleData = [
+// 				['China', 9181204],
+// 				['US', 16768100],
+// 				['Japan', 4898532],
+// 				['Germany', 3730261]
+// 			];
 			
 		var margin = {top: 40, right: 20, bottom: 60, left: 80},
 			width = window.innerWidth - margin.left - margin.right,
@@ -114,7 +110,8 @@
 		
 		function updateChart() {
 			
-			var data = (_data ? _data : _sampleData);
+// 			var data = (_data ? _data : _sampleData);
+			var data=_data;
 			
 // 			width = window.innerWidth - margin.left - margin.right;
 // 			height = window.innerHeight - margin.top - margin.bottom;
@@ -132,16 +129,16 @@
 			var formatter;
 			var xLabel, yLabel;
 			
-			if (resultData) {
+// 			if (resultData) {
 				formatter = axisFormatter;
 				xLabel = resultData.columns[0].label;
 				yLabel = resultData.columns[1].label;
-			}
-			else {
-				formatter = _sampleFormatter;
-				xLabel = _sampleColLabels[0];
-				yLabel = _sampleColLabels[1];
-			}
+// 			}
+// 			else {
+// 				formatter = _sampleFormatter;
+// 				xLabel = _sampleColLabels[0];
+// 				yLabel = _sampleColLabels[1];
+// 			}
 			
 			xAxis.call(xAxisComponent);
 			yAxis.call(yAxisComponent.tickFormat(formatter[yLabel]));
