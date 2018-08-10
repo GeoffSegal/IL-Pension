@@ -1,28 +1,4 @@
 <!DOCTYPE html>
-<!--
-Copyright 2018 SAS Institute Inc.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    https://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-<!--
-	Bar Chart original code based on:
-	https://bost.ocks.org/mike/bar/3/
-	http://animateddata.co.uk/articles/d3/responsive/
-	
-	This example implements some basic chart functionality/characteristics, such as:
-	1. Default visualization (template/placeholder chart)
-	2. Roles validation
-	3. Formats
-	4. Selection (including multiple selections via crtl key)
-	5. Window resizing
--->
 <html>
 <head>
 	<meta charset="utf-8">
@@ -99,7 +75,7 @@ limitations under the License.
 		var _svg = d3.select("#chart").append("svg")
 			.style("width", "100%")
 			.style("height", "100%")
-			.on("click", function(d,i){deselectAllBars(d, i);});
+			;
 			
 		var _chart = _svg.append("g")
 		    .attr("class", "chart")
@@ -205,7 +181,7 @@ limitations under the License.
 				.attr('width', _xScale.rangeBand())
 				.attr('height', function(d) { return _height - _yScale(d[1]); });
 				
-			bars.on("click", function(d,i){selectBar(d, i, this);});
+			
 		}
 		
 		function applySelections() {
@@ -244,38 +220,38 @@ limitations under the License.
 		
 		// Called when clicked on the chart background
 		//
-		function deselectAllBars(d, i) {
-			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
-			va.messagingUtil.postSelectionMessage(_resultName, []);
-		}
+// 		function deselectAllBars(d, i) {
+// 			d3.selectAll("rect.bar-selected").classed("bar-selected", false);
+// 			va.messagingUtil.postSelectionMessage(_resultName, []);
+// 		}
 			
 			
 		// Called when clicked on a bar
 		//
-		function selectBar(d,i,clickedBar){
-			d3.event.stopPropagation();
+// 		function (d,i,clickedBar){
+// 			d3.event.stopPropagation();
 			
-			var bars = d3.selectAll("rect.bar");
-			var selectedFlag = d3.select(clickedBar).classed("bar-selected");
-			if (d3.event.ctrlKey) {
-				// Change selection status of selected bar and leave others unchanged
-				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
-			}
-			else {
-				// Clear all selections
-				bars.classed("bar-selected", false);
-				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
-			}
+// 			var bars = d3.selectAll("rect.bar");
+// 			var selectedFlag = d3.select(clickedBar).classed("bar-selected");
+// 			if (d3.event.ctrlKey) {
+// 				// Change selection status of selected bar and leave others unchanged
+// 				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
+// 			}
+// 			else {
+// 				// Clear all selections
+// 				bars.classed("bar-selected", false);
+// 				d3.select(clickedBar).classed("bar-selected", !selectedFlag);
+// 			}
 			
-			// Send selections back to VA
-			var selections = [];
-			d3.selectAll("rect.bar").each(function(d,i){
-				if (d3.select(this).classed("bar-selected")) {
-					selections.push({row: i});
-				}
-			});
-			va.messagingUtil.postSelectionMessage(_resultName, selections);
-		}
+// 			// Send selections back to VA
+// 			var selections = [];
+// 			d3.selectAll("rect.bar").each(function(d,i){
+// 				if (d3.select(this).classed("bar-selected")) {
+// 					selections.push({row: i});
+// 				}
+// 			});
+// 			va.messagingUtil.postSelectionMessage(_resultName, selections);
+// 		}
 		
 		va.messagingUtil.setOnDataReceivedCallback(onDataReceived);
 		initChart();
