@@ -24,7 +24,7 @@ var parseTime = d3.timeParse("%Y")
 
 
 // Do everything with Data
-d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", function(error, data) {
+d3.csv("../data/PensionData20052016.csv", function(error, data) {
     if (error) throw error;
 
     // Format the data
@@ -250,7 +250,6 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
     makeLineChart("#graphtotal", totaldata, valueLineTotalAssets, valueLineTotalLiabilities, "d.key", "d.value.Assets", "d.value.Liabilities")
 
 
-
     var active = d3.select(null);
 
     var projection = d3.geoAlbersUsa()
@@ -261,11 +260,11 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
         .scaleExtent([1, 8])
         .on("zoom", zoomed);
     
-    var map = d3.map();
+    var maps = d3.map();
     var color = d3.scaleThreshold()
-        .domain(d3.range(0, 2))
-        .range(d3.schemeBlues[9]);
-    
+        .domain([0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00])
+        .range(d3.schemeRdYlGn[10]);
+ 
     
     var path = d3.geoPath() // updated for d3 v4
         .projection(projection);
@@ -286,25 +285,46 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
     //svg.call(zoom); // delete this line to disable free zooming
     
     d3.queue()
-        .defer(d3.json,"https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json")
-        .defer(d3.csv, "https://geoffsegal.github.io/IL-Pension/data/countiesdata.csv", function(d) {map.set(d.NAME, +d.value);})
+        .defer(d3.json,"../data/illinois-counties.json")
+        // .defer(d3.csv, "../data/countiesdata.csv", function(d) {maps.set(d.NAME, +d.Value);})
+        .defer(d3.csv, "../data/countiesdata.csv")
         .await(ready);
     
-    function ready(error,topology) {
+    function ready(error,topology, countiesdata) {
+
     // d3.json("https://geoffsegal.github.io/IL-Pension/data/illinois-counties.json", function(error, topology) {
       if (error) throw error;
     
-        var rateById = {};
-        data.forEach(function(d) {
-            rateById[d.id] =+d.v
-        }
-        )
+
+    
+
+
+      var valueById = {};
+      countiesdata.forEach(function(d) { valueById[d["NAME"]] = +d.Value; });
+      console.log(valueById)
+
+      var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-5, 0])
+      .html(function(d) {
+        var dataRow = valueById[d.properties.NAME];
+           if (dataRow) {
+               return d.properties.NAME + " County: " + dataRow;
+           } else {
+               return d.properties.NAME + " County: No data.";
+           }
+      });
+      g.call(tip);
+      
       g.selectAll("path")
           .data(topojson.feature(topology, topology.objects.cb_2015_illinois_county_20m).features)
         .enter().append("path")
-          .attr("fill", function(d) {return color(d.value = map.get(d.properties.NAME));})
           .attr("d", path)
           .attr("class", "feature")
+          //.style("fill", function(d) {return color(d.properties.ALAND/1000000000);} )
+            .style("fill", function(d) {return color(valueById[d.properties.NAME]);})
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
           .on("click", clicked);
     
       g.append("path")
@@ -314,9 +334,9 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
     // });
     };
     
-    d3.select("#map")
-    .datum(data)
-    .call(Map.draw,map)
+    // d3.select("#map")
+    // .datum(data)
+    // .call(Map.draw,map)
     
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -349,6 +369,7 @@ d3.csv("https://geoffsegal.github.io/IL-Pension/data/PensionData20052016.csv", f
     function zoomed() {
         g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
         g.attr("transform", d3.event.transform); // updated for d3 v4
+        
       }
       
       // If the drag behavior prevents the default click,
