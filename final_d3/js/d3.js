@@ -24,7 +24,7 @@ var parseTime = d3.timeParse("%Y")
 
 
 // Do everything with Data
-        d3.csv("../data/PensionData20052016_2.csv", function(error, data) {
+        d3.csv("../data/PensionData20052016_3.csv", function(error, data) {
     if (error) throw error;
 
     // Format the data
@@ -384,6 +384,7 @@ var parseTime = d3.timeParse("%Y")
 		  .append('td')
             .text(function (d) { return d.value; });
             
+        d3.select('tbody').selectAll("*").remove();
 
 	//   return table;
     // }
@@ -499,7 +500,7 @@ var parseTime = d3.timeParse("%Y")
           .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
 
       d3.select('tbody').selectAll("*").remove();
-      d3.selectAll.text(function(column,i){if (i == 0) {return null;} else {return null;}});
+      d3.selectAll('th').text(function(column,i){if (i == 0) {return null;} else {return null;}});
     }
     
     function zoomed() {
