@@ -24,7 +24,7 @@ var parseTime = d3.timeParse("%Y")
 
 
 // Do everything with Data
-d3.csv("../data/PensionData20052016.csv", function(error, data) {
+        d3.csv("../data/PensionData20052016_2.csv", function(error, data) {
     if (error) throw error;
 
     // Format the data
@@ -34,7 +34,10 @@ d3.csv("../data/PensionData20052016.csv", function(error, data) {
         d.Funding = +d.Assets / +d.Liabilities;
         d.Year = +d.Year;
         d.Fund_Name = d.Fund_Name;
+        d.County = d.County;
     });
+
+    console.log(data);
 
     //summarize the total assets/liabilities
     var totaldata = d3.nest()
@@ -50,6 +53,8 @@ d3.csv("../data/PensionData20052016.csv", function(error, data) {
         .entries(data);
 
         console.log(totaldata);
+
+
     
     function makeLineChart(canvas, dataset, assetsline, liabilitiesline, yearvar, assetsvar, liabilitiesvar) {
         // Scale the range of the data
@@ -309,7 +314,7 @@ d3.csv("../data/PensionData20052016.csv", function(error, data) {
       .html(function(d) {
         var dataRow = valueById[d.properties.NAME];
            if (dataRow) {
-               return d.properties.NAME + " County: " + dataRow;
+               return d.properties.NAME + " County: " + d3.format(",.2%")(dataRow);
            } else {
                return d.properties.NAME + " County: No data.";
            }
@@ -337,6 +342,79 @@ d3.csv("../data/PensionData20052016.csv", function(error, data) {
     // d3.select("#map")
     // .datum(data)
     // .call(Map.draw,map)
+
+
+
+    testdata = [["Test Fund",0.4444]];
+    columns = [0,1];
+
+    // initializetable(testdata,[0,1]);
+
+
+    // function initializetable(tabledata, columns) {
+
+        var table = d3.select('#illinoistable').append('table');
+        var thead = table.append('thead');
+        var	tbody = table.append('tbody');
+
+		// append the header row
+		thead.append('tr')
+		  .selectAll('th')
+          .data(columns)
+          .enter()
+		  .append('th')
+            // .text(function (column) { return column; });
+            .text(function(column,i){if (i == 0) {return "Fund Name"} else {return "Funding Ratio"}})
+
+		// create a row for each object in the data
+		var rows = tbody.selectAll('tr')
+		  .data(testdata)
+		  .enter()
+          .append('tr');
+    
+
+		// create a cell in each row for each column
+		var cells = rows.selectAll('td')
+		  .data(function (row) {
+		    return columns.map(function (column) {
+		      return {column: column, value: row[column]};
+		    });
+		  })
+		  .enter()
+		  .append('td')
+            .text(function (d) { return d.value; });
+            
+
+	//   return table;
+    // }
+
+    
+    function updatetable(tabledata, columns) {
+
+   d3.select('tbody').selectAll("*").remove();
+   
+    // create a row for each object in the data
+    var rows = tbody.selectAll('tr')
+    .data(tabledata)
+    .enter()
+    .append('tr');
+
+
+    // create a cell in each row for each column
+    var cells = rows.selectAll('td')
+    .data(function (row) {
+    return columns.map(function (column) {
+        return {column: column, value: row[column]};
+    });
+    })
+    .enter()
+    .append('td')
+    .text(function (d) { return d.value; });
+
+
+    }
+
+
     
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -354,7 +432,27 @@ d3.csv("../data/PensionData20052016.csv", function(error, data) {
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
         console.log(d.properties.NAME);
-    
+
+        var selectedfunds_name = [];
+        var selectedfunds_ratio = [];
+        //data.forEach(function(e) { if (e.County === d.properties.NAME & e.Year == 2016) {console.log(e.Fund_Name)}});
+        data.forEach(function(e,i) { if (e.County === d.properties.NAME & e.Year == 2016) {selectedfunds_name[i] = e.Fund_Name; selectedfunds_ratio[i] = e.Funding}});
+        selectedfunds_name = selectedfunds_name.filter(function(){return true;});
+        selectedfunds_ratio = selectedfunds_ratio.filter(function(){return true;});
+        console.log(selectedfunds_name)
+        console.log(selectedfunds_ratio);
+
+        var result = [];
+        for ( var i = 0; i < selectedfunds_name.length; i++ ) {
+            result.push( [selectedfunds_name[i],  d3.format(",.2%")(selectedfunds_ratio[i])] );
+          }
+        console.log(result)
+ 
+        // tabulate(result,['selectedfunds_name','selectedfunds_ratio']);
+        // tabulate(result,[0,1]);
+        updatetable(result,[0,1]);
+
+        
         }
     
     function reset() {
@@ -364,6 +462,8 @@ d3.csv("../data/PensionData20052016.csv", function(error, data) {
       svg.transition()
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+
+      
     }
     
     function zoomed() {
