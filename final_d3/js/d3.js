@@ -258,8 +258,8 @@ var parseTime = d3.timeParse("%Y")
     var active = d3.select(null);
 
     var projection = d3.geoAlbersUsa()
-        .scale(4000)
-        .translate([-300+width / 2, 100+height / 2]);
+        .scale(5000)
+        .translate([-500+width / 2, 200+height / 2]);
     
     var zoom = d3.zoom()
         .scaleExtent([1, 8])
@@ -276,7 +276,7 @@ var parseTime = d3.timeParse("%Y")
     
     var svg = d3.select("#illinoismap").append("svg")
         .attr("width", width)
-        .attr("height", height)
+        .attr("height", height+100)
         .on("click", stopped, true);
     
     svg.append("rect")
@@ -345,7 +345,8 @@ var parseTime = d3.timeParse("%Y")
 
 
 
-    testdata = [["Test Fund",0.4444]];
+    // testdata = [["test","0.5"]];
+    testdata= [[null,null]]
     columns = [0,1];
 
     // initializetable(testdata,[0,1]);
@@ -363,8 +364,7 @@ var parseTime = d3.timeParse("%Y")
           .data(columns)
           .enter()
 		  .append('th')
-            // .text(function (column) { return column; });
-            .text(function(column,i){if (i == 0) {return "Fund Name"} else {return "Funding Ratio"}})
+            .text(function(column,i){if (i == 0) {return null;} else {return null;}});
 
 		// create a row for each object in the data
 		var rows = tbody.selectAll('tr')
@@ -389,29 +389,57 @@ var parseTime = d3.timeParse("%Y")
     // }
 
     
+    function colorpicker(v){
+        if (isNaN(v)) {return "#00000";}
+        else {
+        if(v<0.65) { return "#aa0000";}
+        else if (v<0.8){ return "#f0bd27";}
+        else if (v >=0.8) { return "#55aa00" ;}
+        };
+
+    };
+
+    function formatter(v){
+        if (isNaN(v)) {
+            return v;}
+        else {
+            return d3.format(",.2%")(v);
+        };
+
+    };
+
     function updatetable(tabledata, columns) {
 
-   d3.select('tbody').selectAll("*").remove();
-   
+
+    thead.selectAll('th')
+    .text(function(column,i){if (i == 0) {return "Funds In This County:";} else {return "Funding Ratio:";}});
+
     // create a row for each object in the data
     var rows = tbody.selectAll('tr')
     .data(tabledata)
     .enter()
     .append('tr');
+  
 
 
     // create a cell in each row for each column
     var cells = rows.selectAll('td')
-    .data(function (row) {
-    return columns.map(function (column) {
-        return {column: column, value: row[column]};
-    });
+    // .data(function (row) {
+    // return columns.map(function (column) {
+    //     return {column: column, value: row[column]};
+    // });
+    // })
+    .data(function(d,i) {
+        return(d)
     })
     .enter()
     .append('td')
-    .text(function (d) { return d.value; });
+    .text(function (d) { return formatter(d);})
+    .style("color",function(d,i) {return colorpicker(d)});
 
 
+
+        
     }
 
 
@@ -444,9 +472,16 @@ var parseTime = d3.timeParse("%Y")
 
         var result = [];
         for ( var i = 0; i < selectedfunds_name.length; i++ ) {
-            result.push( [selectedfunds_name[i],  d3.format(",.2%")(selectedfunds_ratio[i])] );
+            // result.push( [selectedfunds_name[i],  d3.format(",.2%")(selectedfunds_ratio[i])] );
+                result.push([selectedfunds_name[i], selectedfunds_ratio[i]]);
           }
+
+        
         console.log(result)
+
+        result = result.sort(function(a,b) {
+            return a[1]-b[1]
+        });
  
         // tabulate(result,['selectedfunds_name','selectedfunds_ratio']);
         // tabulate(result,[0,1]);
@@ -463,7 +498,8 @@ var parseTime = d3.timeParse("%Y")
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
 
-      
+      d3.select('tbody').selectAll("*").remove();
+      d3.selectAll('th').text(function(column,i){if (i == 0) {return null;} else {return null;}});
     }
     
     function zoomed() {
