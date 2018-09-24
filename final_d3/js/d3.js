@@ -517,6 +517,8 @@ var parseTime = d3.timeParse("%Y")
 
       d3.select('tbody').selectAll("*").remove();
       d3.selectAll('th').text(function(column,i){if (i == 0) {return null;} else {return null;}});
+
+    //   d3.select("#illinoismap").style("margin",'auto');
     }
     
     function zoomed() {
@@ -529,7 +531,9 @@ var parseTime = d3.timeParse("%Y")
       // also stop propagation so we don’t click-to-zoom.
       function stopped() {
         if (d3.event.defaultPrevented) d3.event.stopPropagation();
-      }
+      };
+
+     
 
 
 })
