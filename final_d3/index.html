@@ -1,1028 +1,303 @@
 <!DOCTYPE html>
-<head>
-<meta charset="utf-8">
-<title> Illinois Pension Funding</title>
-<style>
+<html lang="en">
 
-.endsection {
-text-align: center;
-    font-size: 35px;
-    font-family:verdana;
-}
+  <head>
 
-button {
-    background-color: #003366;
-    border: none;
-    color: white;
-    padding: 15px 32px;
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Illinois’ Billion Dollar Pension Time Bomb</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/full-slider.css" rel="stylesheet">
+
+    <style>
+.navbar-header {
+    float: left;
+    padding: 15px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
+    width: 100%;
 }
-.grid line {
-  stroke: lightgrey;
-  stroke-opacity: 0.7;
+.navbar-brand {float:none;}
+      .axis {
   shape-rendering: crispEdges;
 }
+      .grid line {
+        stroke: lightgrey;
+        stroke-opacity: 0.7;
+        shape-rendering: crispEdges;
+      }
 
-.grid path {
-  stroke-width: 0;
+      .grid path {
+        stroke-width: 0;
+      }
+      
+      .line1 {
+      fill: none;
+        stroke: rgba(85,170,0,1.0);
+        stroke-width: 4px;
+      }
+
+      .circle1{
+      fill: rgba(85,170,0,1.0);
+      }
+      .circle2 {
+        fill:rgba(170,0,0,0.9);
+      }
+      .dot1{
+      fill: rgba(85,170,0,1.0);
+      }
+      .line2{
+      fill: none;
+        stroke: rgba(170,0,0,0.9);
+        stroke-width: 4px;
+      }
+      .dot2 {
+        fill:rgba(170,0,0,0.9);
+      }
+
+      .center-block {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .overlay {
+        fill: none;
+        pointer-events: all;
+      }
+
+      .focus circlel {
+        fill: #F1F3F3;
+        stroke: rgba(170,0,0,0.9);
+        stroke-width: 5px;
+      }
+
+      .focus circlea {
+        fill: #F1F3F3;
+        stroke: rgba(85,170,0,1.0);
+        stroke-width: 5px;
+      }
+        
+      .hover-linea {
+        stroke: rgba(85,170,0,1.0);
+        stroke-width: 2px;
+        stroke-dasharray: 3,3;
+      }
+      .hover-linel {
+        stroke: rgba(170,0,0,0.9);
+        stroke-width: 2px;
+        stroke-dasharray: 3,3;
+      }
+
+      /* For Map */
+            
+      .background {
+        fill: none;
+        pointer-events: all;
+      }
+
+      .feature {
+        fill: #ccc;
+        cursor: pointer;
+      }
+
+      .feature.active {
+        fill: #ccc;
+      }
+      .feature:hover{
+        opacity: 0.6;
+      }
+
+
+      .mesh {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+
+
+
+
+a{
+  color: #333399;
+}
+a:hover{
+  color: #FF0099;
+}
+      .legendLinear text {
+    font-size: 12px;
+}
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  background: rgba(43,43,43, 0.8);
+  color: #fff;
+  border-radius: 2px;
 }
 
-.legend {
-            padding: 5px;
-            font: 10px sans-serif;
-            background: yellow;
-            box-shadow: 2px 2px 1px #888;
-        }
-#tooltip {
-    opacity: 0;
-    position: absolute;
-    text-align: center;
-    width: 100px; height: 100px;
-    background: white;
-    border: 0px;
-}
-header {
-
-    text-align: center;
-    font-size: 35px;
-    font-family:verdana;
-
+tr:hover {
+  background-color: #f5f5f5;
+  }
+  th, td {
+    border-bottom: 1px solid #ddd;
 }
 
-body {
-font-family:verdana;
-}
-.narrative{
-	width: 50%;
-    margin: auto;
-    height: 180px;
-}
-.top {
-	display:block;
-}
-.totalgraph {
-    float: left;
-    width: 50%;
-    height: 750px; 
-    
-}
-
-.barsection {
-    float: left;
-    width:50%;
-    height: 750px; 
-}
-section:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-.fundsection {
-	display:none;
-    float: left;
+table {
     width: 100%;
-    height: 750px;
+    display: block;
+    height: 550px;
+    overflow-y: auto;
 }
 
-
-
-
-.areared {
-  fill: rgba(170,0,0,0.2);
+th {
+    height: 50px;
 }
-.areayellow {
-  fill: rgba(240,189,39,0.2);
-}
-.areagreen {
-  fill: rgba(85,170,0,0.2);
-}
-  
-.line1 {
- fill: none;
-  stroke: rgba(85,170,0,1.0);
-  stroke-width: 4px;
+.tempinstruction {
+  animation: pulse 5s infinite;
+  font-style: oblique;
 }
 
-.circle1{
- fill: rgba(85,170,0,1.0);
+@keyframes pulse {
+  0% {
+    opacity:0.0;
+  }
+  100% {
+    opacity:1.0;
+  }
 }
-.circle2 {
-	fill:rgba(170,0,0,0.9);
-}
-.dot1{
- fill: rgba(85,170,0,1.0);
-}
-.line2{
- fill: none;
-  stroke: rgba(170,0,0,0.9);
-  stroke-width: 4px;
-}
-.dot2 {
-	fill:rgba(170,0,0,0.9);
-}
+    </style>
 
-.container {
-    width: 100%;
-    margin: auto;
-}
-.container1 {
-width:60%;
-float:left;
-height: 750px;
-}
+  </head>
 
-.container2 {
-width:30%;
-float:left;
-  font: 40px verdana;
-  height: 750px;
-}
+  <body>
 
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="navbar-header">
+        <a class="navbar-brand" style="font-size:2em;" href="#">Illinois’ Billion Dollar Pension Time Bomb</a>
 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div> -->
+      </div>
+    </nav>
 
-</style>
-</head>
+    <header>
+      <!-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel"> -->
+        <!-- <ol class="carousel-indicators"> -->
+          <!-- <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li> -->
+          <!-- <li data-target="#carouselExampleIndicators" data-slide-to="1"></li> -->
+          <!-- <li data-target="#carouselExampleIndicators" data-slide-to="2"></li> -->
+        <!-- </ol> -->
+        <div class="carousel-inner" role="listbox">
+          <!-- Slide One - This is where the total Illinois funding graph will go -->
+          <div class="carousel-item active" style="background-color: #e9e9e9">
+              <p style=" margin: auto; width: 60%; text-align:center;"> <br>Illinois has the most public pension plans in the nation. Even the smallest towns and villages manage their own funds for their police and fire employees. However, many of these funds are struggling to keep up with what they owe. Much attention has been given to the funding crisis for Illinois' statewide pensions. This is not just a state-level problem, as it is deeply sowed throughout the state's small communities. In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. This could just be the tip of the iceberg.</p>
 
-
-<body>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-
-<header>
-<a href="https://geoffsegal.github.io/IL-Pension/final_d3/about.html" style="font-size:10px" >About This Visualization</a>
-<h2 style="text-align: center"><span style="color: #003366"><strong>Illinois Downstate Pension Funding</strong></span></h2>
-
-</header>
-
-
-<section style="text-align: center; color: #003366" class="narrative" id="narrative">
-
-Illinois has the most public pension plans in the nation. Even the smallest towns and villages manage
-their own funds for their police and fire employees. However, many of these funds are struggling to keep up with what they owe. 
-Much attention has been given to the funding crisis for Illinois' statewide pensions. 
-This is not just a state-level problem, as it is deeply sowed throughout the state's small communities. 
-In early 2018, the firefighters pension fund for the city of Harvey completely collapsed. 
-This could just be the tip of the iceberg.
-</section>
-
-<section class="top" id="top">
-
-<section class="totalgraph">
-<p style="text-align: center; color: #003366; margin-left:150px; margin-right:150px">
-<strong>How much money does Illinois owe?</strong ><br>A pension fund's viability is measured by comparing the actuarial valuation of its assets to its liabilities. As payrolls increase, towns grow larger, and obligations grow, we expect these liabilities to rise. A fund has a mandate to keep the growth of its assets in line.<br><br>
-The combined total of all Illinois' downstate (meaning outside Chicago) pension liabilities, topping 20 billion dollars, continues to increase. Assets have increased too, but not fast enough to close the gap.
-</p>
-
-<div id="totalfundinggraph"></div>
-</section>
-
-<section class="barsection">
-<p style="text-align: center; color: #003366; margin-left:150px; margin-right:150px">
-<strong>How are the funds doing?</strong ><br>A pension fund is considered to be healthy if its funding ratio, being the assets divided by liabilities, is above 80%. Below that is considered to be in danger, and below 65% is further considered to be in critical danger.<br><br>
-An astounding number of Illinois' pensions are in critical danger. Compare the distribution of funding zones with this interactive chart by changing the year. Green is healthy, yellow is endangered, and red is critically endangered
-</p>
-
-<div id="bar" align="center"></div>
-<form id="years" align="center">
-  <input  type='radio' id=2013 name="mode" checked>2013</input>
-  <input type='radio' id=2014 name="mode">2014</input>
-	<input type='radio' id=2015 name="mode">2015</input>
-    <input type='radio' id=2016 name="mode">2016</input>
-</form>
-</section>
-
-</section>
-
-
-<section class="fundsection" id="fundsection">
-<div id="fundDropdown" align="center" style="color: #003366"> <b>Select a Fund:</b> </div>
-
-<div class="container">
-  <div class="container1" id ="graph"></div>
-  <div class="container2" id="fundinfo">
-     <p style="color: #003366"> The Funding ratio in 2016 for the <strong><span id="FundName2016"></span></strong> was <strong><span id="fund2016"></span></strong></p>
-  </div>
-</div>
-
-</section>
-
-<section id="endsection" class="endsection" style="color: #003366">
-
-<p>
-<span id ="notbuttontext"></span><br>
-<button onclick="myFunction()">
-<span id="buttontext"></span>
-</button>
-</p>
-<p style="font-size:10px">
-Note: If the object/graph elements overlap due to your browser, please zoom out.
-</p>
-</section>
-
-
-<script>
-
-//d3.json("https://geoffsegal.github.io/IL-Pension/data/data.json", function(data) {
-	//console.log(data[0])
-//});
-document.getElementById("buttontext").innerHTML="Look up a particular local fund";
-
-document.getElementById("notbuttontext").innerHTML = "Now, explore each and every local fire/police fund";
- 
-function myFunction() {
-    var x = document.getElementById("top");
-    var y = document.getElementById("fundsection");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-        y.style.display = "none";
- 
-        document.getElementById("buttontext").innerHTML="Look up a particular local fund";
-        document.getElementById("notbuttontext").innerHTML = "Now, explore each and every local fire/police fund";
-    } else {
-        x.style.display = "none";
-        y.style.display= "block";
-        document.getElementById("buttontext").innerHTML="Go back to Overview";
-        document.getElementById("notbuttontext").innerHTML = "";
-    }
-}
-
-
-var margin = {top: 20, right: 20, bottom: 30, left: 100},
-  width = 700 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
-//LOOK INTO YEAR FORMAT LATER
-var formatYear = d3.timeFormat("%Y");
-var parseYear = d3.timeParse("%Y");
-//
-
-	  // Set the ranges
-var x = d3.scaleLinear().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
-
-  
-// Define the line
-var valueLine = d3.line()
-    .x(function(d) { return x(d.Year); })
-    .y(function(d) { return y(d.Assets); });
-    
-
-var valueLine0 = d3.line()
-	.x(function(d) { return x(d.key);})
-	.y(function(d) { return y(d.value.Liabilities);});
-    
-var valueLine1 = d3.line()
-	.x(function(d) { return x(d.key);})
-	.y(function(d) { return y(d.value.Assets);});
-    
-var valueLine2 = d3.line()
-	.x(function(d) { return x(d.Year);})
-	.y(function(d) { return y(d.Liabilities);});
-	
-var areagreen = d3.area()
-	.x(function(d,i) { return x(d.Year);})
-	.y0(function(d) { return y(0.8*d.Liabilities);})
-	.y1(0);
-	
-var areayellow = d3.area()
-	.x(function(d,i) { return x(d.Year);})
-	.y0(function(d) { return y(0.65*d.Liabilities);})
-	.y1(function(d) { return y(0.8*d.Liabilities);});
-	
-var areared = d3.area()
-	.x(function(d,i) { return x(d.Year);})
-	.y0(height)
-	.y1(function(d) { return y(0.65*d.Liabilities);});
-	
-	
-//svg that will contain the barchart
-var svg1 = d3.select("#bar")
-	.append("svg")
-    .style("width", width + margin.left + margin.right + "px")
-    .style("height", height + margin.top + margin.bottom + "px")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-    .attr("class", "svg1");	
-	
-	
-// Create the svg canvas in the "graph" div
-var svg = d3.select("#graph")
-        .append("svg")
-        .style("width", width + margin.left + margin.right + "px")
-        .style("height", height + margin.top + margin.bottom + "px")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-		//.attr("align","center")
-        .attr("class", "svg")
-        ;
-        
-//var svg2 = d3.select("#fundinfo")
-	//.append("svg")
-      //.style("width", 100 + margin.left + margin.right + "px")
-      //.style("height", 500 + margin.top + margin.bottom + "px")
-       //.attr("width", 100 + margin.left + margin.right)
-       // .attr("height", 500 + margin.top + margin.bottom)
-        //.append("g")
-  // .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-     //  .attr("class","svg2")
-    // ;
-    
-    var svg2 = d3.select("#totalfundinggraph")
-    		.append("svg")
-    .style("width", width + margin.left + margin.right + "px")
-    .style("height", height + margin.top + margin.bottom + "px")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-    .attr("class", "svg2");	
-	
-        
-         
-		
-d3.csv("https://geoffsegal.github.io/IL-Pension/data/fundzonestotal.csv", function(error, data) {
-if (error) throw error;
-
-	data.forEach(function(d) {
-		d.Year = +d.Year;
-		d.Count = +d.Count;
-		d.Percent = +d.Percent;
-	});
-	
-	var nest = d3.nest()
-		.key(function(d){return d.Year;})
-		.sortKeys(d3.ascending)
-		.entries(data);
-        
-      
- var barMenu = d3.select("#barDropdown");
-    barMenu
-		.append("select")
-		.selectAll("option")
-        .data(nest)
-        .enter()
-        .append("option")
-        .attr("value", function(d){return d.key;})
-        .text(function(d){return d.key;});
-       
-        
-
-        function colorPicker(v){
-           if(v=="Red") { return "#aa0000";}
-           else if (v =="Yellow"){ return "#f0bd27";}
-           else { return "#55aa00" ;};
-}
-                                        
-     var initialBar = function(year) {
-     
-     
-    
-     	var selectYear = nest.filter(function(d) {return d.key == year;});
-        
-        x.domain([0,3]);
-        y.domain([0,1]);
-        
-       var barspace = d3.select(".svg1").selectAll(".g-category")
-    	.data(selectYear)
-    	.enter().append("g")
-    	.attr("class", "g-category");
-        
-        var bartext = barspace.selectAll(".text")
-          .data(function(d) {return d.values;})
-          .enter()
-          .append("text")
-          .attr("class","text")
-          .attr("dy", ".75em")
-          .attr("y", function(d) { return y(d.Percent+0.05); })
-          .attr("x", function(d,i) { return x((0.6*i+0.75)); })
-          .attr("text-anchor", "middle")
-          .text(function(d) { return d3.format(".01%")(d.Percent); });
-        
-        var bars = barspace.selectAll(".bar")
-     	.data(function(d) {return d.values;})
-     	.enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d,i) {return x((0.6*i+0.5));})
-        .attr("y", function(d) {return y(d.Percent);})
-        .attr("width", 100)
-        .attr("height", function(d) {return height - y(d.Percent);})
-        .attr("fill", function(d) {return colorPicker(d.Fund_Zone);})
-        
-        
-        ; //fund zone is already labeled green/yellow/red
-        
-              barspace.append("text")
-        .attr("fill","#000")
-        .attr("y",0)
-        .attr("dy",10)
-        .attr("x",80)
-        .text("Distribution of Illinois Pension funding zones")
-        .attr("class","svg2title");
-        
-
-        
-
-     };
-    
-     
- var form = document.getElementById("years")
- for(var i=0; i<form.length; i++){
-        if(form[i].checked){
-          form_val = form[i].id;}}
- console.log(form_val)
-     initialBar(form_val);
-     
-     var updateBar = function(year) {
-    	
-     	var selectYear = nest.filter(function(d) {return d.key == year;});
-        
-        x.domain([0,3]);
-        y.domain([0,1]);
-        
-
-      svg1.selectAll(".g-category")
-      .data(selectYear)
-      .transition();
-      
-
-    svg1.selectAll(".g-category").selectAll(".text")
-    	.data(function(d) {return d.values;})
-        .transition()
-        .attr("y", function(d) { return y(d.Percent+0.05); })
-        .text(function(d) { return d3.format(".01%")(d.Percent); })
-        .duration(1000)
-        ;
-
-    svg1.selectAll(".g-category").selectAll(".bar")
-     	.data(function(d) {return d.values;})
-            .transition()
-        .attr("y", function(d) {return y(d.Percent);})
-        .attr("height", function(d) {return height - y(d.Percent);})
-        .duration(1000)
-        ;
-
-      
-     };
-     
-     var dataDim = d3.select("#years")
-	dataDim.on("change", function() {
-    
-     //var form = document.getElementById("years")
- for(var i=0; i<form.length; i++){
-        if(form[i].checked){
-          form_val = form[i].id;}}
- console.log(form_val);
-    updateBar(form_val);
-    
-    });
-
-     
-	
-
-});
-// Import the CSV data
-d3.csv("https://geoffsegal.github.io/IL-Pension/data/totalpensiondata.csv", function(error, data) {
-  if (error) throw error;
-  
-   // Format the data
-  data.forEach(function(d) {
-      d.Funding = +d.Funding;
-	  d.Assets = +d.Assets;
-	  d.Liabilities = +d.Liabilities;
-	  d.Year = +d.Year;
-      d.Fund_Name = d.Fund_Name;
-	
-  });
-  
-  var nest = d3.nest()
-	  .key(function(d){return d.Fund_Name;})
-	  .sortKeys(d3.ascending)
-	  .entries(data);
-      
-      //summarize the total assets/liabilities
-      var nest2 = d3.nest()
-      .key(function(d){return d.Year;})
-      .rollup(function(v) { return {
-      	Assets: d3.sum(v, function(d) { return d.Assets; }),
-        Liabilities: d3.sum(v, function(d) { return d.Liabilities; })
-  		};})
-  .entries(data);
-  
-  
- // console.log(JSON.stringify(nest2));
-	  // Set up the x axis
-
-  // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.Year; }));
-  //y.domain([0,1])
-  y.domain(d3.extent(data, function(d) { return d.Assets;}));
-  
-  
-
-  var xaxis = d3.axisBottom(x)
-	.ticks(4)
-		.tickSizeInner(10)
-		.tickPadding(10)
-        .tickFormat(d3.format("d"));
-		
-  svg.append("g")
-       .attr("transform", "translate(0," + height + ")")
-       .attr("class", "x axis")
-       .call(xaxis);
-	   
-  // Add the y Axis
-  
-	var yaxis = d3.axisLeft(y)
-		.ticks(5)
-		.tickSizeInner(0)
-		.tickPadding(6)
-		.tickSize(0,0);
-		
-		
-  svg.append("g")
-       .attr("class", "y axis")
-       .call(yaxis);
-  
-  // Add a label to the y axis
-  svg.append("text")
-		.attr("fill","#000")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", 10)
-		.attr("x",-350)
-        .style("text-anchor", "end")
-        .text("Funding ($)")
-        .attr("class", "y axis label");
-  // Create a dropdown
-    var fundMenu = d3.select("#fundDropdown");
-    fundMenu
-		.append("select")
-		.selectAll("option")
-        .data(nest)
-        .enter()
-        .append("option")
-        .attr("value", function(d){return d.key;})
-        .text(function(d){return d.key;});
-        
-        
-        
-    svg.selectAll(".legend1")
-    .data(nest2)
-    .enter()
-    .append("rect")
-  	.attr("class", "legend")
-  	.attr("x", width -65)
- 	 .attr("y", 390)
-  	.attr("width", 20)
-  	.attr("height", 20)
-    .style("fill","rgb(170,0,0)")
-	;
-	
-    svg.selectAll(".legend2")
-    .data(nest2)
-    .enter()
-    .append("rect")
-  	.attr("class", "legend")
-  	.attr("x", width -65)
- 	 .attr("y", 420)
-  	.attr("width", 20)
-  	.attr("height", 20)
-    .style("fill","rgb(85,170,0)")
-	;
-    
-    svg.selectAll(".text1")
-    .data(nest2)
-    .enter()
-    .append("text")
-    .attr("class","text1")
-    .attr("dy", ".75em")
-    .attr("y", 395)
-    .attr("x",width-150)
-    .text("Liabilities")
-    ;
-    
-     svg.selectAll(".text2")
-    .data(nest2)
-    .enter()
-    .append("text")
-    .attr("class","text2")
-    .attr("dy", ".75em")
-    .attr("y", 425)
-    .attr("x",width-127)
-    .text("Assets")
-    ;
-		
-// gridlines in x axis function
-function make_x_gridlines() {		
-    return d3.axisBottom(x)
-        .ticks(3)
-}
-
-// gridlines in y axis function
-function make_y_gridlines() {		
-    return d3.axisLeft(y)
-        .ticks(5)
-}
-
- // add the X gridlines
-  svg.append("g")			
-      .attr("class", "grid")
-      .attr("transform", "translate(0," + height + ")")
-      .call(make_x_gridlines()
-          .tickSize(-height)
-          .tickFormat("")
-      )
-      
-        // add the Y gridlines
-  svg.append("g")			
-      .attr("class", "grid")
-      .call(make_y_gridlines()
-          .tickSize(-width)
-          .tickFormat("")
-      )
-//Total Graph
-
-  svg2.append("g")
-       .attr("transform", "translate(0," + height + ")")
-       .attr("class", "x axis")
-       .call(xaxis);
-       
-       
-      y.domain([0, 25000000000]);
-       
-         svg2.append("g")
-       .attr("class", "y axis")
-       .call(yaxis);
-
-		svg.select(".y")
-			.transition()
-			.duration(500)
-			.call(yaxis);
-       
-         svg2.append("text")
-		.attr("fill","#000")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", 10)
-		.attr("x",-350)
-        .style("text-anchor", "end")
-        .text("Funding ($)")
-        .attr("class", "y axis label");
-        
-        
-        svg2.append("text")
-        .attr("fill","#000")
-        .attr("y",-15)
-        .attr("dy",10)
-        .attr("x",80)
-        .text("Total Illinois Combined Pension Fund Assets vs Liabilities")
-        .attr("class","svg2title");
-        
-        
-          // add the X gridlines
-          svg2.append("g")			
-      .attr("class", "grid")
-      .attr("transform", "translate(0," + height + ")")
-      .call(make_x_gridlines()
-          .tickSize(-height)
-          .tickFormat("")
-      )
-      
-        // add the Y gridlines
-  svg2.append("g")			
-      .attr("class", "grid")
-      .call(make_y_gridlines()
-          .tickSize(-width)
-          .tickFormat("")
-      )
-    
-
-     
-    .on("mouseout", function() { tooltip.style("opacity", 0) })
-    
-       svg2.append("path")
-      .datum(nest2)
-      .attr("fill", "none")
-      .attr("class","line1")
-      .attr("d", valueLine1)
-       
-      ;
-      
-       svg2.append("path")
-      .datum(nest2)
-      .attr("fill", "none")
-      .attr("class","line2")
-      .attr("d", valueLine0);
-      
-    var legend1 = svg2.selectAll(".legend1")
-    .data(nest2)
-    .enter()
-    .append("rect")
-  	.attr("class", "legend")
-  	.attr("x", width -65)
- 	 .attr("y", 390)
-  	.attr("width", 20)
-  	.attr("height", 20)
-    .style("fill","rgb(170,0,0)")
-	;
-	
-    var legend2 = svg2.selectAll(".legend2")
-    .data(nest2)
-    .enter()
-    .append("rect")
-  	.attr("class", "legend")
-  	.attr("x", width -65)
- 	 .attr("y", 420)
-  	.attr("width", 20)
-  	.attr("height", 20)
-    .style("fill","rgb(85,170,0)")
-	;
-    
-    svg2.selectAll(".text1")
-    .data(nest2)
-    .enter()
-    .append("text")
-    .attr("class","text1")
-    .attr("dy", ".75em")
-    .attr("y", 395)
-    .attr("x",width-150)
-    .text("Liabilities")
-    ;
-    
-     svg2.selectAll(".text2")
-    .data(nest2)
-    .enter()
-    .append("text")
-    .attr("class","text2")
-    .attr("dy", ".75em")
-    .attr("y", 425)
-    .attr("x",width-127)
-    .text("Assets")
-    ;
- // .style("fill", function(d) { return color_hash[dataset.indexOf(d)][1] });
-
-      
-      
-        svg2.selectAll(".circle1")
-        .data(nest2)
-        .enter().append("circle")
-        .attr("class","circle1")
-        .attr("r", 6)
-        .attr("cx", function(d,i) {  return x(d.key); })
-        .attr("cy", function(d,i) { return y(d.value.Assets); })
-         
-        ;
-        
-        var maxliability = d3.max(nest2, function(d) {return d.value.Liabilities;});
-        
-        svg2.selectAll(".textannotation")
-        	.data(nest2)
-            .enter()
-            .append("text")
-            .attr("class","textannotation")
-            .attr("dy", ".75em")
-            .attr("x", x(2015.5))
-            .attr("y",y(20000000000))
-            .text(d3.format(".2")(maxliability/1000000000)+" Billion")
-            ;
-
-                     
-         svg2.selectAll(".lineannotation")
-         	.data(nest2)
-            .enter()
-            .append("line")
-            .attr("class","lineannotation")
-            .attr("x1", x(2015.75))
-            .attr("y1", y(20500000000))
-            .attr("x2", x(2016))
-            .attr("y2", y(maxliability))
-            .attr("stroke-width", 2)
-            .attr("stroke", "black")
-            ;   
-         
-        
-         svg2.selectAll(".circle2")
-        .data(nest2)
-        .enter().append("circle")
-        .attr("class","circle2")
-        .attr("r", 6)
-        .attr("cx", function(d,i) {  return x(d.key); })
-        .attr("cy", function(d,i) { return y(d.value.Liabilities); });
-        
-       
-        
- 
- 	// Function to create the initial graph
- 	var initialGraph = function(Fund_Name){
- 		// Filter the data to include only Fund_Name of interest
- 		var selectFund = nest.filter(function(d) {return d.key == Fund_Name;});
-		
-		y.domain([0, d3.max(selectFund[0].values, function(d) {return 		d3.max([d.Liabilities,d.Assets]);})]);
-		svg.select(".y")
-			.transition()
-			.duration(500)
-			.call(yaxis);
-       
-  
-		
-		var initialPath = svg.selectAll(".line1")
-			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
-			.enter()
-			.append("g")
-			.append("path")
-			
-		initialPath
-			.datum(function(d) { return d.values;})
-			.attr("d", valueLine)
-			.attr("class", "line1");
-			
-svg.selectAll("g.dot1")
-        .data(selectFund, function(d){return d ? d.key : this.key;})
-        .enter().append("g")
-        .attr("class", "dot1")
-        .selectAll("circle")
-        .data(function(d) { return d.values; })
-        .enter().append("circle")
-        .attr("r", 6)
-        .attr("cx", function(d,i) {  return x(d.Year); })
-        .attr("cy", function(d,i) { return y(d.Assets); });
-
-				
-		var initialPath2 = svg.selectAll(".line2")
-			.data(selectFund, function(d){return d ? d.key : this.key;}) //Might need only .data(selectFund)
-			.enter()
-			.append("g")
-			.append("path");
-			//.style("stroke-dasharray",("3,3"));
-		
-
-		initialPath2
-			.datum(function(d) { return d.values;})
-			.attr("d", valueLine2)
-			.attr("class", "line2");
-        
-            svg.selectAll("g.dot2")
-        .data(selectFund, function(d){return d ? d.key : this.key;})
-        .enter().append("g")
-        .attr("class", "dot2")
-        .selectAll("circle")
-        .data(function(d) { return d.values; })
-        .enter().append("circle")
-        .attr("r", 6)
-        .attr("cx", function(d,i) {  return x(d.Year); })
-        .attr("cy", function(d,i) { return y(d.Liabilities); });
-		    
-        fund2016 = selectFund[0].values[0]["Funding"];
-     
-
-     function colorPicker(v){
-           if(v<0.65) { return "#aa0000";}
-           else if (v<0.8){ return "#f0bd27";}
-           else { return "#55aa00" ;};
-}
-   press=document.getElementById("fund2016");
- press.style.color = colorPicker(fund2016);    
-  
- document.getElementById("FundName2016").innerHTML=Fund_Name;
-        
-
-		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
-        
-        
-
-
-       // var textspace = d3.select(".svg2").selectAll(".svg2-category")
-    	//.data(selectFund)
-    	//.enter().append("g")
-    	//.attr("class", "svg2-category");
-        
-        
-      //  var initialText = textspace.selectAll(".text")
-        //  .data(function(d) {return d.values;})
-         // .enter()
-          //.append("text")
-          //.attr("class","text")
-         // .attr("dy", ".75em")
-          //.attr("text-anchor", "middle")
-          //.text("Funding in "+year2016+ ":"+
-          //d3.format(".01%")(fund2016));
+            <div class="row">
+                <div class="center-block"  id="graphtotal"> 
+                  <!-- <p><br><br><br><br></p> -->
+                </div>
+               
+            </div>
           
 
-		
- 	}
-	
-	
- 	// Create initial graph
- 	initialGraph("Addison Firefighters Pension Fund");
-	
-	
- 	// Update the data
- 	var updateGraph = function(Fund_Name){
-    
- 		// Filter the data to include only Fund_Name of interest
- 		var selectFund = nest.filter(function(d){return d.key == Fund_Name;});
-        
-     
-		
-		 x.domain(d3.extent(data, function(d) { return d.Year; }));
-		y.domain([0, d3.max(selectFund[0].values, function(d) {return d3.max([d.Liabilities,d.Assets]);})]);
-		svg.select(".y")
-			.transition()
-			.duration(500)
-			.call(yaxis)
-		
- 		// Select all of the grouped elements and update the data
-		    // Select all the lines and transition to new positions
-  
-        
-         
+            <!-- <div class="carousel-caption d-none d-md-block" style="color:#000000"> -->
+                <h3 style="text-align: center;"><span style="color:white; background-color:#55aa00">Assets</span> vs. <span style="color:white; background-color:#aa0000">Liabilities</span> for All Downstate Illinois funds, 2005 - 2016</h3>
+                <p style=" text-align: center; font-size:10px;">*There are data reporting issues in the 2011 Illinois Biennial Pension Report , causing the visible dip.</p>
+           
+                <!-- </div> -->
+          </div>
+          <!-- <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+            <div class="carousel-caption d-none d-md-block">
+              <h3>Second Slide</h3>
+              <p>This is a description for the second slide.</p>
+            </div>
+          </div>
+          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+            <div class="carousel-caption d-none d-md-block">
+              <h3>Third Slide</h3>
+              <p>This is a description for the third slide.</p>
+            </div>
+          </div> -->
+        </div>
+        <!-- <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a> -->
+      </div>
+    </header>
 
-        svg.selectAll(".line1")
-			.data(selectFund)
-            .transition()
-            .duration(1000)
-            .attr("d", function(d){return valueLine(d.values);});
-            
-            
-        svg.selectAll("g.dot1")
-        .data(selectFund)
-        .transition().duration(1000);
-        
-     svg.selectAll("g.dot1").selectAll("circle")
-        .data(function(d) { return d.values; })
-        .transition().duration(1000)
-        .attr("cx", function(d,i) {  return x(d.Year); })
-        .attr("cy", function(d,i) { return y(d.Assets); });
-            
-        svg.selectAll(".line2")
-			.data(selectFund)
-            .transition()
-            .duration(1000)
-            .attr("d", function(d){return valueLine2(d.values);});
-	
-        svg.selectAll("g.dot2")
-        .data(selectFund)
-        .transition().duration(1000);
-        
-     svg.selectAll("g.dot2").selectAll("circle")
-        .data(function(d) { return d.values; })
-        .transition().duration(1000)
-        .attr("cx", function(d,i) {  return x(d.Year); })
-        .attr("cy", function(d,i) { return y(d.Liabilities); });
-       
+    <!-- Page Content -->
+    <section class="py-5">
+      <div class="container">
+                <h1 style="text-align:center">How is each <span id="maptitle" style="background-color: #FFFF00">County</span> doing?</h1>
+        <p style=" margin: auto; width: 60%; text-align:center;">A pension fund is considered to be 
+          <span style="color:#55aa00"><strong>healthy</strong></span> 
+          if its funding ratio, being the <strong>assets<span>&#247;</span>liabilities</strong>, is above 80%. Below that is considered to be 
+          <span style="color:#f0bd27"><strong>in danger</strong></span>, 
+          and below 65% is further considered to be 
+          <span style="color:#aa0000"><strong>in critical danger</strong></span>.
+          <br><span id="tempinstruction" class="tempinstruction">Click on a county to reveal each of its individual funds.</span>
+          <br>
+        </p>
 
-        fund2016 = selectFund[0].values[0]["Funding"];
-        
-             function colorPicker(v){
-           if(v<0.65) { return "#aa0000";}
-           else if (v<0.8){ return "#f0bd27";}
-           else { return "#55aa00" ;};
-}
-  press=document.getElementById("fund2016");
- press.style.color = colorPicker(fund2016);    
-  
-        document.getElementById("FundName2016").innerHTML=Fund_Name;
-		document.getElementById("fund2016").innerHTML=d3.format(".01%")(fund2016);
+      <div class="row">  
+      <div  class="col" id="illinoismap">
+      </div>
+      <div  class="col" id="illinoistable"></div>
+      </div>
+    </section>
 
-        //svg2.selectAll(".svg2-category")
-    	//.data(selectFund)
-    	//.transition();
-        
-        
-    //svg2.selectAll(".svg2-category").selectAll(".text")
-         // .data(function(d) {return d.values;})
-          //.transition()
-          //.text("Funding in "+year2016+ ":"+
-          //d3.format(".01%")(fund2016));
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Geoff Segal 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
 
-			
- 	}
-    
-    
- 	// Run update function when dropdown selection changes
- 	fundMenu.on('change', function(){
- 		// Find which Fund_Name was selected from the dropdown
- 		var selectedFund = d3.select("#fundDropdown")
-            .select("select")
-            .property("value");
-            
-        // Run update function with the selected Fund_Name
-        updateGraph(selectedFund);
-		
-    });
-  
-})
-</script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <!-- d3 v4 library  -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" charset="utf-8"></script> -->
+    <!-- <script type="text/javascript" src="jquery.tipsy.js"></script> -->
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <!-- d3 visualization -->
+    <script type ="text/javascript" src = "js/d3.js"></script>
+    <script type ="text/javascript" src = "js/d3-legend-min.js"></script>
+    <script type ="text/javascript" src = "js/d3-tip.js"></script>
 
+  </body>
 
-</body>
 </html>
