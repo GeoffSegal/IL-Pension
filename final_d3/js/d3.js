@@ -259,7 +259,7 @@ var parseTime = d3.timeParse("%Y")
 
     var projection = d3.geoAlbersUsa()
         .scale(5000)
-        .translate([-500+width / 2, 200+height / 2]);
+        .translate([-200+width / 2, 200+height / 2]);
     
     var zoom = d3.zoom()
         .scaleExtent([1, 8])
@@ -275,15 +275,15 @@ var parseTime = d3.timeParse("%Y")
         .projection(projection);
     
     var svg = d3.select("#illinoismap").append("svg")
-        .attr("width", width)
+        .attr("width", width+200)
         .attr("height", height+100)
         .on("click", stopped, true);
     
-    svg.append("rect")
-        .attr("class", "background")
-        .attr("width", width)
-        .attr("height", height)
-        .on("click", reset);
+    // svg.append("rect")
+    //     .attr("class", "background")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .on("click", reset);
     
     var g = svg.append("g");
     
@@ -446,7 +446,7 @@ var parseTime = d3.timeParse("%Y")
     .append('td')
     .style('opacity', 0.0)
     .transition()
-    .duration(500)
+    .duration(750)
     .style('opacity', 1.0)
     .text(function (d) { return formatter(d);})
     .style("color",function(d,i) {return colorpicker(d)});
@@ -460,6 +460,11 @@ var parseTime = d3.timeParse("%Y")
     
     function clicked(d) {
       if (active.node() === this) return reset();
+
+      d3.select("#illinoismap").selectAll("svg")
+        .attr("width", width)
+        .attr("height", height+100);
+
       active.classed("active", false);
       active = d3.select(this).classed("active", true);
       var bounds = path.bounds(d),
@@ -504,10 +509,19 @@ var parseTime = d3.timeParse("%Y")
 
         updatetable(result,["Individual Funds in "+d.properties.NAME+" County","Funding Ratio"]);
 
+
+        title=document.getElementById("maptitle");
+        title.innerHTML = "Fund";
+
         
         }
     
     function reset() {
+
+        d3.select("#illinoismap").selectAll("svg")
+        .attr("width", width+200)
+        .attr("height", height+100);
+
       active.classed("active", false);
       active = d3.select(null);
     
@@ -518,7 +532,8 @@ var parseTime = d3.timeParse("%Y")
       d3.select('tbody').selectAll("*").remove();
       d3.selectAll('th').text(function(column,i){if (i == 0) {return null;} else {return null;}});
 
-    //   d3.select("#illinoismap").style("margin",'auto');
+      title=document.getElementById("maptitle");
+      title.innerHTML = "County";
     }
     
     function zoomed() {
