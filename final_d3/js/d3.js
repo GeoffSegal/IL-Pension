@@ -424,6 +424,8 @@ var parseTime = d3.timeParse("%Y")
 
     function updatetable(tabledata, columns) {
 
+        d3.select('tbody').selectAll("*").remove();
+
 
     thead.selectAll('th')
     .data(columns)
