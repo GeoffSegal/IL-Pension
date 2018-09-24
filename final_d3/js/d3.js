@@ -329,6 +329,7 @@ var parseTime = d3.timeParse("%Y")
           //.style("fill", function(d) {return color(d.properties.ALAND/1000000000);} )
             .style("fill", function(d) {return color(valueById[d.properties.NAME]);})
             .on('mouseover', tip.show)
+            
             .on('mouseout', tip.hide)
           .on("click", clicked);
     
@@ -355,6 +356,7 @@ var parseTime = d3.timeParse("%Y")
     // function initializetable(tabledata, columns) {
 
         var table = d3.select('#illinoistable').append('table');
+        
         var thead = table.append('thead');
         var	tbody = table.append('tbody');
 
@@ -404,7 +406,12 @@ var parseTime = d3.timeParse("%Y")
         if (isNaN(v)) {
             return v;}
         else {
+            if (v == null) {
+                return null;
+            }
+            else {
             return d3.format(",.2%")(v);
+            }
         };
 
     };
@@ -413,7 +420,9 @@ var parseTime = d3.timeParse("%Y")
 
 
     thead.selectAll('th')
-    .text(function(column,i){if (i == 0) {return "Funds In This County:";} else {return "Funding Ratio:";}});
+    .data(columns)
+    // .text(function(column,i){if (i == 0) {return "Individual Funds In This County:";} else {return "Funding Ratio:";}});
+    .text(function(column, i) {return column});
 
     // create a row for each object in the data
     var rows = tbody.selectAll('tr')
@@ -435,6 +444,10 @@ var parseTime = d3.timeParse("%Y")
     })
     .enter()
     .append('td')
+    .style('opacity', 0.0)
+    .transition()
+    .duration(500)
+    .style('opacity', 1.0)
     .text(function (d) { return formatter(d);})
     .style("color",function(d,i) {return colorpicker(d)});
 
@@ -468,8 +481,6 @@ var parseTime = d3.timeParse("%Y")
         data.forEach(function(e,i) { if (e.County === d.properties.NAME & e.Year == 2016) {selectedfunds_name[i] = e.Fund_Name; selectedfunds_ratio[i] = e.Funding}});
         selectedfunds_name = selectedfunds_name.filter(function(){return true;});
         selectedfunds_ratio = selectedfunds_ratio.filter(function(){return true;});
-        console.log(selectedfunds_name)
-        console.log(selectedfunds_ratio);
 
         var result = [];
         for ( var i = 0; i < selectedfunds_name.length; i++ ) {
@@ -478,15 +489,20 @@ var parseTime = d3.timeParse("%Y")
           }
 
         
-        console.log(result)
+        
 
         result = result.sort(function(a,b) {
             return a[1]-b[1]
         });
+
+        if (result.length == 0) {
+            result = [["No data available for "+d.properties.NAME+" County", null]]
+        }
+
+        console.log(result)
  
-        // tabulate(result,['selectedfunds_name','selectedfunds_ratio']);
-        // tabulate(result,[0,1]);
-        updatetable(result,[0,1]);
+
+        updatetable(result,["Individual Funds in "+d.properties.NAME+" County","Funding Ratio"]);
 
         
         }
