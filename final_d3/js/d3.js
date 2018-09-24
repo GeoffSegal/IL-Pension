@@ -515,7 +515,7 @@ var parseTime = d3.timeParse("%Y")
         console.log(result)
  
 
-        updatetable(result,["Funding Ratio for Each Fund in "+d.properties.NAME+" County"]);
+        updatetable(result,["2016 Funding Ratio for Each Fund in "+d.properties.NAME+" County"]);
 
 
         title=document.getElementById("maptitle");
