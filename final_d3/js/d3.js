@@ -178,14 +178,18 @@ var parseTime = d3.timeParse("%Y")
         var focusa = svg.append("g")
         .attr("class", "focusa")
         .style("display", "none");
+        // .style("display",null);
         var focusl = svg.append("g")
         .attr("class", "focusl")
         .style("display", "none");
+        // .style("display", null);
 
         focusa.append("line")
             .attr("class", "x-hover-linea hover-linea")
             .attr("y1", 0)
             .attr("y2", height);
+
+
 
             focusl.append("line")
             .attr("class", "x-hover-linel hover-linel")
@@ -196,6 +200,7 @@ var parseTime = d3.timeParse("%Y")
             .attr("class", "y-hover-linea hover-linea")
             .attr("x1", width+100)
             .attr("x2", width);
+            // .attr("x2",width + y(2016));
 
             focusl.append("line")
             .attr("class", "y-hover-linel hover-linel")
@@ -231,7 +236,8 @@ var parseTime = d3.timeParse("%Y")
           .attr("width", width+20)
           .attr("height", height+10)
           .on("mouseover", function() { focusa.style("display", null);  focusl.style("display", null);})
-          .on("mouseout", function() { focusa.style("display", "none");  focusl.style("display", "none"); })
+        //   .on("mouseout", function() { focusa.style("display", "none");  focusl.style("display", "none"); })
+        .on("mouseout", function() { focusa.style("display", null);  focusl.style("display", null); })
           .on("mousemove", mousemove);
   
         function mousemove() {
@@ -512,6 +518,8 @@ var parseTime = d3.timeParse("%Y")
 
         title=document.getElementById("maptitle");
         title.innerHTML = "Fund";
+
+        document.getElementById("tempinstruction").innerHTML="";
 
         
         }

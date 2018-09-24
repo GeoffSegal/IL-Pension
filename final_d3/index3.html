@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Illinois Downstate Pension Funding</title>
+    <title>Illinois’ Billion Dollar Pension Time Bomb</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -159,12 +159,19 @@ table {
 th {
     height: 50px;
 }
-/* th {
+.tempinstruction {
+  animation: pulse 5s infinite;
+  font-style: oblique;
+}
 
-  
-  
-
-} */
+@keyframes pulse {
+  0% {
+    opacity:0.0;
+  }
+  100% {
+    opacity:1.0;
+  }
+}
     </style>
 
   </head>
@@ -174,7 +181,7 @@ th {
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="navbar-header">
-        <a class="navbar-brand" style="font-size:2em;" href="#">Illinois’ Billion Dollar Time Bomb</a>
+        <a class="navbar-brand" style="font-size:2em;" href="#">Illinois’ Billion Dollar Pension Time Bomb</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -218,8 +225,8 @@ th {
           
 
             <!-- <div class="carousel-caption d-none d-md-block" style="color:#000000"> -->
-                <h3 style="text-align: center;">Assets vs. Liabilities for All Downstate Illinois funds, 2005 - 2016</h3>
-                <p style=" text-align: center; font-size:10px;">*In 2011 there are data reporting issues, causing the visible dip.</p>
+                <h3 style="text-align: center;"><span style="color:white; background-color:#55aa00">Assets</span> vs. <span style="color:white; background-color:#aa0000">Liabilities</span> for All Downstate Illinois funds, 2005 - 2016</h3>
+                <p style=" text-align: center; font-size:10px;">*There are data reporting issues in the 2011 Illinois Biennial Pension Report , causing the visible dip.</p>
            
                 <!-- </div> -->
           </div>
@@ -257,7 +264,8 @@ th {
           <span style="color:#f0bd27"><strong>in danger</strong></span>, 
           and below 65% is further considered to be 
           <span style="color:#aa0000"><strong>in critical danger</strong></span>.
-          <br><br>
+          <br><span id="tempinstruction" class="tempinstruction">Click on a county to reveal each of its individual funds.</span>
+          <br>
         </p>
 
       <div class="row">  
