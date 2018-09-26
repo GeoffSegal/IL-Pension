@@ -577,6 +577,7 @@ var parseTime = d3.timeParse("%Y")
         .attr("height", height+100)
         .on("click", stopped, true);
     
+		var g = svg.append("g");
     // svg.append("rect")
     //     .attr("class", "background")
     //     .attr("width", width)
