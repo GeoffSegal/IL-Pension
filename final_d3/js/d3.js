@@ -263,10 +263,14 @@ var parseTime = d3.timeParse("%Y")
 
     var active = d3.select(null);
 
-    var projection = d3.geoAlbersUsa()
+//     var projection = d3.geoAlbersUsa()
+//         .scale(5000)
+//         .translate([-200+width / 2, 200+height / 2]);
+    var projection = d3.geoAlbers()
+   	 .rotate([90, 0, 0])
         .scale(5000)
-        .translate([-200+width / 2, 200+height / 2]);
-    
+        .translate([175+width / 2, 150+height / 2]);
+		    
     var zoom = d3.zoom()
         .scaleExtent([1, 8])
         .on("zoom", zoomed);
