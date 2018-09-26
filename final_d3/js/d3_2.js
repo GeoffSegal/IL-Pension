@@ -265,7 +265,8 @@ var parseTime = d3.timeParse("%Y")
 
     var projection = d3.geoAlbersUsa()
         .scale(5000)
-        .translate([-200+width / 2, 200+height / 2]);
+        .translate([-200+width / 2, 200+height / 2])
+    	.rotate([45,0]);;
     
     var zoom = d3.zoom()
         .scaleExtent([1, 8])
