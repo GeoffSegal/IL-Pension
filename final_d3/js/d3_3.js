@@ -267,7 +267,7 @@ var parseTime = d3.timeParse("%Y")
         .scale(5000)
         .translate([-200+width / 2, 200+height / 2]);
 		
-	projection.rotate([45,0);
+	projection.rotate([45,0]);
     
     var zoom = d3.zoom()
         .scaleExtent([1, 8])
